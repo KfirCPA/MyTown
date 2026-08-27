@@ -1,0 +1,34 @@
+name: עדכון נתוני מייטאון
+
+on:
+  schedule:
+    - cron: '10 6 * * 0-4'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: שליפת נתוני שוק
+        run: node scripts/fetch.mjs
+        continue-on-error: true
+
+      - name: פרסור דוחות XBRL
+        run: node scripts/parse-xbrl.mjs
+
+      - name: שמירה ברפו
+        run: |
+          git config user.name "mytown-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add data/latest.json data/financials.json
+          git diff --staged --quiet || git commit -m "נתונים: $(date -u +%Y-%m-%d)"
+          git push
