@@ -1,0 +1,367 @@
+{
+  "generatedAt": "2026-08-28T07:58:51.450Z",
+  "source": "XBRL — רשות ניירות ערך (מגנא)",
+  "periodCount": 4,
+  "quarterCount": 3,
+  "annualCount": 1,
+  "allPassed": true,
+  "continuity": [
+    {
+      "from": "2026-03-31",
+      "to": "2026-06-30",
+      "label": "שינוי בהון מוסבר ברווח",
+      "unexplained": 1865000,
+      "ok": false
+    }
+  ],
+  "periods": [
+    {
+      "file": "Kiwi_App_File2025-01-092106.xbrl",
+      "entity": "קבוצת מיי טאון בע\"מ",
+      "corpId": "514444660",
+      "formType": "ת930",
+      "reference": "2025-01-092106",
+      "periodLabel": "רבעון 3/2025",
+      "periodStart": "2025-07-01",
+      "periodEnd": "2025-09-30",
+      "balanceDate": "2025-09-30",
+      "months": 3,
+      "isAnnual": false,
+      "filedAt": "2025-11-25T17:15:00+02:00",
+      "auditor": "קוסט, פורר, גבאי את קסירר, רואי חשבון",
+      "unqualified": true,
+      "facts": {
+        "NoncurrentAssets": 62868000,
+        "CurrentAssets": 223793000,
+        "Assets": 286661000,
+        "EquityAttributableToOwnersOfParent": 38151000,
+        "NoncontrollingInterests": -19000,
+        "Equity": 38132000,
+        "NoncurrentLiabilities": 79107000,
+        "CurrentLiabilities": 169422000,
+        "Liabilities": 248529000,
+        "EquityAndLiabilities": 286661000,
+        "Revenue": 16222000,
+        "GrossProfit": 1692000,
+        "ProfitLossFromOperatingActivities": -2203000,
+        "ProfitLossBeforeTax": -4071000,
+        "ProfitLoss": -4071000,
+        "ProfitLossAttributableToOwnersOfParent": -4068000,
+        "ProfitLossAttributableToNoncontrollingInterests": -3000,
+        "BasicEarningsLossPerShare": -0.73,
+        "DilutedEarningsLossPerShare": -0.73,
+        "ComprehensiveIncome": -4071000,
+        "ComprehensiveIncomeAttributableToOwnersOfParent": -4068000,
+        "ComprehensiveIncomeAttributableToNoncontrollingInterests": -3000,
+        "CashFlowsFromUsedInOperatingActivities": -276000,
+        "CashFlowsFromUsedInInvestingActivities": 1579000,
+        "CashFlowsFromUsedInFinancingActivities": -1300000,
+        "EffectOfExchangeRateChangesOnCashAndCashEquivalents": 0
+      },
+      "ratios": {
+        "grossMargin": 0.10430279866847492,
+        "financeCost": 1868000,
+        "currentRatio": 1.320920541606167,
+        "equityRatio": 0.13302123414067488,
+        "leverage": 6.517596769117802,
+        "netMargin": -0.2509554925409937
+      },
+      "validation": {
+        "checks": [
+          {
+            "label": "נכסים = שוטפים + לא שוטפים",
+            "ok": true,
+            "a": 286661000,
+            "b": 286661000
+          },
+          {
+            "label": "התחייבויות = שוטפות + לא שוטפות",
+            "ok": true,
+            "a": 248529000,
+            "b": 248529000
+          },
+          {
+            "label": "הון + התחייבויות = סך מאזן",
+            "ok": true,
+            "a": 286661000,
+            "b": 286661000
+          },
+          {
+            "label": "הון = בעלים + זכויות מיעוט",
+            "ok": true,
+            "a": 38132000,
+            "b": 38132000
+          },
+          {
+            "label": "רווח = בעלים + מיעוט",
+            "ok": true,
+            "a": -4071000,
+            "b": -4071000
+          }
+        ],
+        "passed": true
+      }
+    },
+    {
+      "file": "Kiwi_App_File2026-01-030392.xbrl",
+      "entity": "קבוצת מיי טאון בע\"מ",
+      "corpId": "514444660",
+      "formType": "ת930",
+      "reference": "2026-01-030392",
+      "periodLabel": "שנת 2025",
+      "periodStart": "2025-01-01",
+      "periodEnd": "2025-12-31",
+      "balanceDate": "2025-12-31",
+      "months": 12,
+      "isAnnual": true,
+      "filedAt": "2026-03-31T11:23:00+02:00",
+      "auditor": "קוסט, פורר, גבאי את קסירר, רואי חשבון",
+      "unqualified": false,
+      "facts": {
+        "NoncurrentAssets": 72707000,
+        "CurrentAssets": 223243000,
+        "Assets": 295950000,
+        "EquityAttributableToOwnersOfParent": 40815000,
+        "NoncontrollingInterests": -32000,
+        "Equity": 40783000,
+        "NoncurrentLiabilities": 83044000,
+        "CurrentLiabilities": 172123000,
+        "Liabilities": 255167000,
+        "EquityAndLiabilities": 295950000,
+        "Revenue": 72448000,
+        "GrossProfit": 10022000,
+        "ProfitLossFromOperatingActivities": -10126000,
+        "ProfitLossBeforeTax": -18321000,
+        "ProfitLoss": -14150000,
+        "ProfitLossAttributableToOwnersOfParent": -14130000,
+        "ProfitLossAttributableToNoncontrollingInterests": -20000,
+        "BasicEarningsLossPerShare": -2.54,
+        "DilutedEarningsLossPerShare": -2.54,
+        "ComprehensiveIncome": -14150000,
+        "ComprehensiveIncomeAttributableToOwnersOfParent": -14130000,
+        "ComprehensiveIncomeAttributableToNoncontrollingInterests": -20000,
+        "CashFlowsFromUsedInOperatingActivities": -56427000,
+        "CashFlowsFromUsedInInvestingActivities": 7590000,
+        "CashFlowsFromUsedInFinancingActivities": 5064000,
+        "EffectOfExchangeRateChangesOnCashAndCashEquivalents": 0
+      },
+      "ratios": {
+        "grossMargin": 0.13833370141342757,
+        "financeCost": 8195000,
+        "currentRatio": 1.2969969149968337,
+        "equityRatio": 0.13780368305457003,
+        "leverage": 6.25670009562808,
+        "netMargin": -0.1953125
+      },
+      "validation": {
+        "checks": [
+          {
+            "label": "נכסים = שוטפים + לא שוטפים",
+            "ok": true,
+            "a": 295950000,
+            "b": 295950000
+          },
+          {
+            "label": "התחייבויות = שוטפות + לא שוטפות",
+            "ok": true,
+            "a": 255167000,
+            "b": 255167000
+          },
+          {
+            "label": "הון + התחייבויות = סך מאזן",
+            "ok": true,
+            "a": 295950000,
+            "b": 295950000
+          },
+          {
+            "label": "הון = בעלים + זכויות מיעוט",
+            "ok": true,
+            "a": 40783000,
+            "b": 40783000
+          },
+          {
+            "label": "רווח = בעלים + מיעוט",
+            "ok": true,
+            "a": -14150000,
+            "b": -14150000
+          }
+        ],
+        "passed": true
+      }
+    },
+    {
+      "file": "Kiwi_App_File2026-01-049263.xbrl",
+      "entity": "קבוצת מיי טאון בע\"מ",
+      "corpId": "514444660",
+      "formType": "ת930",
+      "reference": "2026-01-049263",
+      "periodLabel": "רבעון 1/2026",
+      "periodStart": "2026-01-01",
+      "periodEnd": "2026-03-31",
+      "balanceDate": "2026-03-31",
+      "months": 3,
+      "isAnnual": false,
+      "filedAt": "2026-05-27T14:11:00+02:00",
+      "auditor": "קוסט, פורר, גבאי את קסירר, רואי חשבון",
+      "unqualified": true,
+      "facts": {
+        "NoncurrentAssets": 73325000,
+        "CurrentAssets": 227454000,
+        "Assets": 300779000,
+        "EquityAttributableToOwnersOfParent": 38062000,
+        "NoncontrollingInterests": -46000,
+        "Equity": 38016000,
+        "NoncurrentLiabilities": 83358000,
+        "CurrentLiabilities": 179405000,
+        "Liabilities": 262763000,
+        "EquityAndLiabilities": 300779000,
+        "Revenue": 27081000,
+        "GrossProfit": 5911000,
+        "ProfitLossFromOperatingActivities": -762000,
+        "ProfitLossBeforeTax": -4115000,
+        "ProfitLoss": -3260000,
+        "ProfitLossAttributableToOwnersOfParent": -3246000,
+        "ProfitLossAttributableToNoncontrollingInterests": -14000,
+        "BasicEarningsLossPerShare": -0.58,
+        "DilutedEarningsLossPerShare": -0.58,
+        "ComprehensiveIncome": -3260000,
+        "ComprehensiveIncomeAttributableToOwnersOfParent": -3246000,
+        "ComprehensiveIncomeAttributableToNoncontrollingInterests": -14000,
+        "CashFlowsFromUsedInOperatingActivities": -23219000,
+        "CashFlowsFromUsedInInvestingActivities": 1396000,
+        "CashFlowsFromUsedInFinancingActivities": 24010000,
+        "EffectOfExchangeRateChangesOnCashAndCashEquivalents": 0
+      },
+      "ratios": {
+        "grossMargin": 0.21827111258816145,
+        "financeCost": 3353000,
+        "currentRatio": 1.2678241966500376,
+        "equityRatio": 0.1263918026191988,
+        "leverage": 6.911905513468014,
+        "netMargin": -0.12037960193493594
+      },
+      "validation": {
+        "checks": [
+          {
+            "label": "נכסים = שוטפים + לא שוטפים",
+            "ok": true,
+            "a": 300779000,
+            "b": 300779000
+          },
+          {
+            "label": "התחייבויות = שוטפות + לא שוטפות",
+            "ok": true,
+            "a": 262763000,
+            "b": 262763000
+          },
+          {
+            "label": "הון + התחייבויות = סך מאזן",
+            "ok": true,
+            "a": 300779000,
+            "b": 300779000
+          },
+          {
+            "label": "הון = בעלים + זכויות מיעוט",
+            "ok": true,
+            "a": 38016000,
+            "b": 38016000
+          },
+          {
+            "label": "רווח = בעלים + מיעוט",
+            "ok": true,
+            "a": -3260000,
+            "b": -3260000
+          }
+        ],
+        "passed": true
+      }
+    },
+    {
+      "file": "Kiwi_App_File2026-01-078335.xbrl",
+      "entity": "קבוצת מיי טאון בע\"מ",
+      "corpId": "514444660",
+      "formType": "ת930",
+      "reference": "2026-01-078335",
+      "periodLabel": "רבעון 2/2026",
+      "periodStart": "2026-04-01",
+      "periodEnd": "2026-06-30",
+      "balanceDate": "2026-06-30",
+      "months": 3,
+      "isAnnual": false,
+      "filedAt": "2026-08-20T13:37:00+02:00",
+      "auditor": "קוסט, פורר, גבאי את קסירר, רואי חשבון",
+      "unqualified": true,
+      "facts": {
+        "NoncurrentAssets": 77280000,
+        "CurrentAssets": 241118000,
+        "Assets": 318398000,
+        "EquityAttributableToOwnersOfParent": 37628000,
+        "NoncontrollingInterests": -58000,
+        "Equity": 37570000,
+        "NoncurrentLiabilities": 76067000,
+        "CurrentLiabilities": 204761000,
+        "Liabilities": 280828000,
+        "EquityAndLiabilities": 318398000,
+        "Revenue": 32899000,
+        "GrossProfit": 7421000,
+        "ProfitLossFromOperatingActivities": 239000,
+        "ProfitLossBeforeTax": -3026000,
+        "ProfitLoss": -2311000,
+        "ProfitLossAttributableToOwnersOfParent": -2299000,
+        "ProfitLossAttributableToNoncontrollingInterests": -12000,
+        "BasicEarningsLossPerShare": -0.41,
+        "DilutedEarningsLossPerShare": -0.41,
+        "ComprehensiveIncome": -2311000,
+        "ComprehensiveIncomeAttributableToOwnersOfParent": -2299000,
+        "ComprehensiveIncomeAttributableToNoncontrollingInterests": -12000,
+        "CashFlowsFromUsedInOperatingActivities": -1268000,
+        "CashFlowsFromUsedInInvestingActivities": -1938000,
+        "CashFlowsFromUsedInFinancingActivities": 2484000,
+        "EffectOfExchangeRateChangesOnCashAndCashEquivalents": 0
+      },
+      "ratios": {
+        "grossMargin": 0.2255691662360558,
+        "financeCost": 3265000,
+        "currentRatio": 1.1775582264200701,
+        "equityRatio": 0.11799697234279109,
+        "leverage": 7.474793718392334,
+        "netMargin": -0.07024529620961123
+      },
+      "validation": {
+        "checks": [
+          {
+            "label": "נכסים = שוטפים + לא שוטפים",
+            "ok": true,
+            "a": 318398000,
+            "b": 318398000
+          },
+          {
+            "label": "התחייבויות = שוטפות + לא שוטפות",
+            "ok": true,
+            "a": 280828000,
+            "b": 280828000
+          },
+          {
+            "label": "הון + התחייבויות = סך מאזן",
+            "ok": true,
+            "a": 318398000,
+            "b": 318398000
+          },
+          {
+            "label": "הון = בעלים + זכויות מיעוט",
+            "ok": true,
+            "a": 37570000,
+            "b": 37570000
+          },
+          {
+            "label": "רווח = בעלים + מיעוט",
+            "ok": true,
+            "a": -2311000,
+            "b": -2311000
+          }
+        ],
+        "passed": true
+      }
+    }
+  ]
+}

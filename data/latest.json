@@ -1,0 +1,31 @@
+{
+  "company": {
+    "name": "קבוצת מיי טאון בע\"מ",
+    "tase": 2449,
+    "corpId": "514444660"
+  },
+  "updatedAt": "2026-08-28T07:58:51.389Z",
+  "reports": {
+    "data": null,
+    "fetchedAt": null,
+    "stale": true,
+    "error": "HTTP 403 — https://mayaapi.tase.co.il/api/company/reports?companyId=2449&lang=he"
+  },
+  "bond": {
+    "data": {
+      "lastPrice": null,
+      "changePct": "-1.93",
+      "seriesMarketCap": "8362",
+      "yield": "9.07"
+    },
+    "fetchedAt": "2026-08-28T07:58:51.389Z",
+    "stale": false,
+    "error": null
+  },
+  "deals": {
+    "data": null,
+    "fetchedAt": null,
+    "stale": true,
+    "error": "Unexpected token '<', \"<!doctype \"... is not valid JSON"
+  }
+}
