@@ -1,660 +1,1902 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>מייטאון · חדר בקרה</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מייטאון · מרכז בקרה</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  /* רקעים */
-  --void:#070C10;
-  --surface:#0E1820;
-  --raised:#14222C;
-  --sunken:#050A0D;
-  --overlay:rgba(7,12,16,.72);
-  --hairline:#1E323E;
-
-  /* מבטא */
-  --accent:#0FA9A0;
-  --accent-glow:#2FD4C4;
-  --positive:#34D399;
-  --negative:#FF5A6E;
-  --warning:#FFB547;
-  --info:#3D8BFF;
-
-  /* טקסט */
-  --text-1:#E8F1F3;
-  --text-2:#8FA6AF;
-  --text-3:#5B7480;
-
-  /* רדיוס */
-  --r-sm:4px;
-  --r-md:8px;
-  --r-lg:14px;
-
-  /* צל והילה */
-  --shadow-card:0 2px 12px rgba(0,0,0,.4);
-  --shadow-modal:0 16px 48px rgba(0,0,0,.6);
-  --glow-accent:0 0 16px rgba(47,212,196,.22);
-  --glow-alert:0 0 14px rgba(255,90,110,.35);
-
-  /* גרדיאנטים */
-  --grad-banner:linear-gradient(135deg,#0E1820 0%,#123A44 100%);
-  --grad-card:linear-gradient(160deg,#101E28 0%,#0A1218 100%);
-  --grad-active:linear-gradient(135deg,#0FA9A0 0%,#14808A 100%);
-  --grad-bar:linear-gradient(270deg,rgba(15,169,160,.55),rgba(15,169,160,0));
-  --grad-rule:linear-gradient(90deg,transparent,rgba(47,212,196,.4),transparent);
+  --void:#070C10;--surface:#0E1820;--raised:#14222C;--sunken:#050A0D;--hair:#1E323E;
+  --accent:#0FA9A0;--glow:#2FD4C4;--pos:#34D399;--neg:#FF5A6E;--warn:#FFB547;--info:#3D8BFF;
+  --t1:#E8F1F3;--t2:#8FA6AF;--t3:#5B7480;
+  --glass:rgba(14,24,32,.72);
+  --sh-card:0 2px 14px rgba(0,0,0,.45);
+  --sh-pos:0 0 0 1px rgba(52,211,153,.28), 0 0 18px rgba(52,211,153,.14);
+  --sh-warn:0 0 0 1px rgba(255,181,71,.32), 0 0 20px rgba(255,181,71,.16);
+  --sh-neg:0 0 0 1px rgba(255,90,110,.36), 0 0 22px rgba(255,90,110,.18);
+  --ease:cubic-bezier(.16,1,.3,1);
 }
-
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%}
-body{
-  background:var(--void);
-  color:var(--text-1);
-  font-family:'Assistant',system-ui,sans-serif;
-  font-size:14px;
-  line-height:1.5;
-  -webkit-font-smoothing:antialiased;
-}
-.mono{font-family:'JetBrains Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums}
+html{scroll-behavior:smooth}
+body{background:var(--void);color:var(--t1);
+  font-family:"Heebo",system-ui,sans-serif;font-size:14px;line-height:1.55;
+  -webkit-font-smoothing:antialiased;padding-bottom:34px;transition:background .35s}
+.num{font-family:"JetBrains Mono",Consolas,monospace;font-variant-numeric:tabular-nums lining-nums;
+  font-feature-settings:"tnum" 1,"lnum" 1;letter-spacing:-.01em}
+.wrap{max-width:1560px;margin:0 auto;padding:0 14px}
 
-/* ============ באנר ============ */
-.banner{
-  height:72px;
-  background:var(--grad-banner);
-  border-bottom:1px solid var(--accent);
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 32px;gap:16px;
-  position:sticky;top:0;z-index:20;
-}
-.banner-id h1{font-size:24px;font-weight:600;letter-spacing:.02em;line-height:1.15}
-.banner-id p{font-size:10px;letter-spacing:.05em;color:var(--text-3);margin-top:2px}
-.banner-tools{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+/* ═══ STRESS MODE ═══ */
+body.stress{background:#0D0709}
+body.stress .card{border-color:rgba(255,90,110,.26)}
+body.stress .banner{background:linear-gradient(135deg,rgba(26,13,17,.82) 0%,rgba(68,22,28,.82) 100%);
+  border-bottom-color:var(--neg)}
+body.stress .card.grad::before{background:radial-gradient(circle,rgba(255,90,110,.13) 0%,transparent 70%)}
+@keyframes flash{0%{box-shadow:0 0 0 1px rgba(255,90,110,.55),0 0 26px rgba(255,90,110,.3)}
+  100%{box-shadow:var(--sh-card)}}
+.flashme{animation:flash .6s var(--ease)}
+.stressbar{display:none;background:rgba(255,90,110,.09);border-radius:8px;
+  box-shadow:var(--sh-neg);padding:13px 17px;margin:12px 0;font-size:12.5px;color:#FFC4CB;line-height:1.75}
+.stressbar b{color:var(--neg)}
+body.stress .stressbar{display:block;animation:flash .6s var(--ease)}
 
-.seg{display:flex;border:1px solid var(--hairline);border-radius:var(--r-md);overflow:hidden}
-.seg button{
-  font-family:inherit;font-size:11px;letter-spacing:.05em;
-  background:var(--raised);color:var(--text-2);
-  border:none;padding:7px 13px;cursor:pointer;
-  transition:background 120ms ease-out,color 120ms ease-out,border-color 120ms ease-out;
-}
-.seg button + button{border-inline-start:1px solid var(--hairline)}
-.seg button:hover{color:var(--text-1)}
-.seg button[aria-pressed="true"]{background:var(--grad-active);color:#fff}
+/* ═══ BANNER · GLASS ═══ */
+.banner{position:sticky;top:0;z-index:40;
+  background:linear-gradient(135deg,rgba(14,24,32,.8) 0%,rgba(18,58,68,.8) 100%);
+  -webkit-backdrop-filter:blur(14px) saturate(150%);backdrop-filter:blur(14px) saturate(150%);
+  border-bottom:1px solid rgba(15,169,160,.55);
+  padding:15px 22px;display:flex;align-items:center;gap:15px;flex-wrap:wrap;transition:background .35s}
+.banner h1{font-size:19px;font-weight:600;letter-spacing:.01em;line-height:1.25}
+.banner .tagline{font-size:10.5px;color:var(--t2);letter-spacing:.09em;margin-top:2px}
+.sp{flex:1}
+.dd{background:rgba(5,10,13,.6);border:1px solid rgba(15,169,160,.5);border-radius:6px;padding:7px 12px;
+  font-size:13px;display:flex;align-items:center;gap:8px;cursor:pointer;transition:border-color .15s}
+.dd:hover{border-color:var(--glow)}
+.dd::after{content:"▾";color:var(--accent);font-size:11px}
+.chip{font-size:10px;letter-spacing:.11em;padding:5px 10px;border-radius:5px;
+  background:rgba(15,169,160,.12);color:var(--glow);box-shadow:0 0 0 1px rgba(47,212,196,.3)}
 
-.chip{
-  font-size:10px;letter-spacing:.12em;padding:5px 10px;
-  border-radius:var(--r-sm);
-  background:rgba(15,169,160,.12);color:var(--accent-glow);
-  border:1px solid rgba(47,212,196,.3);
-  display:inline-flex;align-items:center;gap:6px;white-space:nowrap;
-}
-.chip.is-warning{background:rgba(255,181,71,.12);color:var(--warning);border-color:rgba(255,181,71,.3)}
-.chip.is-negative{background:rgba(255,90,110,.12);color:var(--negative);border-color:rgba(255,90,110,.3)}
+/* ═══ LIVE STATUS ═══ */
+.live{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--t2);
+  background:rgba(5,10,13,.5);border-radius:6px;padding:6px 11px;
+  box-shadow:0 0 0 1px rgba(30,50,62,.9)}
+.live .pip{width:7px;height:7px;border-radius:50%;flex:none}
+.live.ok .pip{background:var(--pos);animation:blink 2.4s ease-in-out infinite}
+.live.manual .pip{background:var(--info);animation:blink 3.4s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1;box-shadow:0 0 7px currentColor}50%{opacity:.35;box-shadow:0 0 0 currentColor}}
+.live .sep{color:var(--t3)}
+.live b{font-weight:500;color:var(--t1)}
 
-.lamp{width:7px;height:7px;border-radius:50%;background:var(--positive);box-shadow:0 0 8px rgba(52,211,153,.5);flex:none}
-.lamp.is-warning{background:var(--warning);box-shadow:none}
-.lamp.is-negative{background:var(--negative);box-shadow:var(--glow-alert)}
+/* ═══ ICON BUTTON ═══ */
+.ico{width:34px;height:34px;border-radius:6px;background:rgba(5,10,13,.5);
+  box-shadow:0 0 0 1px rgba(30,50,62,.9);display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--t2);transition:color .15s,box-shadow .15s;flex:none}
+.ico:hover{color:var(--glow);box-shadow:0 0 0 1px rgba(47,212,196,.55)}
+.ico svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.6}
 
-/* ============ פריסה ============ */
-main{padding:24px 32px 48px;max-width:1920px;margin:0 auto}
-.kpi-row{display:grid;grid-template-columns:repeat(6,1fr);gap:16px;margin-bottom:24px}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:start}
-.span-2{grid-column:span 2}
+/* ═══ TOGGLE ═══ */
+.tog{display:flex;align-items:center;gap:9px;cursor:pointer;user-select:none}
+.tog .sw{width:42px;height:22px;background:rgba(5,10,13,.7);box-shadow:0 0 0 1px var(--hair) inset;
+  border-radius:11px;position:relative;transition:background .22s,box-shadow .22s;flex:none}
+.tog .sw::after{content:"";position:absolute;top:3px;right:3px;width:16px;height:16px;border-radius:50%;
+  background:var(--t3);transition:transform .22s var(--ease),background .22s}
+.tog.on .sw{background:rgba(255,90,110,.18);box-shadow:0 0 0 1px var(--neg) inset,0 0 14px rgba(255,90,110,.28)}
+.tog.on .sw::after{transform:translateX(-20px);background:var(--neg);box-shadow:0 0 10px rgba(255,90,110,.9)}
+.tog .txt{font-size:11.5px;color:var(--t2);letter-spacing:.05em}
+.tog.on .txt{color:var(--neg)}
 
-@media (max-width:1599px){
-  .kpi-row{grid-template-columns:repeat(3,1fr)}
-  .grid{grid-template-columns:1fr}
-  .span-2{grid-column:auto}
-}
-@media (max-width:1099px){
-  main{padding:20px 20px 40px}
-  .banner{padding:0 20px}
-}
-@media (max-width:699px){
-  .kpi-row{grid-template-columns:repeat(2,1fr);gap:12px}
-  .banner{height:auto;padding:14px 16px;flex-direction:column;align-items:flex-start;position:static}
-  .banner-tools{justify-content:flex-start}
-  main{padding:16px 16px 40px}
-}
+/* ═══ ZEN ═══ */
+body.zen .nav,body.zen .sub{display:none}
+body.zen .banner{padding:10px 20px}
+body.zen .wrap{max-width:100%}
 
-/* ============ כרטיסים ============ */
-.card{
-  position:relative;overflow:hidden;
-  background:var(--grad-card);
-  border:1px solid var(--hairline);
-  border-radius:var(--r-md);
-  padding:16px;
-  box-shadow:var(--shadow-card);
-}
-.card::before{
-  content:"";position:absolute;top:-30px;inset-inline-start:-30px;
-  width:90px;height:90px;pointer-events:none;
-  background:radial-gradient(circle,rgba(47,212,196,.12) 0%,transparent 70%);
-}
-.card > *{position:relative}
+.nav{display:flex;gap:6px;padding:14px 0 0;flex-wrap:wrap}
+.tab{background:var(--raised);border-radius:7px;box-shadow:0 0 0 1px var(--hair);padding:9px 18px;
+  font-size:13.5px;color:var(--t2);cursor:pointer;transition:box-shadow .15s,color .15s,transform .15s}
+.tab:hover{box-shadow:0 0 0 1px var(--accent);color:var(--t1)}
+.tab.on{background:linear-gradient(135deg,#0FA9A0,#14808A);color:#fff;font-weight:600;
+  box-shadow:0 0 0 1px var(--glow),0 0 18px rgba(47,212,196,.28)}
+.sub{display:flex;gap:16px;padding:12px 2px 0;border-bottom:1px solid var(--hair);margin-bottom:16px;flex-wrap:wrap}
+.sub span{font-size:12.5px;color:var(--t3);padding-bottom:9px;cursor:pointer;border-bottom:2px solid transparent;transition:color .15s}
+.sub span:hover{color:var(--t2)}
+.sub span.on{color:var(--glow);border-bottom-color:var(--accent)}
 
-.card h2{
-  font-size:12px;font-weight:600;letter-spacing:.16em;
-  color:var(--text-2);
-  display:flex;align-items:center;gap:12px;
-  margin-bottom:16px;
-}
-.card h2::after{content:"";flex:1;height:1px;background:var(--grad-rule)}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:14px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:14px}
+.grid2{display:grid;grid-template-columns:1.4fr 1fr;gap:14px}
 
-/* KPI */
-.kpi .spark{height:22px;display:block;margin-bottom:8px;overflow:visible}
-.kpi .val{font-size:26px;letter-spacing:-.01em;line-height:1.1;display:block}
-.kpi .lbl{font-size:10px;letter-spacing:.05em;color:var(--text-3);margin-top:6px;display:block}
-.kpi .cmp{font-size:11px;color:var(--text-2);margin-top:8px;display:flex;align-items:center;gap:5px}
-.up{color:var(--positive)}
-.down{color:var(--negative)}
-.na{color:var(--text-3)}
+/* ═══ CARDS · SOFT DEPTH ═══ */
+.card{background:var(--surface);border-radius:10px;padding:22px 24px;position:relative;overflow:hidden;
+  box-shadow:0 0 0 1px var(--hair),var(--sh-card);transition:box-shadow .35s}
+.card.grad{background:linear-gradient(160deg,#101E28 0%,#0A1218 100%)}
+.card.grad::before{content:"";position:absolute;top:-30px;inset-inline-start:-30px;width:96px;height:96px;
+  background:radial-gradient(circle,rgba(47,212,196,.11) 0%,transparent 70%);transition:background .35s}
+.card.st-pos{box-shadow:var(--sh-pos),var(--sh-card)}
+.card.st-warn{box-shadow:var(--sh-warn),var(--sh-card)}
+.card.st-neg{box-shadow:var(--sh-neg),var(--sh-card)}
+h2{font-size:11px;font-weight:600;color:var(--t2);letter-spacing:.15em;margin-bottom:16px;
+  display:flex;align-items:center;gap:9px}
+h2::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,rgba(47,212,196,.35),transparent)}
+.lbl{font-size:10px;color:var(--t3);letter-spacing:.05em}
+.big{font-size:29px;margin:8px 0 3px;font-weight:500}
+.mid{font-size:23px;margin:6px 0 2px;font-weight:500}
+.mini{font-size:11px;color:var(--t2);margin-top:3px}
 
-/* ============ טבלה ============ */
-.tbl-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse}
-thead th{
-  background:var(--raised);
-  font-size:10px;font-weight:600;letter-spacing:.1em;color:var(--text-3);
-  text-align:start;padding:8px 10px;white-space:nowrap;
-}
-thead th.num{text-align:end;padding-inline-end:20px}
-tbody td{
-  padding:8px 10px;font-size:13px;
-  border-bottom:1px solid rgba(30,50,62,.45);
-  position:relative;
-}
-tbody td.num{text-align:end;padding-inline-end:20px;font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums}
-tbody tr{transition:background 120ms ease-out}
-tbody tr:hover{background:rgba(20,34,44,.5)}
-td .bar{
-  position:absolute;inset-block:2px;inset-inline-end:0;
-  background:var(--grad-bar);border-radius:var(--r-sm);pointer-events:none;
-}
-td .bar + span{position:relative}
-tfoot td{
-  padding:10px;background:var(--surface);
-  border-top:1px solid var(--hairline);
-  border-bottom:3px double rgba(15,169,160,.4);
-  font-size:13px;font-weight:600;
-}
-tfoot td.num{text-align:end;padding-inline-end:20px;font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums}
+.bullet{margin-top:16px}
+.btrack{position:relative;height:26px;background:var(--sunken);border-radius:5px;overflow:hidden;
+  box-shadow:0 0 0 1px rgba(30,50,62,.7) inset}
+.bfill{position:absolute;top:0;bottom:0;right:0;border-radius:5px;width:0;
+  transition:width .95s var(--ease),background .35s}
+.bghost{position:absolute;top:0;bottom:0;right:0;border-radius:5px;
+  box-shadow:0 0 0 1px rgba(143,166,175,.5) inset;pointer-events:none;transition:width .95s var(--ease)}
+.bthresh{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--warn);box-shadow:0 0 9px rgba(255,181,71,.75)}
+.bscale{display:flex;justify-content:space-between;font-size:9.5px;color:var(--t3);margin-top:6px}
+.marg{display:flex;align-items:baseline;gap:8px;margin-top:12px;font-size:12px;flex-wrap:wrap}
+.marg .v{font-size:16px;font-weight:500}
+.delta{font-size:11px;color:var(--warn)}
 
-.link{color:var(--text-1);text-decoration:none;border-bottom:1px solid rgba(47,212,196,.35)}
-.link:hover{border-bottom-color:var(--accent-glow)}
+/* ═══ SIMULATOR ═══ */
+.sim{background:linear-gradient(160deg,#101E28,#0A1218);border-radius:10px;
+  box-shadow:0 0 0 1px var(--hair),var(--sh-card);padding:20px 24px;margin-bottom:14px}
+.simgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:8px}
+.simctl label{font-size:11px;color:var(--t2);display:flex;align-items:center;gap:6px;margin-bottom:11px}
+.simctl .val{margin-inline-start:auto;font-family:"JetBrains Mono",monospace;font-variant-numeric:tabular-nums;
+  font-size:14px;color:var(--glow)}
+input[type=range]{width:100%;-webkit-appearance:none;appearance:none;height:4px;border-radius:2px;
+  background:var(--hair);outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;border-radius:50%;
+  background:var(--glow);border:2px solid var(--void);cursor:pointer;box-shadow:0 0 10px rgba(47,212,196,.6)}
+input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:50%;background:var(--glow);
+  border:2px solid var(--void);cursor:pointer}
+body.stress input[type=range]::-webkit-slider-thumb{background:var(--neg);box-shadow:0 0 10px rgba(255,90,110,.6)}
+.simfoot{display:flex;align-items:center;gap:14px;margin-top:17px;padding-top:14px;
+  border-top:1px solid var(--hair);flex-wrap:wrap}
+.btn{background:var(--raised);border:0;border-radius:6px;box-shadow:0 0 0 1px var(--hair);padding:8px 14px;
+  font-size:11.5px;color:var(--t2);cursor:pointer;font-family:inherit;transition:box-shadow .15s,color .15s}
+.btn:hover{box-shadow:0 0 0 1px var(--accent);color:var(--glow)}
+.simnote{font-size:10.5px;color:var(--t3);line-height:1.6;flex:1;min-width:220px}
 
-/* ============ מצבים ============ */
-.empty{
-  text-align:center;padding:32px 16px;
-  display:flex;flex-direction:column;align-items:center;gap:12px;
-}
-.empty svg{stroke:var(--text-3);fill:none;stroke-width:1.25}
-.empty p{color:var(--text-2);font-size:13px;max-width:46ch;line-height:1.7}
-.empty .hint{color:var(--text-3);font-size:11px;letter-spacing:.04em}
+/* ═══ TOOLTIP ═══ */
+.ttip{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:50%;
+  box-shadow:0 0 0 1px var(--t3);color:var(--t3);font-size:9px;cursor:help;position:relative;
+  vertical-align:middle;margin-inline-start:5px;font-family:"JetBrains Mono",monospace;flex:none;
+  transition:box-shadow .15s,color .15s}
+.ttip:hover{box-shadow:0 0 0 1px var(--glow);color:var(--glow)}
+.ttip::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 10px);right:50%;
+  transform:translateX(50%) translateY(5px);
+  background:rgba(10,21,32,.97);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+  box-shadow:0 0 0 1px var(--accent),0 14px 38px rgba(0,0,0,.7);border-radius:8px;padding:11px 13px;width:300px;
+  font-family:"Heebo",sans-serif;font-size:11.5px;line-height:1.7;color:var(--t1);font-weight:300;
+  text-align:right;opacity:0;visibility:hidden;transition:opacity .18s,transform .18s;z-index:70;
+  pointer-events:none;white-space:normal}
+.ttip::before{content:"";position:absolute;bottom:calc(100% + 5px);right:50%;transform:translateX(50%);
+  border:5px solid transparent;border-top-color:var(--accent);opacity:0;visibility:hidden;transition:opacity .18s;z-index:71}
+.ttip:hover::after{opacity:1;visibility:visible;transform:translateX(50%) translateY(0)}
+.ttip:hover::before{opacity:1;visibility:visible}
 
-.err{
-  background:#2A1418;border:1px solid rgba(255,90,110,.4);
-  border-radius:var(--r-sm);padding:12px 14px;
-  color:var(--negative);font-size:13px;line-height:1.7;
-}
-.err b{display:block;margin-bottom:4px}
+/* ═══ TABLES ═══ */
+.scroller{overflow:auto;max-height:70vh;border-radius:8px}
+table{width:100%;border-collapse:separate;border-spacing:0;font-size:13px}
+th{font-size:9.5px;color:var(--t3);font-weight:600;letter-spacing:.09em;text-align:right;
+  padding:11px 10px;white-space:nowrap;position:sticky;top:0;z-index:10;
+  background:rgba(20,34,44,.86);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--hair)}
+th.n{text-align:left;padding-inline-start:16px}
+th.srt{cursor:pointer;user-select:none;transition:color .15s}
+th.srt:hover{color:var(--glow)}
+th.srt::after{content:"⇅";font-size:8px;margin-inline-start:4px;opacity:.4}
+th.srt.asc::after{content:"▲";opacity:1;color:var(--glow)}
+th.srt.desc::after{content:"▼";opacity:1;color:var(--glow)}
+td{padding:10px;border-bottom:1px solid rgba(30,50,62,.4)}
+td.n{text-align:left;padding-inline-start:16px}
 
-.skel{background:var(--raised);border-radius:var(--r-sm);animation:pulse 1.5s ease-in-out infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
+/* עמודה ראשונה מוקפאת — ראה הערה ב-README: סותר את כלל ג.1.
+   למי שרוצה לבטל: מחק את שתי ההגדרות הבאות בלבד. */
+.frz{position:sticky;inset-inline-start:0;z-index:9;background:var(--surface)}
+th.frz{z-index:11;background:rgba(20,34,44,.94)}
 
-/* התראות */
-.alert-row{
-  display:flex;align-items:flex-start;gap:10px;
-  padding:10px 0;border-bottom:1px solid rgba(30,50,62,.45);
-  font-size:13px;
-}
-.alert-row:last-child{border-bottom:none}
-.alert-row .lamp{margin-top:6px}
-.alert-row .t{color:var(--text-1)}
-.alert-row .s{color:var(--text-3);font-size:11px;margin-top:2px}
+/* ריחוף עם עמעום השאר */
+tbody:hover tr{opacity:.42;transition:opacity .18s}
+tbody:hover tr:hover{opacity:1;background:rgba(20,34,44,.62)}
+tbody:hover tr:hover .frz{background:#16242F}
+tr.sum td{border-top:1px solid var(--hair);border-bottom:3px double rgba(15,169,160,.4);
+  background:rgba(20,34,44,.5);font-weight:600}
+tfoot tr.sum td{position:sticky;bottom:0;z-index:8;
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+tbody:hover tfoot tr{opacity:1}
+tr.neg td.n{color:var(--t2)}
+.src{font-size:9.5px;color:var(--t3);margin-top:12px;letter-spacing:.03em;line-height:1.6}
 
-/* פוקוס */
-:focus-visible{outline:2px solid var(--accent-glow);outline-offset:2px}
+.mbar{position:relative;height:16px;background:var(--sunken);border-radius:4px;min-width:74px;
+  overflow:hidden;display:inline-block;width:100%;box-shadow:0 0 0 1px rgba(30,50,62,.6) inset}
+.mbar i{position:absolute;top:0;bottom:0;right:0;width:0;
+  background:linear-gradient(270deg,rgba(15,169,160,.75),rgba(15,169,160,.18));transition:width .8s var(--ease)}
+.mbar b{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-family:"JetBrains Mono",monospace;font-variant-numeric:tabular-nums;font-size:10.5px;font-weight:400;color:var(--t1)}
+.mbar.warn i{background:linear-gradient(270deg,rgba(255,181,71,.7),rgba(255,181,71,.15))}
+.mbar.bad i{background:linear-gradient(270deg,rgba(255,90,110,.65),rgba(255,90,110,.15))}
 
-/* גרפים */
-.chart{width:100%;display:block;overflow:visible}
-.chart .grid-line{stroke:var(--hairline);stroke-opacity:.4;stroke-width:1}
-.chart .tick{fill:var(--text-3);font-size:10px;font-family:'JetBrains Mono',monospace}
-.chart .serie-1{stroke:var(--accent-glow);fill:none;stroke-width:1.75}
-.chart .serie-2{stroke:var(--info);fill:none;stroke-width:1.5}
-.chart .dot-1{fill:var(--accent-glow)}
-.enter{animation:rise 400ms ease-out backwards}
-@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.stage{font-size:9.5px;border-radius:4px;box-shadow:0 0 0 1px var(--hair);padding:3px 8px;color:var(--t2);white-space:nowrap}
+.stage.exec{box-shadow:0 0 0 1px rgba(47,212,196,.45);color:var(--glow)}
+.stage.plan{box-shadow:0 0 0 1px rgba(61,139,255,.45);color:var(--info)}
+.stage.done{box-shadow:var(--sh-pos);color:var(--pos)}
+.stage.bad{box-shadow:var(--sh-neg);color:var(--neg)}
 
-@media (prefers-reduced-motion:reduce){*{transition:none !important;animation:none !important}}
+.al{display:flex;gap:12px;padding:11px 0;border-bottom:1px solid rgba(30,50,62,.4);align-items:flex-start}
+.al:last-child{border-bottom:0}
+.dot{width:7px;height:7px;border-radius:50%;margin-top:7px;flex:0 0 auto}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,90,110,.55),0 0 9px rgba(255,90,110,.8)}
+  70%{box-shadow:0 0 0 7px rgba(255,90,110,0),0 0 9px rgba(255,90,110,.8)}
+  100%{box-shadow:0 0 0 0 rgba(255,90,110,0),0 0 9px rgba(255,90,110,.8)}}
+.dot.hi{background:var(--neg);animation:pulse 2s ease-out infinite}
+.dot.md{background:var(--warn);box-shadow:0 0 8px rgba(255,181,71,.55)}
+.dot.ok{background:var(--pos);box-shadow:0 0 8px rgba(52,211,153,.5)}
+.al .tx{flex:1}
+.al .tt{font-size:13px;display:block}
+.al .ds{font-size:11px;color:var(--t3);margin-top:3px;display:block}
+.al .add{font-size:10px;color:var(--t3);border-radius:5px;box-shadow:0 0 0 1px var(--hair);
+  padding:4px 9px;cursor:pointer;white-space:nowrap;transition:box-shadow .15s,color .15s}
+.al .add:hover{box-shadow:0 0 0 1px var(--accent);color:var(--glow)}
+
+/* ═══ מעקב · כפתורים, פעולות והודעת רגע ═══ */
+.add{font-size:10px;color:var(--t3);border-radius:5px;box-shadow:0 0 0 1px var(--hair);
+  padding:4px 9px;cursor:pointer;white-space:nowrap;display:inline-block;
+  transition:box-shadow .15s,color .15s}
+.add:hover{box-shadow:0 0 0 1px var(--accent);color:var(--glow)}
+.act{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:13px}
+.act button{font-family:inherit;font-size:11.5px;color:var(--t2);background:rgba(5,10,13,.6);
+  border:1px solid var(--hair);border-radius:6px;padding:7px 13px;cursor:pointer;
+  transition:border-color .15s,color .15s}
+.act button:hover{border-color:var(--accent);color:var(--glow)}
+.act button.danger:hover{border-color:var(--neg);color:var(--neg)}
+.act .grow{flex:1}
+.fu-st{cursor:pointer}
+.fu-note{cursor:pointer;font-size:11.5px;color:var(--t3);line-height:1.5}
+.fu-note:hover{color:var(--t1)}
+.fu-x{cursor:pointer;color:var(--t3);font-size:13px;padding:0 6px}
+.fu-x:hover{color:var(--neg)}
+.toast{position:fixed;bottom:52px;right:50%;transform:translate(50%,14px);z-index:90;
+  background:var(--raised);color:var(--t1);font-size:12.5px;padding:11px 20px;border-radius:8px;
+  box-shadow:0 0 0 1px var(--accent),0 6px 26px rgba(0,0,0,.6);
+  opacity:0;pointer-events:none;transition:opacity .22s var(--ease),transform .22s var(--ease)}
+.toast.on{opacity:1;transform:translate(50%,0)}
+
+.pos{color:var(--pos)}.negc{color:var(--neg)}.warnc{color:var(--warn)}.infoc{color:var(--info)}
+.na{color:var(--t3)}
+svg{display:block;overflow:visible}
+.gl{stroke:var(--hair);stroke-opacity:.45;stroke-width:1}
+.tk{fill:var(--t3);font-size:9.5px;font-family:"JetBrains Mono",monospace}
+
+.empty{text-align:center;padding:78px 24px}
+.empty .icon{width:36px;height:36px;margin:0 auto 16px;box-shadow:0 0 0 1px var(--hair);border-radius:9px;
+  display:flex;align-items:center;justify-content:center;color:var(--t3);font-size:15px}
+.empty .e1{font-size:16px;color:var(--t1);margin-bottom:8px}
+.empty .e2{font-size:13px;color:var(--t2);max-width:44ch;margin:0 auto;line-height:1.65}
+.empty .e3{font-size:10px;color:var(--t3);letter-spacing:.11em;margin-top:18px}
+.hide{display:none}
+
+@media(max-width:1100px){.grid3,.grid4{grid-template-columns:1fr 1fr}.grid2{grid-template-columns:1fr}
+  .simgrid{grid-template-columns:1fr}}
+@media(max-width:640px){.grid3,.grid4{grid-template-columns:1fr}.ttip::after{width:210px}
+  .card{padding:17px 18px}.banner{padding:12px 15px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
 <body>
 
-<header class="banner">
-  <div class="banner-id">
-    <h1>קבוצת מייטאון</h1>
-    <p>TASE 2449 · התחדשות עירונית · ערכים בשקלים</p>
+<div class="banner">
+  <div>
+    <h1>קבוצת מיי טאון בע״מ</h1>
+    <div class="tagline">מרכז בקרה · באלפי ש״ח</div>
   </div>
-  <div class="banner-tools">
-    <div class="seg" role="group" aria-label="טווח תקופה">
-      <button type="button" data-months="12" aria-pressed="true">12 ח׳</button>
-      <button type="button" data-months="24" aria-pressed="false">24 ח׳</button>
-      <button type="button" data-months="0" aria-pressed="false">הכל</button>
+  <div class="live manual" id="liveStatus" title="מקור הנתונים">
+    <span class="pip"></span><span id="liveText">—</span>
+  </div>
+  <div class="sp"></div>
+  <div class="tog" id="stressToggle" role="switch" aria-checked="false" tabindex="0">
+    <span class="sw"></span><span class="txt">מבחן קיצון · 15%−</span>
+  </div>
+  <div class="dd">30 ביוני 2026</div>
+  <div class="dd">מאוחד</div>
+  <div class="chip">רבעוני · סקירה</div>
+  <div class="ico" id="zenBtn" role="button" tabindex="0" title="מסך מלא · Zen" aria-label="מסך מלא">
+    <svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="nav">
+    <div class="tab" data-t="home">בית</div>
+    <div class="tab" data-t="audit">ביקורת</div>
+    <div class="tab on" data-t="strength">איתנות</div>
+    <div class="tab" data-t="proj">פרויקטים</div>
+  </div>
+
+  <div class="sub" id="subBar"></div>
+  <div class="stressbar" id="stressBar"></div>
+
+  <!-- ═══ COVENANTS ═══ -->
+  <div id="scr-strength-0" class="screen hide">
+    <div class="sim">
+      <h2 style="margin-bottom:12px">סימולטור · מה יקרה אם</h2>
+      <div class="simgrid">
+        <div class="simctl">
+          <label>חלוקת דיבידנד
+            <span class="ttip" data-tip="חלוקה מקטינה את ההון העצמי במלואה. המימון נלקח תחילה מהמזומן המנוכה מהמאזן המתואם (2,806); מעבר לכך, המאזן המתואם נשחק אף הוא. שים לב: לחברה יתרת הפסד של (20,012) ולכן חלוקה אינה עומדת במבחן הרווח.">?</span>
+            <span class="val" id="vDiv">0</span>
+          </label>
+          <input type="range" id="sDiv" min="0" max="20000" step="250" value="0" aria-label="חלוקת דיבידנד">
+        </div>
+        <div class="simctl">
+          <label>מחיקת ערך פרויקטים
+            <span class="ttip" data-tip="ירידת ערך מלאי מקטינה נכסים והון במקביל, ברוטו — ללא זקיפת מגן מס, משום שהחברה ביתרת הפסד ואין ודאות להכרה בנכס מס נוסף. הנכסים המשועבדים נשחקים 1:1 בחלק היחסי של הפרויקטים המשועבדים (74.3% מהערך בספרים).">?</span>
+            <span class="val" id="vWD">0</span>
+          </label>
+          <input type="range" id="sWD" min="0" max="40000" step="500" value="0" aria-label="מחיקת ערך">
+        </div>
+        <div class="simctl">
+          <label>גיוס חוב חדש
+            <span class="ttip" data-tip="ההנחה: אשראי בנקאי שנמשך ומושקע מיידית בבנייה, ולא נותר כמזומן. לכן הנכסים והמאזן המתואם גדלים, ההון אינו משתנה, ויחס ההון למאזן נשחק. חוב בנקאי אינו נכנס למונה של יחס חוב לבטוחה, המחושב על אג״ח בלבד.">?</span>
+            <span class="val" id="vDebt">0</span>
+          </label>
+          <input type="range" id="sDebt" min="0" max="80000" step="1000" value="0" aria-label="חוב חדש">
+        </div>
+      </div>
+      <div class="simfoot">
+        <button class="btn" id="resetSim">איפוס</button>
+        <div class="simnote">הקו המקווקו על כל מד מציין את הערך המדווח בפועל. הסימולציה היא חישוב נגזר ואינה נתון מדווח.</div>
+      </div>
     </div>
-    <span class="chip" id="statusChip"><span class="lamp"></span><span id="statusText">טוען</span></span>
+
+    <div class="grid3" id="covRow"></div>
+
+    <div class="grid2">
+      <div class="card">
+        <h2>אופן החישוב</h2>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:28px">
+          <div>
+            <div class="lbl" style="margin-bottom:9px">הון עצמי מתואם</div>
+            <table id="tblEquity"></table>
+          </div>
+          <div>
+            <div class="lbl" style="margin-bottom:9px">מאזן מתואם</div>
+            <table id="tblBalance"></table>
+          </div>
+        </div>
+        <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--hair)">
+          <div class="lbl" style="margin-bottom:9px">יחס חוב לבטוחה</div>
+          <table id="tblDebt"></table>
+        </div>
+        <div class="src">שטר נאמנות אג״ח סדרה א׳ · סעיפים 6.3.1, 6.3.2, 6.4.1, 6.4.2, 8.1.25</div>
+      </div>
+
+      <div>
+        <div class="card" style="margin-bottom:14px">
+          <h2>מגמת ההון</h2>
+          <div id="sparkEquity"></div>
+          <div style="margin-top:13px;font-size:12px;color:var(--t2);line-height:1.6" id="equityNote"></div>
+          <div class="src">חישוב נגזר · לא נתון מדווח</div>
+        </div>
+        <div class="card" style="margin-bottom:14px">
+          <h2>נזילות מול פירעונות
+            <span class="ttip" data-tip="מזומן פנוי הוא מזומן ושווי מזומן בלבד. פיקדונות מוגבלים וכספי חשבונות ליווי אינם זמינים לשירות חוב — הם משועבדים לטובת הפרויקטים ולרוכשים, ולכן מוצגים בנפרד.">?</span>
+          </h2>
+          <div id="liqChart"></div>
+        </div>
+        <div class="card">
+          <h2>שחיקת המרווח לאורך זמן</h2>
+          <div id="runwayChart"></div>
+          <div class="src">חישוב נגזר · מניח קצב שחיקה קבוע · אינו תחזית של החברה</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:14px">
+      <h2>דורש תשומת לב</h2>
+      <div id="covAlerts"></div>
+    </div>
   </div>
-</header>
 
-<main>
-  <section class="kpi-row" id="kpis" aria-label="מדדים מרכזיים" aria-live="polite"></section>
 
-  <div class="grid">
-    <section class="card span-2">
-      <h2>הכנסות ורווח · לאורך הרבעונים</h2>
-      <div id="trend"></div>
-    </section>
-
-    <section class="card">
-      <h2>התראות</h2>
-      <div id="alerts"></div>
-    </section>
-
-    <section class="card span-2">
-      <h2>תיק הפרויקטים</h2>
-      <div id="projects"></div>
-    </section>
-
-    <section class="card">
-      <h2>גשר רווח בין תקופות</h2>
-      <div id="bridge"></div>
-    </section>
-
-    <section class="card span-2">
-      <h2>עסקאות אחרונות</h2>
-      <div id="deals"></div>
-    </section>
-
-    <section class="card">
-      <h2>דיווחים במאיה</h2>
-      <div id="reports"></div>
-    </section>
+  <!-- ═══ HOME ═══ -->
+  <div id="scr-home-0" class="screen hide">
+    <div class="grid4" id="homeKpi"></div>
+    <div class="grid2">
+      <div class="card"><h2>הרבעון במבט אחד</h2><div id="homeQuarter"></div></div>
+      <div class="card"><h2>דורש טיפול</h2><div id="homeAlerts"></div></div>
+    </div>
   </div>
-</main>
+  <div id="scr-home-1" class="screen hide">
+    <div class="stressbar" style="display:block;background:rgba(61,139,255,.07);box-shadow:0 0 0 1px rgba(61,139,255,.3);color:#BFD6FF">
+      <b style="color:var(--info)">מפת סיכונים · לא המלצה.</b> המסך מבוסס על הגילוי הציבורי בלבד ואינו מהווה ייעוץ,
+      דירוג או חוות דעת על כדאיות השקעה. מועדי ארבעת תשלומי הקרן והתשואה השוטפת אינם בגילוי ומוצגים כמקפים.
+    </div>
+    <div class="grid4" id="invKpi"></div>
+    <div class="grid2">
+      <div class="card"><h2>מה שצריך לבחון</h2><div id="invRisk"></div></div>
+      <div class="card"><h2>נורות אזהרה · תקנה 10(ב)(14)</h2><div id="invWarn"></div></div>
+    </div>
+  </div>
 
-<script>
-/* ---------- פורמט מספרים (סעיף 5) ---------- */
-const NA = '<span class="na">—</span>';
-function num(n){
-  if(n===null||n===undefined||Number.isNaN(n)) return NA;
-  if(n===0) return NA;
-  const v = Math.round(n).toLocaleString('he-IL');
-  return n<0 ? `(${Math.abs(Math.round(n)).toLocaleString('he-IL')})` : v;
-}
-function pct(n,digits=1){
-  if(n===null||n===undefined||!Number.isFinite(n)) return NA;
-  return n.toFixed(digits)+'%';
-}
-/* אחוז שינוי מוצג רק כשהבסיס משמעותי */
-function delta(cur,base){
-  if(!Number.isFinite(cur)||!Number.isFinite(base)||base<=0) return NA;
-  const d=((cur-base)/base)*100;
-  const cls = d>=0?'up':'down';
-  const arrow = d>=0?'▲':'▼';
-  return `<span class="${cls}">${arrow} ${Math.abs(d).toFixed(1)}%</span>`;
-}
-const toDate = s => { const d = new Date(s); return isNaN(d) ? null : d; };
-const median = a => { if(!a.length) return null; const s=[...a].sort((x,y)=>x-y); const m=s.length>>1;
-  return s.length%2 ? s[m] : (s[m-1]+s[m])/2; };
+  <!-- ═══ ANALYTIC ═══ -->
+  <div id="scr-audit-0" class="screen hide">
+    <div class="card">
+      <h2>מבחני שינוי
+        <span class="ttip" data-tip="סעיפים מאזניים: יתרה מול יתרה, ללא עיבוד. סעיפי רווח והפסד: שלושה מבחנים במקביל. הרבעון הבודד נגזר בחיסור מהמצטבר.">?</span>
+      </h2>
+      <div style="display:flex;gap:9px;margin-bottom:14px;flex-wrap:wrap">
+        <button class="btn" id="btnPL">רווח והפסד</button>
+        <button class="btn" id="btnBS">מאזן</button>
+      </div>
+      <div id="analyticBody"></div>
+    </div>
+    <div class="card" style="margin-top:14px">
+      <h2>חריגות · ממוינות לפי סכום</h2>
+      <div id="analyticEx"></div>
+    </div>
+  </div>
 
-/* ---------- מצבים (סעיף 7) ---------- */
-function empty(msg, hint){
-  return `<div class="empty">
-    <svg width="30" height="30" viewBox="0 0 24 24" aria-hidden="true">
-      <rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M9 9v11"/>
-    </svg>
-    <p>${msg}</p>${hint?`<p class="hint">${hint}</p>`:''}
-  </div>`;
+  <!-- ═══ RELATED ═══ -->
+  <div id="scr-audit-1" class="screen hide">
+    <div class="grid2">
+      <div class="card"><h2>מטריצת יתרות</h2><div id="relatedBody"></div>
+        <div class="src">מקור · מאזן 30.6.2026 מול 31.12.2025</div></div>
+      <div class="card"><h2>מה שהמספרים מספרים</h2><div id="relatedInsight"></div></div>
+    </div>
+  </div>
+
+  <!-- ═══ FOLLOW-UP ═══ -->
+  <div id="scr-audit-3" class="screen hide">
+    <div class="grid4" id="followKpi"></div>
+    <div class="card"><h2>אוסף המעקב</h2><div id="followBody"></div></div>
+  </div>
+
+  <!-- ═══ LIQUIDITY ═══ -->
+  <div id="scr-strength-1" class="screen hide">
+    <div class="grid4" id="liqKpi"></div>
+    <div class="card"><h2>מקורות נזילות · לפי זמינות אמיתית</h2><div id="liqBody"></div></div>
+  </div>
+
+  <!-- ═══ LEVERAGE ═══ -->
+  <div id="scr-strength-2" class="screen hide">
+    <div class="grid4" id="levKpi"></div>
+    <div class="card"><h2>הרכב מקורות המימון</h2><div id="levBody"></div></div>
+  </div>
+
+  <!-- ═══ WARNINGS ═══ -->
+  <div id="scr-strength-3" class="screen hide">
+    <div class="grid2">
+      <div class="card"><h2>ארבע נורות האזהרה</h2><div id="warnBody"></div>
+        <div class="src">תקנה 10(ב)(14) לתקנות ניירות ערך · דוח דירקטוריון 30.6.2026</div></div>
+      <div class="card"><h2>ביקורת וסיווג</h2><div id="warnAudit"></div></div>
+    </div>
+  </div>
+
+  <!-- ═══ IN EXECUTION ═══ -->
+  <div id="scr-proj-1" class="screen hide">
+    <div class="grid4" id="execKpi"></div>
+    <div class="card"><h2>פרויקטים בביצוע · כלכלה מלאה
+      <span class="ttip" data-tip="סף ירידת ערך = שיעור הרווח הגולמי של הפרויקט. מתחתיו שווי המימוש נותר מעל העלות ולא נוצרת ירידת ערך. נתוני המצגת ליום 31.3.2026.">?</span></h2>
+      <div id="execBody"></div>
+      <div class="src">מקור · מצגת משקיעים 24.5.2026 · נתונים ליום 31.3.2026 · לפי 100% למעט עמודת חלק החברה</div>
+    </div>
+  </div>
+
+  <!-- ═══ PLANNING ═══ -->
+  <div id="scr-proj-2" class="screen hide">
+    <div class="grid4" id="planKpi"></div>
+    <div class="card"><h2>פרויקטים בתכנון</h2><div id="planBody"></div>
+      <div class="src">מקור · מצגת משקיעים 24.5.2026 · נתונים ליום 31.3.2026</div></div>
+    <div class="card" style="margin-top:14px"><h2>התחדשות עירונית · שלבי ייזום</h2>
+      <div id="urbanBody"></div>
+      <div class="src">13 פרויקטים · היקף הכנסות 3.15 מיליארד ש״ח · שיעור ההסכמה הוא אחוז בעלי הדירות שחתמו</div></div>
+  </div>
+
+  <!-- ═══ COMPLETED ═══ -->
+  <div id="scr-proj-3" class="screen hide">
+    <div class="grid4" id="doneKpi"></div>
+    <div class="card"><h2>מסירות ופרויקטים שהושלמו</h2><div id="doneBody"></div></div>
+  </div>
+
+  <!-- ═══ EVENTS ═══ -->
+  <div id="scr-audit-2" class="screen hide">
+    <div class="card">
+      <h2>אירועים בתקופת הדיווח ולאחריה</h2>
+      <div id="eventsList"></div>
+      <div class="src">מקור · דיווחים מיידיים למאיה · דוח דירקטוריון · מצגת משקיעים 24.5.2026</div>
+    </div>
+    <div class="grid2" style="margin-top:14px">
+      <div class="card">
+        <h2>אג״ח סדרה א׳ · תנאים</h2>
+        <table id="bondTable"></table>
+        <div id="bondNote" style="margin-top:12px;font-size:12px;color:var(--t2);line-height:1.7"></div>
+        <div class="src">מקור · דוח דירקטוריון Q1/2026 · דוח נאמן 2025 · נאמן: משמרת · הריבית הוזנה ידנית ולא אומתה מול שטר הנאמנות</div>
+      </div>
+      <div class="card">
+        <h2>ההון החוזר · שלוש נקודות</h2>
+        <div id="wcChart"></div>
+        <div style="margin-top:12px;font-size:12px;color:var(--t2);line-height:1.65" id="wcNote"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ PROJECTS ═══ -->
+  <div id="scr-proj-0" class="screen hide">
+    <div class="grid4" id="projKpi"></div>
+    <div class="card">
+      <h2>סטטוס פרויקטים · 30.6.2026
+        <span class="ttip" data-tip="לחיצה על כותרת עמודה ממיינת. לחיצה שנייה הופכת את הכיוון. ברירת המחדל היא מיון לפי הפער בין ביצוע לשיווק, כך שהפרויקטים המסוכנים ביותר צפים למעלה.">?</span>
+      </h2>
+      <div style="display:flex;gap:9px;margin-bottom:14px;flex-wrap:wrap">
+        <button class="btn" id="btnCsv">ייצוא ל־CSV</button>
+        <button class="btn" id="btnGap">מיין לפי פער</button>
+      </div>
+      <div class="scroller">
+        <table id="projTable">
+          <thead><tr id="projHead"></tr></thead>
+          <tbody id="projBody"></tbody>
+          <tfoot id="projFoot"></tfoot>
+        </table>
+      </div>
+      <div class="src">מקור · נספח א׳ גילוי רבעוני נדל״ן יזמי, דוח 30.6.2026, עמ׳ 19–32 · נתונים לפי 100% · עמודות הפער והחשיפה מחושבות</div>
+    </div>
+
+    <div class="grid2" style="margin-top:14px">
+      <div class="card">
+        <h2>הפער בין ביצוע לשיווק
+          <span class="ttip" data-tip="פער = אחוז ההשלמה הכספית פחות אחוז השיווק. פער חיובי משמעו שהחברה בונה מהר יותר משהיא מוכרת, ולכן ממנת את הבנייה מהון ומאשראי במקום מתקבולי רוכשים. זהו המדד המרכזי לניהול הסיכון של יזם.">?</span>
+        </h2>
+        <div id="gapChart"></div>
+        <div style="margin-top:15px;font-size:12px;color:var(--t2);line-height:1.6" id="gapNote"></div>
+        <div class="src">מדד מחושב · לא נתון מדווח</div>
+      </div>
+      <div class="card">
+        <h2>ריכוזיות החשיפה</h2>
+        <div id="projAlerts"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="ph" class="screen hide">
+    <div class="empty">
+      <div class="icon">◫</div>
+      <div class="e1" id="ph1"></div>
+      <div class="e2" id="ph2"></div>
+      <div class="e3">טרם נבנה</div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+"use strict";
+
+/* ═══════════ מקור הנתונים ═══════════
+   נקודת החיבור היחידה. כשתתחבר הזנה אמיתית, שנה mode ל-"live"
+   ועדכן lastSync — המחוון יתהפך לבד. אין כאן סימולציה של חיבור. */
+/* ═══════════ מקור הנתונים ═══════════
+   אין מספרים קשיחים בקוד. כל הנתונים יושבים ב-data/app/*.json ונטענים כאן.
+   עדכון רבעון הוא עריכת JSON — הקוד לא משתנה.
+   כשתתחבר הזנה אמיתית, שנה mode ל-"live" ועדכן lastSync ב-meta.json. */
+const FILES=["meta","bond","statements","projects","related","events","followups.seed"];
+async function loadJson(name){
+  const r=await fetch("data/app/"+name+".json",{cache:"no-store"});
+  if(!r.ok)throw new Error("data/app/"+name+".json · "+r.status+" "+r.statusText);
+  return r.json();
 }
-function errorBox(title,msg){
-  return `<div class="err"><b>${title}</b>${msg}</div>`;
-}
-function skeleton(h=90){
-  return `<div class="skel" style="height:${h}px"></div>`;
+let META,BONDSRC,STMT,PROJ,RELSRC,EVSRC,SEED;
+try{
+  [META,BONDSRC,STMT,PROJ,RELSRC,EVSRC,SEED]=await Promise.all(FILES.map(loadJson));
+}catch(err){
+  document.body.innerHTML=
+    '<div style="max-width:720px;margin:14vh auto;padding:26px 30px;background:#0E1820;'+
+    'border-radius:10px;box-shadow:0 0 0 1px rgba(255,90,110,.36)">'+
+    '<div style="font-size:19px;font-weight:600;color:#FF5A6E;margin-bottom:12px">טעינת הנתונים נכשלה</div>'+
+    '<div style="font-size:13.5px;color:#8FA6AF;line-height:1.85">'+
+    'הדשבורד קורא את הנתונים מ־<code>data/app/*.json</code>. הקריאה נכשלה:<br>'+
+    '<span style="color:#E8F1F3">'+String(err.message||err)+'</span><br><br>'+
+    '<b style="color:#E8F1F3">הסיבה השכיחה:</b> הדף נפתח ישירות מהדיסק. הדפדפן חוסם '+
+    '<code>fetch</code> על פרוטוקול <code>file://</code>, ולכן דרוש שרת:<br>'+
+    '<code style="display:block;margin:10px 0;padding:9px 12px;background:#050A0D;border-radius:6px;'+
+    'direction:ltr;text-align:left;color:#2FD4C4">python3 -m http.server 8000</code>'+
+    'ואז <code>http://localhost:8000</code>.</div></div>';
+  throw err;
 }
 
-/* ---------- KPI ---------- */
-function sparkline(values){
-  if(!values || values.length<2) return '<svg class="spark" viewBox="0 0 100 22" preserveAspectRatio="none"></svg>';
-  const min=Math.min(...values), max=Math.max(...values), rng=(max-min)||1;
-  const pts=values.map((v,i)=>`${(i/(values.length-1))*100},${22-((v-min)/rng)*20-1}`).join(' ');
-  return `<svg class="spark" viewBox="0 0 100 22" preserveAspectRatio="none" aria-hidden="true">
-    <polyline points="${pts}" fill="none" stroke="var(--accent-glow)" stroke-width="1.25" vector-effect="non-scaling-stroke"/>
-  </svg>`;
-}
-function kpi({value,label,compare,spark,delay=0}){
-  return `<article class="card kpi enter" style="animation-delay:${delay}ms">
-    ${sparkline(spark)}
-    <span class="val mono">${value}</span>
-    <span class="lbl">${label}</span>
-    <span class="cmp">${compare??NA}</span>
-  </article>`;
-}
+/* ── נגזר מהנתונים · אין כאן ערכים, רק מיפוי ── */
+const SOURCE={
+  mode:META.source.mode,
+  label:META.source.label,
+  asOf:new Date(META.source.asOf+"T00:00:00"),
+  lastSync:META.source.lastSync?new Date(META.source.lastSync):null
+};
+const BASE=META.base;
+const THRESH=META.thresholds;
+const PRIOR_COV=META.covenantsPriorPeriod;
+const EQUITY_TREND=META.equityTrend.map(p=>({label:p.label,v:p.value}));
+const WC=META.workingCapital.map(p=>({l:p.label,v:p.value}));
+const SCOPE=META.scope;
+const LAYER={A:{d:META.layers.A.date,src:META.layers.A.source},
+             B:{d:META.layers.B.date,src:META.layers.B.source}};
+const PROJECTS=PROJ.inExecution;
+const TOTALS=PROJ.totals;
+const EVENTS=EVSRC.events.map(e=>({d:e.date,t:e.title,s:e.detail,k:e.kind}));
 
-/* ---------- גרף קווים (תומך בשתי סדרות) ---------- */
-function lineChart(series, opts={}){
-  const s2=opts.series2||null, names=opts.names||null;
-  if(!series.length || series.length<2) return empty(opts.emptyMsg||'אין מספיק נקודות זמן כדי לשרטט מגמה.',opts.emptyHint||'');
-  const W=620,H=210,PT=18,PB=34,PS=58;
-  const all=series.map(d=>d.v).concat(s2?s2.map(d=>d.v):[]);
-  const min=Math.min(...all,0), max=Math.max(...all);
-  const pad=(max-min)*0.12||1;
-  const lo=min-pad, hi=max+pad;
-  const x=i=>PS+(i/(series.length-1))*(W-PS-16);
-  const y=v=>PT+(1-(v-lo)/((hi-lo)||1))*(H-PT-PB);
-  const line=arr=>arr.map((d,i)=>`${i?'L':'M'}${x(i).toFixed(1)},${y(d.v).toFixed(1)}`).join(' ');
-  const gl=[];
-  for(let i=0;i<=4;i++){
-    const v=lo+((hi-lo)*i)/4, yy=y(v);
-    gl.push(`<line class="grid-line" x1="${PS}" y1="${yy.toFixed(1)}" x2="${W-16}" y2="${yy.toFixed(1)}"/>
-      <text class="tick" x="${PS-8}" y="${(yy+3).toFixed(1)}" text-anchor="end">${Math.round(v/1000).toLocaleString('he-IL')}</text>`);
-  }
-  if(lo<0&&hi>0) gl.push(`<line class="grid-line" style="stroke-opacity:.8" x1="${PS}" y1="${y(0).toFixed(1)}" x2="${W-16}" y2="${y(0).toFixed(1)}"/>`);
-  const dots=(arr,cls)=>arr.map((d,i)=>`<circle class="${cls}" cx="${x(i).toFixed(1)}" cy="${y(d.v).toFixed(1)}" r="2.5"
-    style="animation:rise 400ms ease-out backwards;animation-delay:${i*40}ms"><title>${d.label}: ${Math.round(d.v/1000).toLocaleString('he-IL')} אלפי ₪</title></circle>`).join('');
-  const xt=series.map((d,i)=>`<text class="tick" x="${x(i).toFixed(1)}" y="${H-14}" text-anchor="middle">${d.label}</text>`).join('');
-  const legend = names ? `<div style="display:flex;gap:16px;font-size:11px;color:var(--text-2);margin-top:8px">
-      <span><span style="display:inline-block;width:14px;height:2px;background:var(--accent-glow);vertical-align:middle;margin-inline-end:6px"></span>${names[0]}</span>
-      <span><span style="display:inline-block;width:14px;height:2px;background:var(--info);vertical-align:middle;margin-inline-end:6px"></span>${names[1]}</span>
-    </div>` : '';
-  return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="${opts.label||'מגמה'}">
-    ${gl.join('')}
-    ${s2?`<path class="serie-2 enter" d="${line(s2)}"/>`:''}
-    <path class="serie-1 enter" d="${line(series)}"/>
-    ${s2?dots(s2,'').replace(/class=""/g,'fill="var(--info)"'):''}
-    ${dots(series,'dot-1')}${xt}
-    <text class="tick" x="${PS-8}" y="${PT-6}" text-anchor="end">אלפי ₪</text>
-  </svg>${legend}`;
-}
-
-/* ---------- גשר (Waterfall) ---------- */
-function waterfall(steps){
-  const W=380,H=230,PT=14,PB=54,PS=54;
-  let run=0; const bars=[];
-  steps.forEach(s=>{
-    if(s.total){ bars.push({...s, from:0, to:s.value}); run=s.value; }
-    else { bars.push({...s, from:run, to:run+s.value}); run+=s.value; }
+/* ── אג״ח סדרה א׳ · לוח הסילוקין נגזר מתנאי השטר, לא מוקלד ──
+   קרן: ארבעה תשלומים לא שווים · ריבית: חצי-שנתית על היתרה הבלתי מסולקת.
+   מקור התנאים: נספח א' לדוח הדירקטוריון 31.12.2025 · ביאור 17. */
+function bondSchedule(b,fromISO){
+  const from=fromISO, nominal=b.nominalAtIssue;
+  let out=nominal;
+  b.principalPayments.forEach(p=>{if(p.date<=from)out-=nominal*p.pct;});
+  const dates=new Set();
+  for(let y=Number(from.slice(0,4));y<=b.interestLastYear;y++)
+    b.interestPaymentDates.forEach(md=>dates.add(y+"-"+md));
+  b.principalPayments.forEach(p=>dates.add(p.date));
+  const rows=[];
+  [...dates].sort().forEach(d=>{
+    if(d<=from)return;
+    const interest=out*b.coupon/2;
+    const pp=b.principalPayments.find(p=>p.date===d);
+    const principal=pp?nominal*pp.pct:0;
+    out-=principal;
+    rows.push({date:d,interest,principal,total:interest+principal,balance:out});
   });
-  const all=bars.flatMap(b=>[b.from,b.to]).concat(0);
-  const lo=Math.min(...all), hi=Math.max(...all), rng=(hi-lo)||1;
-  const y=v=>PT+(1-(v-lo)/rng)*(H-PT-PB);
-  const bw=(W-PS-14)/bars.length*0.62, gap=(W-PS-14)/bars.length;
-  const fmtK=v=>Math.round(v/1000).toLocaleString('he-IL');
-  return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="גשר מהכנסות לרווח נקי">
-    <line class="grid-line" x1="${PS}" y1="${y(0).toFixed(1)}" x2="${W-8}" y2="${y(0).toFixed(1)}"/>
-    ${bars.map((b,i)=>{
-      const x=PS+i*gap+(gap-bw)/2;
-      const yy=Math.min(y(b.from),y(b.to)), h=Math.max(Math.abs(y(b.to)-y(b.from)),1.5);
-      const color=b.total?'var(--accent)':(b.value>=0?'var(--positive)':'var(--negative)');
-      return `<g style="animation:rise 400ms ease-out backwards;animation-delay:${i*40}ms">
-        <rect x="${x.toFixed(1)}" y="${yy.toFixed(1)}" width="${bw.toFixed(1)}" height="${h.toFixed(1)}"
-              fill="${color}" fill-opacity="${b.total?.85:.65}" rx="2"><title>${b.label}: ${fmtK(b.value)} אלפי ₪</title></rect>
-        <text class="tick" x="${(x+bw/2).toFixed(1)}" y="${(yy-5).toFixed(1)}" text-anchor="middle"
-              fill="${b.value<0&&!b.total?'var(--negative)':'var(--text-2)'}">${fmtK(b.value)}</text>
-        <text class="tick" x="${(x+bw/2).toFixed(1)}" y="${H-32}" text-anchor="middle">${b.label}</text>
-      </g>`;}).join('')}
-    <text class="tick" x="${PS}" y="${H-10}" fill="var(--text-3)">אלפי ₪</text>
-  </svg>`;
+  return rows;
+}
+const BOND=Object.assign({},BONDSRC,{
+  nominal:BONDSRC.nominalAtIssue*(1-BONDSRC.principalPayments
+    .filter(p=>p.date<=META.source.asOf).reduce((a,p)=>a+p.pct,0)),
+  balance:BONDSRC.carrying.current+BONDSRC.carrying.noncurrent,
+  valueWithAccrued:BONDSRC.carrying.accruedPrincipalPlusInterest,
+  installments:BONDSRC.principalPayments.length,
+  finalPrincipal:BONDSRC.principalPayments[BONDSRC.principalPayments.length-1].date,
+  marketYield:BONDSRC.market.yield,
+  schedule:bondSchedule(BONDSRC,META.source.asOf)
+});
+/* חלויות 12 החודשים הקרובים · נגזר מהלוח */
+const NEXT12=(()=>{
+  const to=new Date(SOURCE.asOf.getTime());to.setFullYear(to.getFullYear()+1);
+  const cut=to.toISOString().slice(0,10);
+  return BOND.schedule.filter(r=>r.date<=cut)
+    .reduce((a,r)=>({principal:a.principal+r.principal,interest:a.interest+r.interest}),
+      {principal:0,interest:0});
+})();
+
+const SIM={div:0,wd:0,debt:0};
+let STRESS=false, sortKey="gap", sortDir=-1, firstPaint=true;
+const REDUCED=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* ═══════════ פורמט ═══════════ */
+const fmt=n=>{
+  if(n===null||n===undefined||!Number.isFinite(n))return "—";
+  const a=Math.round(Math.abs(n)).toLocaleString("he-IL");
+  return n<0?"("+a+")":a;
+};
+const pctS=(n,d)=>Number.isFinite(n)?(n*100).toFixed(d===undefined?1:d)+"%":"—";
+const ptS=n=>Number.isFinite(n)?(n>=0?"+":"−")+Math.abs(n).toFixed(1):"—";
+
+/* ═══════════ מבחן קיצון · מודל IFRS 15 ═══════════
+   קיצוץ 15% אינו מחיקת ערך של 15%. מלאי נמדד לפי עלות או שווי מימוש,
+   הנמוך. ברווח גולמי 22.6%, הכנסה חזויה ≈ עלות ÷ 0.774 ולכן קיצוץ 15%
+   משאיר אותה מעל העלות. מה שכן נוצר: התאמת cumulative catch-up על
+   ההכנסה שהוכרה עד היום, ורק על החלק שטרם נמכר — חוזים חתומים במחיר קבוע. */
+const HAIRCUT=0.15, IMPAIR_AT=BASE.grossMargin;
+/* ── המודל מבוסס כעת על כלכלת הפרויקט האמיתית מהמצגת ולא על פרוקסי ──
+   שיעורי הרווח הגולמי נעים בין 20.1% ל־37.8%. לכל פרויקט סף ירידת ערך
+   משלו, השווה בדיוק לשיעור הרווח שלו: מתחתיו NRV עדיין מעל העלות. */
+function stressOn(p){
+  if(!Number.isFinite(p.rev)||!Number.isFinite(p.cost))return null;
+  const ex=Number.isFinite(p.execB)?p.execB:p.exec;
+  const mk=Number.isFinite(p.mktB)?p.mktB:p.mkt;
+  if(!Number.isFinite(ex)||!Number.isFinite(mk))return null;
+  const sh=Number.isFinite(p.shareB)?p.shareB:p.share;
+  const margin=p.gp/p.rev;
+  const impairAt=1-p.cost/p.rev;              // הקיצוץ שממנו NRV<עלות
+  const exposed=p.rev*(1-mk);                 // רק יחידות שטרם נמכרו
+  const revLoss=exposed*HAIRCUT;
+  const immediate=revLoss*ex;                 // catch-up לפי IFRS 15
+  const nrvBreach=Math.max(0,p.cost-p.rev*(1-HAIRCUT));
+  return {cost:p.cost,revenue:p.rev,margin,impairAt,exposed,revLoss,immediate,
+    immediateShare:immediate*sh,future:(revLoss-immediate)*sh,nrvBreach:nrvBreach*sh,
+    triggered:HAIRCUT>=impairAt};
+}
+function stressTotals(){let imm=0,fut=0;PROJECTS.forEach(p=>{const s=stressOn(p);
+  if(s){imm+=s.immediateShare;fut+=s.future;}});return {imm,fut};}
+const stressGap=p=>Number.isFinite(p.mkt)?(STRESS?p.mkt*(1-HAIRCUT):p.mkt):null;
+
+/* ═══════════ מנוע הקובננטים ═══════════ */
+function computeCovenants(){
+  const st=STRESS?stressTotals().imm:0, {div,wd,debt}=SIM;
+  const adjEquity=BASE.ownersEquity+BASE.subLoans-div-wd-st;
+  const cashAfter=Math.max(0,BASE.cashFree+BASE.depositsFree-div);
+  const assets=BASE.totalAssets-div-wd-st+debt;
+  const adjBalance=assets-cashAfter-BASE.buildServices-BASE.contractLiab;
+  const ratio=adjBalance>0?adjEquity/adjBalance:0;
+  const pledgedHit=(wd+st)*BASE.pledgedBookShare;
+  const collateral=Math.max(1,BASE.pledgedAssets-pledgedHit);
+  return {adjEquity,adjBalance,ratio,collateral,cashAfter,pledgedHit,stressHit:st,
+    debtCol:(BASE.bondAccrued-BASE.finCollateral)/collateral};
+}
+const BASELINE=(()=>{const s=STRESS,d=SIM.div,w=SIM.wd,n=SIM.debt;
+  STRESS=false;SIM.div=SIM.wd=SIM.debt=0;const r=computeCovenants();
+  STRESS=s;SIM.div=d;SIM.wd=w;SIM.debt=n;return r;})();
+
+/* ═══════════ Count-Up ═══════════ */
+function countUp(el,to,render,ms){
+  if(REDUCED){el.textContent=render(to);return;}
+  const dur=ms||900, t0=performance.now();
+  const ease=t=>1-Math.pow(1-t,3);
+  (function step(now){
+    const t=Math.min(1,(now-t0)/dur);
+    el.textContent=render(to*ease(t));
+    if(t<1)requestAnimationFrame(step);
+  })(performance.now());
+}
+function runCountUps(scope){
+  (scope||document).querySelectorAll("[data-count]").forEach(el=>{
+    const to=Number(el.dataset.count), kind=el.dataset.kind||"num";
+    countUp(el,to,v=>kind==="pct"?pctS(v):fmt(v));
+  });
+}
+/* מילוי מדים בהדרגה — נדחה לפריים הבא כדי שה-transition ייתפס */
+function growBars(scope){
+  requestAnimationFrame(()=>{
+    (scope||document).querySelectorAll("[data-w]").forEach(el=>{el.style.width=el.dataset.w+"%";});
+  });
 }
 
-/* ---------- רינדור ---------- */
-let RAW=null, FIN=null, MONTHS=12;
-
-function dealsInRange(deals){
-  if(!deals) return [];
-  const rows = deals.map(d=>({...d,_d:toDate(d.date)})).filter(d=>d._d && Number.isFinite(d.price) && d.price>0);
-  if(!MONTHS) return rows.sort((a,b)=>b._d-a._d);
-  const cut=new Date(); cut.setMonth(cut.getMonth()-MONTHS);
-  return rows.filter(d=>d._d>=cut).sort((a,b)=>b._d-a._d);
+/* ═══════════ SVG ═══════════ */
+function sparkline(pts,w,h){
+  const vals=pts.map(p=>p.v),mn=Math.min(...vals),mx=Math.max(...vals),r=(mx-mn)||1;
+  const PL=8,PR=8,PT=12,PB=18;
+  const x=i=>PR+(i/(pts.length-1))*(w-PL-PR), y=v=>PT+(1-(v-mn)/r)*(h-PT-PB);
+  const d=pts.map((p,i)=>(i?"L":"M")+x(i).toFixed(1)+","+y(p.v).toFixed(1)).join(" ");
+  const col=STRESS?"var(--neg)":"var(--glow)";
+  const len=pts.length*90;
+  return '<svg viewBox="0 0 '+w+' '+h+'" width="100%" height="'+h+'">'+
+    '<path d="'+d+' L'+x(pts.length-1).toFixed(1)+','+(h-PB)+' L'+x(0).toFixed(1)+','+(h-PB)+' Z" fill="'+
+      (STRESS?"rgba(255,90,110,.1)":"rgba(47,212,196,.1)")+'"/>'+
+    '<path d="'+d+'" fill="none" stroke="'+col+'" stroke-width="1.9" stroke-linecap="round"'+
+      (REDUCED?"":' stroke-dasharray="'+len+'" stroke-dashoffset="'+len+'"><animate attributeName="stroke-dashoffset" from="'+len+'" to="0" dur=".9s" fill="freeze" calcMode="spline" keySplines=".16 1 .3 1" keyTimes="0;1"/>')+
+      (REDUCED?"/>":"</path>")+
+    pts.map((p,i)=>'<circle cx="'+x(i).toFixed(1)+'" cy="'+y(p.v).toFixed(1)+'" r="2.8" fill="'+col+'"><title>'+p.label+": "+fmt(p.v)+'</title></circle>').join("")+
+    pts.map((p,i)=>'<text class="tk" x="'+x(i).toFixed(1)+'" y="'+(h-4)+'" text-anchor="middle">'+p.label+'</text>').join("")+
+    '<text class="tk" x="'+x(pts.length-1).toFixed(1)+'" y="'+(y(pts[pts.length-1].v)-8).toFixed(1)+'" text-anchor="middle" fill="'+col+'">'+fmt(pts[pts.length-1].v)+'</text></svg>';
+}
+function barChart(rows,w,h){
+  const PT=16,PB=46,PR=8,PL=8;
+  const mx=Math.max(...rows.map(r=>r.v))*1.12||1;
+  const bw=(w-PL-PR)/rows.length*0.54, gap=(w-PL-PR)/rows.length, y=v=>PT+(1-v/mx)*(h-PT-PB);
+  return '<svg viewBox="0 0 '+w+' '+h+'" width="100%" height="'+h+'">'+
+    '<line class="gl" x1="'+PR+'" y1="'+(h-PB)+'" x2="'+(w-PL)+'" y2="'+(h-PB)+'"/>'+
+    rows.map((r,i)=>{const bx=PR+i*gap+(gap-bw)/2,by=y(r.v),bh=Math.max(h-PB-by,1.5);
+      return '<g><rect x="'+bx.toFixed(1)+'" y="'+by.toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+bh.toFixed(1)+
+        '" rx="3" fill="'+r.c+'" fill-opacity=".78">'+(REDUCED?"":'<animate attributeName="height" from="0" to="'+bh.toFixed(1)+'" dur=".7s" fill="freeze"/><animate attributeName="y" from="'+(h-PB)+'" to="'+by.toFixed(1)+'" dur=".7s" fill="freeze"/>')+
+        '<title>'+r.label+": "+fmt(r.v)+'</title></rect>'+
+        '<text class="tk" x="'+(bx+bw/2).toFixed(1)+'" y="'+(by-6).toFixed(1)+'" text-anchor="middle" fill="'+r.c+'">'+fmt(r.v)+'</text>'+
+        r.label.split(" · ").map((ln,k)=>'<text class="tk" x="'+(bx+bw/2).toFixed(1)+'" y="'+(h-PB+15+k*11)+'" text-anchor="middle">'+ln+'</text>').join("")+'</g>';
+    }).join("")+'<text class="tk" x="'+(w-PL)+'" y="10" text-anchor="end">אלפי ₪</text></svg>';
+}
+function runwayChart(cur,floor,burn,w,h){
+  const yrs=4,PT=18,PB=26,PS=54,PR=10;
+  const pts=[];for(let i=0;i<=yrs;i++)pts.push({t:i,v:cur-burn*i});
+  const mx=Math.max(cur,floor)*1.1, mn=Math.min(...pts.map(p=>p.v),floor)*0.9;
+  const x=i=>PS+(i/yrs)*(w-PS-PR), y=v=>PT+(1-(v-mn)/((mx-mn)||1))*(h-PT-PB);
+  const d=pts.map((p,i)=>(i?"L":"M")+x(i).toFixed(1)+","+y(p.v).toFixed(1)).join(" ");
+  const cross=burn>0?(cur-floor)/burn:null, col=STRESS?"var(--neg)":"var(--warn)";
+  return '<svg viewBox="0 0 '+w+' '+h+'" width="100%" height="'+h+'">'+
+    '<line class="gl" x1="'+PS+'" y1="'+y(floor).toFixed(1)+'" x2="'+(w-PR)+'" y2="'+y(floor).toFixed(1)+
+      '" style="stroke:var(--neg);stroke-opacity:.75;stroke-dasharray:4 3"/>'+
+    '<text class="tk" x="'+(PS-6)+'" y="'+(y(floor)+3).toFixed(1)+'" text-anchor="end" fill="var(--neg)">'+fmt(floor)+'</text>'+
+    '<text class="tk" x="'+(PS-6)+'" y="'+(y(cur)+3).toFixed(1)+'" text-anchor="end">'+fmt(cur)+'</text>'+
+    '<path d="'+d+'" fill="none" stroke="'+col+'" stroke-width="1.9" stroke-linecap="round"/>'+
+    pts.map((p,i)=>'<text class="tk" x="'+x(i).toFixed(1)+'" y="'+(h-8)+'" text-anchor="middle">'+(i?i+"ש":"היום")+'</text>').join("")+
+    (cross!==null&&cross<=yrs?'<circle cx="'+x(cross).toFixed(1)+'" cy="'+y(floor).toFixed(1)+'" r="4.5" fill="var(--neg)"/>'+
+      '<text class="tk" x="'+x(cross).toFixed(1)+'" y="'+(y(floor)-10).toFixed(1)+'" text-anchor="middle" fill="var(--neg)">'+cross.toFixed(1)+' שנים</text>':"")+'</svg>';
+}
+function gapChart(w){
+  const rows=PROJECTS.filter(p=>Number.isFinite(p.exec)&&Number.isFinite(stressGap(p)))
+    .map(p=>({name:p.name.split(",")[0],gap:(p.exec-stressGap(p))*100})).sort((a,b)=>b.gap-a.gap);
+  const h=rows.length*27+20, mx=Math.max(...rows.map(r=>Math.abs(r.gap)))*1.15||1, mid=w*0.5;
+  return '<svg viewBox="0 0 '+w+' '+h+'" width="100%" height="'+h+'">'+
+    '<line class="gl" x1="'+mid+'" y1="0" x2="'+mid+'" y2="'+(h-16)+'"/>'+
+    rows.map((r,i)=>{
+      const bad=r.gap>0, len=Math.abs(r.gap)/mx*(w*0.36), yy=i*27+6;
+      const col=bad?(r.gap>30?"var(--neg)":"var(--warn)"):"var(--pos)";
+      const bx=bad?mid:mid-len;
+      return '<rect x="'+bx.toFixed(1)+'" y="'+yy+'" width="'+len.toFixed(1)+'" height="15" rx="3" fill="'+col+'" fill-opacity=".68">'+
+        (REDUCED?"":'<animate attributeName="width" from="0" to="'+len.toFixed(1)+'" dur=".65s" fill="freeze"/>'+(bad?"":'<animate attributeName="x" from="'+mid+'" to="'+bx.toFixed(1)+'" dur=".65s" fill="freeze"/>'))+
+        '<title>'+r.name+" "+ptS(r.gap)+'</title></rect>'+
+        '<text class="tk" x="'+(mid+(bad?len+7:-len-7)).toFixed(1)+'" y="'+(yy+11)+'" text-anchor="'+(bad?"start":"end")+'" fill="'+col+'">'+ptS(r.gap)+'</text>'+
+        '<text x="'+(bad?mid-7:mid+7)+'" y="'+(yy+11)+'" text-anchor="'+(bad?"end":"start")+'" style="font-size:11px;fill:var(--t2);font-family:Heebo,sans-serif">'+r.name+'</text>';
+    }).join("")+
+    '<text class="tk" x="'+(mid-8)+'" y="'+(h-2)+'" text-anchor="end">בונים בלי למכור ◀</text>'+
+    '<text class="tk" x="'+(mid+8)+'" y="'+(h-2)+'" text-anchor="start">▶ מוכרים לפני שבונים</text></svg>';
 }
 
-function render(){
-  const d=RAW;
-  const bond   = d.bond?.data   || null;
-  const rows   = dealsInRange(d.deals?.data);
-  const reports= d.reports?.data|| null;
-
-  /* --- סטטוס --- */
-  const secs=[d.bond,d.reports,d.deals];
-  const bad=secs.filter(s=>!s||!s.data).length;
-  const stale=secs.filter(s=>s?.stale).length;
-  const chip=document.getElementById('statusChip'), txt=document.getElementById('statusText');
-  const lamp=chip.querySelector('.lamp');
-  chip.className='chip'+(bad?' is-negative':stale?' is-warning':'');
-  lamp.className='lamp'+(bad?' is-negative':stale?' is-warning':'');
-  txt.textContent = bad ? `${bad} מקורות לא זמינים` : stale ? `${stale} מקורות מיושנים`
-    : 'עודכן ' + new Date(d.updatedAt).toLocaleDateString('he-IL');
-
-  /* --- KPI --- */
-  const prices=rows.map(r=>r.price);
-  const psqm=rows.filter(r=>r.sqm>0).map(r=>r.price/r.sqm);
-  // חלוקה לשתי מחציות להשוואה תקופתית
-  const half=Math.floor(rows.length/2);
-  const recent=prices.slice(0,half), prior=prices.slice(half);
-  const medRecent=median(recent), medPrior=median(prior);
-
-  // סדרה חודשית לספארקליין ולגרף
-  const byMonth=new Map();
-  rows.forEach(r=>{
-    const k=`${r._d.getFullYear()}-${String(r._d.getMonth()+1).padStart(2,'0')}`;
-    if(!byMonth.has(k)) byMonth.set(k,[]);
-    byMonth.get(k).push(r.price);
-  });
-  const monthly=[...byMonth.entries()].sort((a,b)=>a[0].localeCompare(b[0]))
-    .map(([k,v])=>({label:k.slice(5)+'/'+k.slice(2,4), v:median(v), n:v.length}));
-
-  const bondPrice=parseFloat(String(bond?.lastPrice??'').replace(/,/g,''));
-  const bondCap=parseFloat(String(bond?.seriesMarketCap??'').replace(/,/g,''));
-
-  /* --- KPI פיננסי מ-XBRL --- */
-  const allP = FIN?.periods || [];
-  const QS = allP.filter(p=>p.months===3);              // רבעונים בלבד — לפריטי תוצאה
-  const P  = allP.length ? allP[allP.length-1] : null;  // הדוח האחרון לפי תאריך מאזן
-  const Q  = QS.length ? QS[QS.length-1] : null;
-  const Qprev = QS.length>1 ? QS[QS.length-2] : null;
-  const Bprev = allP.length>1 ? allP[allP.length-2] : null;
-  const K = 1000;
-
-  const FLOW = new Set(['Revenue','GrossProfit','ProfitLoss','ProfitLossFromOperatingActivities',
-    'ProfitLossBeforeTax','CashFlowsFromUsedInOperatingActivities','CashFlowsFromUsedInInvestingActivities',
-    'CashFlowsFromUsedInFinancingActivities','ComprehensiveIncome']);
-
-  /* השוואה: פריט מאזן מול הדוח הקודם, פריט תוצאה רק מול רבעון קודם */
-  function cmpFact(k){
-    const isFlow = FLOW.has(k);
-    const cur = isFlow ? Q : P;
-    const base = isFlow ? Qprev : Bprev;
-    if(!cur || !base) return '<span class="na">אין תקופת השוואה</span>';
-    if(!Number.isFinite(cur.facts[k]) || !Number.isFinite(base.facts[k])) return NA;
-    const suffix = isFlow ? 'מול הרבעון הקודם' : 'מול הדוח הקודם';
-    return `${delta(cur.facts[k], base.facts[k])} ${suffix}`;
-  }
-  const serFlow = k => QS.map(p=>p.facts[k]).filter(Number.isFinite);
-  const serBal  = k => allP.map(p=>p.facts[k]).filter(Number.isFinite);
-
-  if(P){
-    document.getElementById('kpis').innerHTML=[
-      kpi({value:num(P.facts.Assets/K), label:'סך נכסים · אלפי ₪',
-           compare:cmpFact('Assets'), spark:serBal('Assets'), delay:0}),
-      kpi({value:num(P.facts.Equity/K), label:'הון עצמי · אלפי ₪',
-           compare:cmpFact('Equity'), spark:serBal('Equity'), delay:40}),
-      kpi({value:Q?num(Q.facts.Revenue/K):NA, label:`הכנסות · ${Q?.periodLabel??''}`,
-           compare:cmpFact('Revenue'), spark:serFlow('Revenue'), delay:80}),
-      kpi({value:Q?num(Q.facts.ProfitLoss/K):NA, label:`רווח נקי · ${Q?.periodLabel??''}`,
-           compare:cmpFact('ProfitLoss'), spark:serFlow('ProfitLoss'), delay:120}),
-      kpi({value:Q?num(Q.facts.CashFlowsFromUsedInOperatingActivities/K):NA, label:'תזרים מפעילות שוטפת',
-           compare:cmpFact('CashFlowsFromUsedInOperatingActivities'),
-           spark:serFlow('CashFlowsFromUsedInOperatingActivities'), delay:160}),
-      kpi({value:Q?pct(Q.ratios.grossMargin*100):NA, label:'שיעור רווח גולמי',
-           compare:Qprev?`${delta(Q.ratios.grossMargin, Qprev.ratios.grossMargin)} מול הרבעון הקודם`:NA,
-           spark:QS.map(p=>p.ratios.grossMargin), delay:200}),
-    ].join('');
-  } else {
-    document.getElementById('kpis').innerHTML=[
-      kpi({value: Number.isFinite(bondPrice)?bondPrice.toFixed(2):NA, label:'שער אג״ח א׳ (אג׳)',
-           compare: bond?.changePct ? `<span>${bond.changePct}</span> מול אתמול` : NA, delay:0}),
-      kpi({value: Number.isFinite(bondCap)?num(bondCap):NA, label:'שווי שוק סדרה · אלפי ₪',
-           compare:'<span class="na">אין בסיס השוואה</span>', delay:40}),
-      kpi({value: rows.length?num(rows.length):NA, label:`עסקאות באזור · ${MONTHS?MONTHS+' ח׳':'הכל'}`,
-           compare: half? `${delta(recent.length,prior.length)} מול המחצית הקודמת`:NA,
-           spark: monthly.map(m=>m.n), delay:80}),
-      kpi({value: medRecent?num(medRecent):NA, label:'מחיר עסקה חציוני · ₪',
-           compare: (medRecent&&medPrior)? `${delta(medRecent,medPrior)} מול המחצית הקודמת`:NA,
-           spark: monthly.map(m=>m.v), delay:120}),
-      kpi({value: psqm.length?num(median(psqm)):NA, label:'מחיר חציוני למ״ר · ₪',
-           compare: psqm.length? `<span class="na">מבוסס ${psqm.length} עסקאות</span>`:NA, delay:160}),
-      kpi({value: reports?num(reports.length):NA, label:'דיווחים במאיה',
-           compare:'<span class="na">ממתין לקבצי XBRL</span>', delay:200}),
-    ].join('');
-  }
-
-  /* --- מגמה רבעונית: הכנסות מול רווח נקי --- */
-  document.getElementById('trend').innerHTML = QS.length>1
-    ? lineChart(
-        QS.map(p=>({label:p.periodLabel.replace('רבעון ','Q'), v:p.facts.Revenue})),
-        { series2: QS.map(p=>({label:p.periodLabel, v:p.facts.ProfitLoss})),
-          names:['הכנסות','רווח נקי'], label:'הכנסות ורווח נקי לאורך הרבעונים' })
-      + `<p style="font-size:11px;color:var(--text-3);margin-top:6px">רבעונים בלבד · דוחות שנתיים אינם מוצגים כאן כדי לא לערבב תקופות באורך שונה</p>`
-    : empty('דרושים לפחות שני רבעונים כדי לשרטט מגמה.',
-            `כרגע יש ${QS.length} רבעון. הוסף קבצי XBRL נוספים ל-data/xbrl.`);
-
-  /* --- התראות --- */
-  const alerts=[];
-  secs.forEach((s,i)=>{
-    const name=['נתוני אג״ח','דיווחי מאיה','עסקאות נדל״ן'][i];
-    if(!s||!s.data) alerts.push({lvl:'is-negative',t:`${name} — אין נתונים`,s:s?.error||'המקור לא החזיר תשובה'});
-    else if(s.stale) alerts.push({lvl:'is-warning',t:`${name} — מיושן`,s:`נשלף לאחרונה ${new Date(s.fetchedAt).toLocaleDateString('he-IL')}`});
-  });
-  // חריגות ולידציה של הדוחות — הדבר החשוב ביותר בפאנל
-  (FIN?.periods||[]).forEach(p=>{
-    p.validation.checks.filter(c=>!c.ok).forEach(c=>
-      alerts.push({lvl:'is-negative',t:`${c.label} — לא מתאזן`,
-        s:`${p.periodLabel}: ${Math.round(c.a).toLocaleString('he-IL')} מול ${Math.round(c.b).toLocaleString('he-IL')}`}));
-  });
-  (FIN?.continuity||[]).filter(c=>!c.ok).forEach(c=>
-    alerts.push({lvl:'is-warning',t:'שינוי בהון לא מוסבר במלואו ברווח',
-      s:`${c.from} → ${c.to}: פער ${Math.round(c.unexplained/1000).toLocaleString('he-IL')} אלפי ₪ (ייתכן הנפקה או דיבידנד)`}));
-  if(Q && Q.facts.ProfitLossFromOperatingActivities>0 && Q.facts.ProfitLossBeforeTax<0){
-    alerts.push({lvl:'is-warning',t:'הוצאות המימון מוחקות את הרווח התפעולי',
-      s:`תפעולי ${Math.round(Q.facts.ProfitLossFromOperatingActivities/1000).toLocaleString('he-IL')} → לפני מס ${Math.round(Q.facts.ProfitLossBeforeTax/1000).toLocaleString('he-IL')} אלפי ₪`});
-  }
-  if(medRecent&&medPrior&&medPrior>0){
-    const chg=((medRecent-medPrior)/medPrior)*100;
-    if(Math.abs(chg)>=10) alerts.push({lvl:chg<0?'is-negative':'is-warning',
-      t:`מחיר חציוני ${chg<0?'ירד':'עלה'} ב־${Math.abs(chg).toFixed(1)}%`,s:'בין מחצית התקופה הנוכחית לקודמת'});
-  }
-  document.getElementById('alerts').innerHTML = alerts.length
-    ? alerts.map(a=>`<div class="alert-row"><span class="lamp ${a.lvl}"></span><div><div class="t">${a.t}</div><div class="s">${a.s}</div></div></div>`).join('')
-    : `<div class="alert-row"><span class="lamp"></span><div><div class="t">כל המקורות עדכניים</div><div class="s">לא נמצאו חריגות בטווח שנבחר</div></div></div>`;
-
-  /* --- תיק פרויקטים (אין מקור אוטומטי) --- */
-  document.getElementById('projects').innerHTML = empty(
-    'תיק הפרויקטים דורש נתונים מתוך הדוחות הכספיים — שלב, אחוז השלמה, הכנסות שהוכרו ומקדמות. הנתונים האלה קיימים בדוחות ה־PDF במאיה ואינם נשלפים אוטומטית כרגע.',
-    'להפעלה: הוסף אדפטר שמפרסר את הביאור הרלוונטי, או טען קובץ projects.json לתיקיית data.'
-  );
-
-  /* --- גשר: מהכנסות לרווח נקי --- */
-  if(Q && Number.isFinite(Q.facts.Revenue)){
-    const f=Q.facts;
-    document.getElementById('bridge').innerHTML =
-      waterfall([
-        {label:'הכנסות', value:f.Revenue, total:true},
-        {label:'עלות', value:(f.GrossProfit-f.Revenue)},
-        {label:'תפעול', value:(f.ProfitLossFromOperatingActivities-f.GrossProfit)},
-        {label:'מימון', value:(f.ProfitLossBeforeTax-f.ProfitLossFromOperatingActivities)},
-        {label:'מס', value:(f.ProfitLoss-f.ProfitLossBeforeTax)},
-        {label:'נקי', value:f.ProfitLoss, total:true},
-      ]) +
-      `<p style="font-size:11px;color:var(--text-3);margin-top:10px;letter-spacing:.04em">
-        ${Q.periodLabel} · ${Q.auditor??'רו״ח'} · ${Q.validation.passed?'עבר 5/5 בדיקות זהות':'נכשל בבדיקות'}
-      </p>`;
-  } else {
-    document.getElementById('bridge').innerHTML = empty(
-      'גשר הרווח מחייב דוח מתויג עם פירוק מהכנסות לרווח נקי.',
-      'הנח קובץ .xbrl בתיקייה data/xbrl והרץ: node scripts/parse-xbrl.mjs'
-    );
-  }
-
-  /* --- טבלת עסקאות --- */
-  const top=rows.slice(0,12);
-  const maxP=Math.max(...top.map(r=>r.price),1);
-  document.getElementById('deals').innerHTML = !d.deals?.data
-    ? errorBox('מקור העסקאות לא הגיב','ראה פאנל ההתראות. הנתון האחרון שנשמר יוצג ברגע שתתבצע שליפה מוצלחת.')
-    : !top.length ? empty('לא נמצאו עסקאות בטווח שנבחר.','הרחב את הטווח באמצעות הבורר בראש המסך.')
-    : `<div class="tbl-wrap"><table>
-        <thead><tr><th>כתובת</th><th>תאריך</th><th class="num">חדרים</th><th class="num">מ״ר</th><th class="num">מחיר</th></tr></thead>
-        <tbody>${top.map(r=>`<tr>
-          <td>${r.address??NA}</td>
-          <td class="mono" style="font-size:12px;color:var(--text-2)">${r._d.toLocaleDateString('he-IL')}</td>
-          <td class="num">${r.rooms??NA}</td>
-          <td class="num">${r.sqm?num(r.sqm):NA}</td>
-          <td class="num"><span class="bar" style="width:${(r.price/maxP*100).toFixed(1)}%"></span><span>${num(r.price)}</span></td>
-        </tr>`).join('')}</tbody>
-        <tfoot><tr><td colspan="4">חציון · ${top.length} עסקאות</td><td class="num">${num(median(top.map(r=>r.price)))}</td></tr></tfoot>
-      </table></div>`;
-
-  /* --- דיווחים --- */
-  document.getElementById('reports').innerHTML = !reports
-    ? errorBox('דיווחי מאיה לא נטענו', (d.reports?.error||'המקור לא הגיב') + '. עדכן את האדפטר maya-reports.')
-    : !reports.length ? empty('לא נמצאו דיווחים.','בדוק שמספר המנפיק בסקריפט הוא 2449.')
-    : `<div class="tbl-wrap"><table>
-        <thead><tr><th>דיווח</th><th class="num">תאריך</th></tr></thead>
-        <tbody>${reports.slice(0,8).map(r=>`<tr>
-          <td>${r.url?`<a class="link" href="${r.url}" target="_blank" rel="noopener">${r.title}</a>`:r.title}</td>
-          <td class="num" style="font-size:12px;color:var(--text-2)">${r.date?new Date(r.date).toLocaleDateString('he-IL'):NA}</td>
-        </tr>`).join('')}</tbody></table></div>`;
+/* ═══════════ כרטיס קובננט ═══════════ */
+function bulletCard(o){
+  const fill=Math.max(0,Math.min(100,o.v/o.scale*100));
+  const ghost=Math.max(0,Math.min(100,o.base/o.scale*100));
+  const th=Math.max(0,Math.min(100,o.thresh/o.scale*100));
+  const breach=o.invert?o.v>o.thresh:o.v<o.thresh;
+  const near=!breach&&(o.invert?o.v>o.thresh*0.9:o.v<o.thresh*1.15);
+  const col=breach?"#FF5A6E":near?"#FFB547":"#2FD4C4";
+  const soft=breach?"rgba(255,90,110,.2)":near?"rgba(255,181,71,.2)":"rgba(15,169,160,.25)";
+  const state=breach?"st-neg":near?"st-warn":"st-pos";
+  const margin=o.invert?o.thresh-o.v:o.v-o.thresh;
+  const changed=Math.abs(o.v-o.base)>(o.isPct?0.0005:0.5);
+  return '<div class="card grad '+state+(changed?" flashme":"")+'">'+
+    '<div class="lbl">'+o.title+(o.tip?'<span class="ttip" data-tip="'+o.tip+'">?</span>':"")+'</div>'+
+    '<div class="big num" style="color:'+(breach?"var(--neg)":near?"var(--warn)":"var(--t1)")+
+      '" data-count="'+o.v+'" data-kind="'+(o.isPct?"pct":"num")+'">'+o.fmt(o.v)+'</div>'+
+    '<div class="mini">'+(o.invert?"סף מקסימלי ":"סף מינימלי ")+'<span class="num">'+o.fmt(o.thresh)+'</span></div>'+
+    '<div class="bullet"><div class="btrack">'+
+      '<div class="bfill" data-w="'+fill.toFixed(2)+'" style="background:linear-gradient(270deg,'+col+','+soft+')"></div>'+
+      (changed?'<div class="bghost" data-w="'+ghost.toFixed(2)+'"></div>':"")+
+      '<div class="bthresh" style="right:'+th.toFixed(2)+'%"></div></div>'+
+      '<div class="bscale"><span class="num">'+o.fmt(o.scale)+'</span><span class="num">'+o.fmt(0)+'</span></div></div>'+
+    '<div class="marg"><span class="lbl">מרווח</span>'+
+      '<span class="v num '+(breach?"negc":near?"warnc":"pos")+'">'+(margin>=0?"+":"−")+o.fmt(Math.abs(margin))+'</span>'+
+      '<span class="lbl">'+(breach?"חריגה מהאמה":o.note)+'</span>'+
+      (changed?'<span class="delta">מדווח '+o.fmt(o.base)+'</span>':"")+'</div>'+
+    '<div class="src">'+o.src+'</div></div>';
 }
 
-/* ---------- בוררי תקופה ---------- */
-document.querySelectorAll('.seg button').forEach(b=>{
-  b.addEventListener('click',()=>{
-    document.querySelectorAll('.seg button').forEach(x=>x.setAttribute('aria-pressed','false'));
-    b.setAttribute('aria-pressed','true');
-    MONTHS=Number(b.dataset.months);
-    if(RAW) render();
+/* ═══════════ רינדור ═══════════ */
+function renderCovenants(animate){
+  const c=computeCovenants(), b=BASELINE;
+  document.getElementById("covRow").innerHTML=
+    bulletCard({title:"הון עצמי מתואם",tip:"הון המיוחס לבעלים בתוספת הלוואות בעלים נחותות. זכויות המיעוט השליליות מנוטרלות.",
+      v:c.adjEquity,base:b.adjEquity,thresh:THRESH.equity,scale:60000,fmt:fmt,
+      note:Math.round(c.adjEquity/THRESH.equity*100)+"% מהסף",src:"מקור · דוח רבעוני 30.6.2026, עמ׳ 33"})+
+    bulletCard({title:"יחס הון מתואם למאזן מתואם",tip:"האמה הצרה מבין השלוש. מרווח של 5.1 נקודות בלבד במצב המדווח.",
+      v:c.ratio,base:b.ratio,thresh:THRESH.ratio,scale:0.30,isPct:true,fmt:x=>pctS(x),
+      note:"הצר מהשלושה",src:"מקור · דוח רבעוני 30.6.2026, עמ׳ 33"})+
+    bulletCard({title:"יחס חוב לבטוחה",invert:true,tip:"(A−B)÷C · קרן אג״ח בתוספת ריבית שנצברה, בניכוי בטוחה פיננסית, חלקי ערך הנכסים המשועבדים.",
+      v:c.debtCol,base:b.debtCol,thresh:THRESH.debtCol,scale:1.0,isPct:true,fmt:x=>pctS(x),
+      note:"מתחת לתקרה",src:"מקור · דוח רבעוני 30.6.2026, עמ׳ 34"});
+
+  const st=STRESS?stressTotals():{imm:0,fut:0};
+  const row=(l,v,cls)=>'<tr'+(cls?' class="'+cls+'"':"")+'><td>'+l+'</td><td class="n num">'+fmt(v)+'</td></tr>';
+  document.getElementById("tblEquity").innerHTML=
+    row("הון עצמי מאוחד",BASE.equityConsolidated)+row("נטרול זכויות מיעוט",-BASE.nci)+
+    row('הלוואות בעלים נחותות<span class="ttip" data-tip="הלוואות מבעלי המניות הנחותות לחוב הפיננסי. שטר הנאמנות מתיר להוסיפן להון המתואם משום שאינן מתחרות עם מחזיקי האג״ח בפירעון.">?</span>',BASE.subLoans)+
+    (SIM.div?row("חלוקת דיבידנד · סימולציה",-SIM.div,"neg"):"")+
+    (SIM.wd?row("מחיקת ערך · סימולציה",-SIM.wd,"neg"):"")+
+    (st.imm?row("מבחן קיצון · catch-up",-st.imm,"neg"):"")+
+    row("הון עצמי מתואם",c.adjEquity,"sum");
+  document.getElementById("tblBalance").innerHTML=
+    row("סך נכסים",BASE.totalAssets)+
+    (SIM.debt?row("גיוס חוב חדש · סימולציה",SIM.debt):"")+
+    (SIM.div||SIM.wd||st.imm?row("שחיקת נכסים · סימולציה",-(SIM.div+SIM.wd+st.imm),"neg"):"")+
+    row("מזומן ושווי מזומן",-c.cashAfter,"neg")+
+    row("התחייבויות לשירותי בנייה",-BASE.buildServices,"neg")+
+    row("התחייבויות חוזים עם לקוחות",-BASE.contractLiab,"neg")+
+    row("מאזן מתואם",c.adjBalance,"sum");
+  document.getElementById("tblDebt").innerHTML=
+    row("A · קרן אג״ח בלתי מסולקת בתוספת ריבית",BASE.bondAccrued)+
+    row("B · בטוחה פיננסית ומזומן משועבד",BASE.finCollateral)+
+    row("C · ערך הנכסים המשועבדים",c.collateral)+
+    (c.pledgedHit?row("שחיקת עודפים · סימולציה",-c.pledgedHit,"neg"):"")+
+    '<tr class="sum"><td>(A − B) ÷ C</td><td class="n num">'+pctS(c.debtCol)+'</td></tr>';
+
+  document.getElementById("sparkEquity").innerHTML=sparkline(EQUITY_TREND,320,100);
+  const burn=6400;
+  document.getElementById("equityNote").innerHTML=
+    "ההון ירד מ־"+fmt(40783)+" ל־"+fmt(37570)+" בחצי שנה, שחיקה של "+fmt(3213)+
+    ". בקצב שנתי של כ־"+fmt(burn)+", המרווח הנוכחי מסף ההון המתואם מספיק לכ־"+
+    ((c.adjEquity-THRESH.equity)/burn).toFixed(1)+" שנים.";
+  document.getElementById("liqChart").innerHTML=barChart([
+    {label:"מזומן פנוי",v:BASE.cashFree,c:"#2FD4C4"},
+    {label:"מוגבל · וליווי",v:BASE.restricted+BASE.escrow,c:"#3D8BFF"},
+    {label:"אג״ח · 12ח׳",v:BASE.bondCurrent,c:"#FFB547"},
+    {label:"אג״ח · יתרה",v:BASE.bondNonCurrent,c:"#FF5A6E"}],330,158)+
+    '<div style="font-size:11.5px;color:var(--t2);line-height:1.6;margin-top:10px">המזומן הפנוי מכסה '+
+    (BASE.cashFree/BASE.bondCurrent*100).toFixed(0)+'% מחלויות האג״ח ב־12 החודשים הקרובים. כספי הליווי משועבדים לפרויקטים ואינם זמינים לשירות החוב.</div>';
+  document.getElementById("runwayChart").innerHTML=runwayChart(c.adjEquity,THRESH.equity,burn,330,146);
+
+  const A=[];
+  if(c.adjEquity<THRESH.equity)A.push(["hi","חריגה מאמת ההון העצמי המתואם",fmt(c.adjEquity)+" מול סף "+fmt(THRESH.equity)]);
+  if(c.ratio<THRESH.ratio)A.push(["hi","חריגה מיחס ההון למאזן",pctS(c.ratio)+" מול סף "+pctS(THRESH.ratio)]);
+  if(c.debtCol>THRESH.debtCol)A.push(["hi","חריגה מיחס חוב לבטוחה",pctS(c.debtCol)+" מול תקרה "+pctS(THRESH.debtCol)]);
+  if(STRESS){const s=stressTotals();
+    A.push(["hi","מבחן קיצון פעיל · קיצוץ 15% במחירי היח״ד שטרם נמכרו",
+      "פגיעה מיידית בהון "+fmt(s.imm)+" · פגיעה עתידית נוספת "+fmt(s.fut)+" · ירידת ערך מלאי מתחילה רק מקיצוץ של "+pctS(IMPAIR_AT)]);}
+  if(SIM.div>0&&BASE.accumDeficit<0)A.push(["hi","חלוקה אינה עומדת במבחן הרווח",
+    "לחברה יתרת הפסד של "+fmt(BASE.accumDeficit)+" · חלוקה תחייב אישור בית משפט לפי סעיף 303 לחוק החברות"]);
+  A.push(["hi","שחיקת הון וגידול ביתרת ההפסד","הון "+fmt(40783)+" ← "+fmt(37570)+" · יתרת הפסד "+fmt(-14467)+" ← "+fmt(-20012)]);
+  A.push(["hi","קפיצה באשראי שוטף",fmt(BASE.bankCreditPrior)+" ← "+fmt(BASE.bankCredit)+" · פי "+(BASE.bankCredit/BASE.bankCreditPrior).toFixed(1)+" בחצי שנה"]);
+  A.push([c.ratio-THRESH.ratio<0.02?"hi":"md","יחס ההון הוא הקובננט הצר","מרווח "+((c.ratio-THRESH.ratio)*100).toFixed(1)+" נקודות מהסף"]);
+  A.push(["md","תזרים שלילי מתמשך בסולו","מצוין בדוחות · הון חוזר חיובי "+fmt(BASE.workingCapital)]);
+  if(!STRESS&&c.adjEquity>=THRESH.equity&&c.ratio>=THRESH.ratio&&c.debtCol<=THRESH.debtCol&&!SIM.div&&!SIM.wd&&!SIM.debt)
+    A.push(["ok","עמידה בכל שלושת הקובננטים","ללא חריגה למועד הדוח"]);
+  document.getElementById("covAlerts").innerHTML=A.map(a=>
+    '<div class="al"><span class="dot '+a[0]+'"></span><span class="tx"><span class="tt">'+a[1]+
+    '</span><span class="ds">'+a[2]+'</span></span><span class="add">למעקב</span></div>').join("");
+
+  growBars(document.getElementById("covRow"));
+  if(animate)runCountUps(document.getElementById("covRow"));
+  else document.querySelectorAll("#covRow [data-count]").forEach(el=>{
+    el.textContent=el.dataset.kind==="pct"?pctS(Number(el.dataset.count)):fmt(Number(el.dataset.count));});
+}
+
+const COLS=[
+  {k:"name",t:"פרויקט",n:false,srt:true,frz:true},
+  {k:"share",t:"חלק",n:true,srt:true},
+  {k:"exec",t:"ביצוע · 30.6",n:true,srt:true},
+  {k:"mktEff",t:"שיווק · 30.6",n:true,srt:true},
+  {k:"gap",t:"פער",n:true,srt:true},
+  {k:"book",t:"בספרים · 30.6",n:true,srt:true},
+  {k:"rem",t:"להשלמה · 30.6",n:true,srt:true},
+  {k:"rev",t:"הכנסות צפויות · 31.3",n:true,srt:true},
+  {k:"margin",t:"רווח גולמי %",n:true,srt:true},
+  {k:"impairAt",t:"סף ירידת ערך",n:true,srt:true},
+  {k:"surplus",t:"עודפים · 31.3",n:true,srt:true},
+  {k:"stress",t:"חשיפה בקיצון",n:true,srt:true},
+  {k:"status",t:"סטטוס",n:false,srt:false}
+];
+function projRow(p){
+  const mkt=stressGap(p);
+  const gap=(Number.isFinite(p.exec)&&Number.isFinite(mkt))?(p.exec-mkt)*100:null;
+  const s=stressOn(p);
+  return Object.assign({},p,{mktEff:mkt,gap,
+    stress:s?s.immediateShare:null,
+    margin:s?s.margin:null,
+    impairAt:s?s.impairAt:null,
+    triggered:s?s.triggered:false});
+}
+function renderProjects(animate){
+  document.getElementById("projHead").innerHTML=COLS.map(c=>
+    '<th class="'+(c.n?"n ":"")+(c.frz?"frz ":"")+(c.srt?"srt":"")+
+    (sortKey===c.k?(sortDir>0?" asc":" desc"):"")+'" data-k="'+c.k+'">'+c.t+'</th>').join("");
+
+  const rows=PROJECTS.map(projRow).sort((a,b)=>{
+    const A=a[sortKey],B=b[sortKey];
+    if(A===null||A===undefined)return 1;
+    if(B===null||B===undefined)return -1;
+    return typeof A==="string"?A.localeCompare(B,"he")*sortDir:(A-B)*sortDir;
+  });
+
+  document.getElementById("projBody").innerHTML=rows.map(r=>{
+    const gapCls=r.gap===null?"na":r.gap>30?"negc":r.gap>0?"warnc":"pos";
+    const bar=(v,cls)=>(v===null||v===undefined)?'<span class="na">\u2014</span>':
+      '<span class="mbar'+cls+'"><i data-w="'+(v*100).toFixed(1)+'"></i><b>'+(v*100).toFixed(1)+'%</b></span>';
+    return '<tr><td class="frz">'+r.name+(r.conflict?'<span class="ttip" data-tip="\u05e1\u05ea\u05d9\u05e8\u05d4 \u05d1\u05d9\u05df \u05d4\u05de\u05e7\u05d5\u05e8\u05d5\u05ea: \u05d4\u05d2\u05d9\u05dc\u05d5\u05d9 \u05d4\u05e8\u05d1\u05e2\u05d5\u05e0\u05d9 \u05de\u05e6\u05d9\u05d2 \u05d7\u05dc\u05e7 \u05d7\u05d1\u05e8\u05d4 33%, \u05d4\u05de\u05e6\u05d2\u05ea \u05de\u05e6\u05d9\u05d2\u05d4 67%. \u05d9\u05e9 \u05dc\u05d0\u05de\u05ea \u05dc\u05e4\u05e0\u05d9 \u05d4\u05e1\u05ea\u05de\u05db\u05d5\u05ea.">!</span>':"")+'</td>'+
+      '<td class="n num'+(r.cons==="\u05d9\u05d7\u05e1\u05d9"?" infoc":"")+'">'+(r.share*100)+'%'+(r.conflict?'<span class="negc"> ?</span>':"")+'</td>'+
+      '<td class="n">'+bar(r.exec,"")+'</td>'+
+      '<td class="n">'+bar(r.mktEff,(r.mktEff!==null&&r.exec!==null&&r.exec-r.mktEff>0.15)?" warn":"")+'</td>'+
+      '<td class="n num '+gapCls+'">'+(r.gap===null?"\u2014":ptS(r.gap))+'</td>'+
+      '<td class="n num">'+fmt(r.book)+'</td>'+
+      '<td class="n num'+(r.rem>200000?" negc":"")+'">'+fmt(r.rem)+'</td>'+
+      '<td class="n num">'+fmt(r.rev)+'</td>'+
+      '<td class="n num">'+(r.margin==null?"\u2014":pctS(r.margin))+'</td>'+
+      '<td class="n num'+(r.triggered?" negc":"")+'">'+(r.impairAt==null?"\u2014":pctS(r.impairAt))+'</td>'+
+      '<td class="n num pos">'+fmt(r.surplus)+'</td>'+
+      '<td class="n num'+(r.stress?" negc":"")+'">'+(STRESS?fmt(r.stress):'<span class="na">\u2014</span>')+'</td>'+
+      '<td><span class="stage '+r.cls+'">'+r.status+'</span></td></tr>';
+  }).join("");
+
+  const st=stressTotals();
+  document.getElementById("projFoot").innerHTML='<tr class="sum"><td class="frz">\u05e1\u05d4\u05f4\u05db</td>'+
+    '<td class="n na">\u2014</td><td class="n na">\u2014</td><td class="n na">\u2014</td><td class="n na">\u2014</td>'+
+    '<td class="n num">'+fmt(TOTALS.book)+'</td><td class="n num">'+fmt(TOTALS.rem)+'</td>'+
+    '<td class="n num">'+fmt(PROJECTS.reduce((a,p)=>a+(p.rev||0),0))+'</td>'+
+    '<td class="n na">\u2014</td><td class="n na">\u2014</td>'+
+    '<td class="n num pos">'+fmt(PROJECTS.reduce((a,p)=>a+(p.surplus||0),0))+'</td>'+
+    '<td class="n num'+(STRESS?" negc":"")+'">'+(STRESS?fmt(st.imm):'<span class="na">\u2014</span>')+'</td><td></td></tr>';
+
+  document.querySelectorAll("#projHead th.srt").forEach(th=>th.addEventListener("click",()=>{
+    const k=th.dataset.k;
+    if(sortKey===k)sortDir*=-1;else{sortKey=k;sortDir=k==="name"?1:-1;}
+    renderProjects(false);
+  }));
+
+  document.getElementById("projKpi").innerHTML=
+    '<div class="card grad"><div class="lbl">\u05d4\u05d9\u05e7\u05e3 \u05d4\u05e4\u05e2\u05d9\u05dc\u05d5\u05ea</div><div class="mid num" data-count="'+SCOPE.projects+'">'+SCOPE.projects+'</div>'+
+      '<div class="mini">'+SCOPE.inExec+' \u05d1\u05d1\u05d9\u05e6\u05d5\u05e2 \u00b7 '+SCOPE.inPlanning+' \u05d1\u05ea\u05db\u05e0\u05d5\u05df \u00b7 '+SCOPE.urbanRenewal+' \u05d4\u05ea\u05d7\u05d3\u05e9\u05d5\u05ea \u05e2\u05d9\u05e8\u05d5\u05e0\u05d9\u05ea</div></div>'+
+    '<div class="card grad"><div class="lbl">\u05d4\u05db\u05e0\u05e1\u05d5\u05ea \u05e6\u05e4\u05d5\u05d9\u05d5\u05ea \u00b7 \u05d1\u05d9\u05e6\u05d5\u05e2</div><div class="mid num" data-count="'+SCOPE.revExec+'">'+fmt(SCOPE.revExec)+'</div>'+
+      '<div class="mini">\u05e2\u05d5\u05d3\u05e4\u05d9\u05dd \u05e6\u05e4\u05d5\u05d9\u05d9\u05dd <span class="num pos">'+fmt(SCOPE.surplusExec)+'</span></div></div>'+
+    '<div class="card grad"><div class="lbl">\u05e2\u05dc\u05d5\u05ea \u05e9\u05e0\u05d5\u05ea\u05e8\u05d4 \u05dc\u05d4\u05e9\u05dc\u05de\u05d4</div><div class="mid num" data-count="'+TOTALS.rem+'">'+fmt(TOTALS.rem)+'</div>'+
+      '<div class="mini negc">\u05e4\u05d9 '+(TOTALS.rem/BASE.totalAssets).toFixed(1)+' \u05de\u05e1\u05da \u05d4\u05de\u05d0\u05d6\u05df</div></div>'+
+    '<div class="card grad'+(STRESS?" st-neg flashme":"")+'"><div class="lbl">\u05d7\u05e9\u05d9\u05e4\u05d4 \u05de\u05d9\u05d9\u05d3\u05d9\u05ea \u05d1\u05e7\u05d9\u05e6\u05d5\u05df</div>'+
+      '<div class="mid num'+(STRESS?" negc":"")+'"'+(STRESS?' data-count="'+st.imm+'"':"")+'>'+(STRESS?fmt(st.imm):"\u2014")+'</div>'+
+      '<div class="mini">'+(STRESS?"\u05e2\u05ea\u05d9\u05d3\u05d9\u05ea \u05e0\u05d5\u05e1\u05e4\u05ea "+fmt(st.fut):"\u05d4\u05e4\u05e2\u05dc \u05d0\u05ea \u05de\u05d1\u05d7\u05df \u05d4\u05e7\u05d9\u05e6\u05d5\u05df")+'</div></div>';
+
+  document.getElementById("gapChart").innerHTML=gapChart(330);
+  const worst=rows.filter(r=>r.gap!==null&&r.gap>0).length;
+  document.getElementById("gapNote").innerHTML=worst+" פרויקטים בפער שלילי מסבירים היטב את הקפיצה באשראי השוטף מ־"+
+    fmt(BASE.bankCreditPrior)+" ל־"+fmt(BASE.bankCredit)+"."+
+    (STRESS?" תחת קיצון, ערך המכירות שנחתמו נשחק ב־15% והפערים מתרחבים בהתאם.":"");
+  document.getElementById("projAlerts").innerHTML=[
+    ["hi","\u05e1\u05ea\u05d9\u05e8\u05d4 \u05d1\u05d7\u05dc\u05e7 \u05d4\u05d7\u05d1\u05e8\u05d4 \u00b7 \u05e7\u05e8\u05d9\u05d9\u05ea \u05de\u05dc\u05d0\u05db\u05d9",
+      "\u05d4\u05d2\u05d9\u05dc\u05d5\u05d9 \u05d4\u05e8\u05d1\u05e2\u05d5\u05e0\u05d9 \u05de\u05e6\u05d9\u05d2 33% \u05d1\u05d0\u05d9\u05d7\u05d5\u05d3 \u05d9\u05d7\u05e1\u05d9 \u00b7 \u05d4\u05de\u05e6\u05d2\u05ea \u05de\u05e6\u05d9\u05d2\u05d4 67% \u00b7 \u05d4\u05e4\u05e2\u05e8 \u05de\u05db\u05e4\u05d9\u05dc \u05d0\u05ea \u05d4\u05d7\u05e9\u05d9\u05e4\u05d4"],
+    ["hi","\u05e7\u05e8\u05d9\u05d9\u05ea \u05de\u05dc\u05d0\u05db\u05d9 \u00b7 "+fmt(323866)+" \u05dc\u05d4\u05e9\u05dc\u05de\u05d4",
+      "73% \u05de\u05db\u05dc\u05dc \u05d4\u05e2\u05dc\u05d5\u05ea \u05e9\u05e0\u05d5\u05ea\u05e8\u05d4 \u00b7 \u05d4\u05db\u05e0\u05e1\u05d5\u05ea \u05e6\u05e4\u05d5\u05d9\u05d5\u05ea "+fmt(460491)+" \u00b7 \u05e9\u05d5\u05d5\u05e7\u05d5 11% \u05d1\u05dc\u05d1\u05d3"],
+    ["hi","\u05d6\u05f3\u05d1\u05d5\u05d8\u05d9\u05e0\u05e1\u05e7\u05d9 105 \u00b7 \u05d4\u05d7\u05e9\u05d5\u05e3 \u05d1\u05d9\u05d5\u05ea\u05e8",
+      "\u05d4\u05db\u05e0\u05e1\u05d5\u05ea \u05e6\u05e4\u05d5\u05d9\u05d5\u05ea "+fmt(85060)+" \u00b7 \u05e0\u05de\u05db\u05e8\u05d4 \u05d9\u05d7\u05f4\u05d3 \u05d0\u05d7\u05ea \u05de\u05ea\u05d5\u05da 12 \u00b7 \u05d7\u05e9\u05d9\u05e4\u05d4 "+fmt(78255)],
+    ["md","\u05d7\u05de\u05d9\u05e9\u05d4 \u05e4\u05e8\u05d5\u05d9\u05e7\u05d8\u05d9\u05dd \u05de\u05e9\u05d5\u05e2\u05d1\u05d3\u05d9\u05dd \u05dc\u05d0\u05d2\u05f4\u05d7",
+      "\u05e6\u05e4\u05d9 \u05e2\u05d5\u05d3\u05e4\u05d9\u05dd \u05db\u05f4 91,476 \u00b7 \u05d1\u05d9\u05dc\u05d8\u05de\u05d5\u05e8, \u05d0\u05dc\u05db\u05e1\u05e0\u05d3\u05e8 \u05d9\u05e0\u05d0\u05d9, \u05d6\u05f3\u05d1\u05d5\u05d8\u05d9\u05e0\u05e1\u05e7\u05d9 105, \u05d1\u05e8\u05e0\u05d3\u05d9\u05e1 9, \u05d3\u05d9\u05d6\u05d9\u05e0\u05d2\u05d5\u05e3 78"],
+    ["md","\u05e4\u05e2\u05e8 \u05e2\u05dc\u05d5\u05ea \u05de\u05e6\u05d8\u05d1\u05e8\u05ea \u05de\u05d5\u05dc \u05e1\u05e4\u05e8\u05d9\u05dd",
+      fmt(TOTALS.cum)+" \u05de\u05d5\u05dc "+fmt(TOTALS.book)+" \u00b7 \u05d4\u05e4\u05e8\u05e9 "+fmt(133444)+" \u05d1\u05d2\u05d9\u05df \u05d4\u05ea\u05d7\u05d9\u05d9\u05d1\u05d5\u05ea \u05dc\u05e9\u05d9\u05e8\u05d5\u05ea\u05d9 \u05d1\u05e0\u05d9\u05d9\u05d4"]
+  ].map(a=>'<div class="al"><span class="dot '+a[0]+'"></span><span class="tx"><span class="tt">'+a[1]+
+    '</span><span class="ds">'+a[2]+'</span></span></div>').join("");
+
+  growBars(document.getElementById("scr-proj-0"));
+  if(animate)runCountUps(document.getElementById("projKpi"));
+}
+
+/* ═══════════ CSV ═══════════ */
+function exportCsv(){
+  const head=["\u05e4\u05e8\u05d5\u05d9\u05e7\u05d8","\u05d7\u05dc\u05e7 \u05d4\u05d7\u05d1\u05e8\u05d4","\u05d1\u05d9\u05e6\u05d5\u05e2 30.6","\u05e9\u05d9\u05d5\u05d5\u05e7 30.6","\u05e4\u05e2\u05e8 \u05e0\u05e7\u05d5\u05d3\u05d5\u05ea",
+    "\u05d1\u05e1\u05e4\u05e8\u05d9\u05dd 30.6","\u05dc\u05d4\u05e9\u05dc\u05de\u05d4 30.6","\u05d4\u05db\u05e0\u05e1\u05d5\u05ea \u05e6\u05e4\u05d5\u05d9\u05d5\u05ea 31.3","\u05e2\u05dc\u05d5\u05ea \u05e6\u05e4\u05d5\u05d9\u05d4 31.3",
+    "\u05e8\u05d5\u05d5\u05d7 \u05d2\u05d5\u05dc\u05de\u05d9","\u05e9\u05d9\u05e2\u05d5\u05e8 \u05e8\u05d5\u05d5\u05d7","\u05e1\u05e3 \u05d9\u05e8\u05d9\u05d3\u05ea \u05e2\u05e8\u05da","\u05e2\u05d5\u05d3\u05e4\u05d9\u05dd \u05e6\u05e4\u05d5\u05d9\u05d9\u05dd",
+    "\u05d7\u05e9\u05d9\u05e4\u05d4 \u05de\u05d9\u05d9\u05d3\u05d9\u05ea \u05d1\u05e7\u05d9\u05e6\u05d5\u05df","\u05e1\u05d8\u05d8\u05d5\u05e1"];
+  const rows=PROJECTS.map(projRow).sort((a,b)=>{
+    const A=a[sortKey],B=b[sortKey];
+    if(A==null)return 1;if(B==null)return -1;
+    return typeof A==="string"?A.localeCompare(B,"he")*sortDir:(A-B)*sortDir;});
+  const esc=v=>{const s=String(v==null?"":v);return /[",\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;};
+  const body=rows.map(r=>[r.name,r.share,
+    r.exec==null?"":r.exec, r.mktEff==null?"":r.mktEff,
+    r.gap==null?"":r.gap.toFixed(1),
+    r.book==null?"":r.book, r.rem==null?"":r.rem,
+    r.rev==null?"":r.rev, r.cost==null?"":r.cost, r.gp==null?"":r.gp,
+    r.margin==null?"":(r.margin*100).toFixed(1), r.impairAt==null?"":(r.impairAt*100).toFixed(1),
+    r.surplus==null?"":r.surplus,
+    r.stress==null?"":Math.round(r.stress), r.status].map(esc).join(","));
+  const st=stressTotals();
+  const meta=["מייטאון · סטטוס פרויקטים · אלפי ש״ח",
+    "שכבה A · ביצוע, שיווק, ספרים, להשלמה · גילוי רבעוני 30.06.2026",
+    "שכבה B · הכנסות, עלויות, רווח, עודפים · מצגת משקיעים 31.03.2026",
+    "מצב: "+(STRESS?"מבחן קיצון 15%":"מדווח"),
+    "סימולציה: דיבידנד "+SIM.div+" · מחיקת ערך "+SIM.wd+" · חוב חדש "+SIM.debt,""];
+  const csv="\uFEFF"+meta.map(esc).join("\n")+"\n"+head.map(esc).join(",")+"\n"+body.join("\n");
+  const url=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8;"}));
+  const a=document.createElement("a");
+  a.href=url;a.download="maytown-projects"+(STRESS?"-stress":"")+".csv";
+  document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1200);
+}
+
+/* ═══════════ מבחן קיצון ═══════════ */
+function renderStressBar(){
+  const bar=document.getElementById("stressBar");
+  if(!STRESS){bar.innerHTML="";return;}
+  const st=stressTotals(),c=computeCovenants(),b=BASELINE;
+  const rows=PROJECTS.map(p=>({n:p.name.split(",")[0],s:stressOn(p)})).filter(x=>x.s);
+  const trig=rows.filter(x=>x.s.triggered);
+  const lo=rows.reduce((a,x)=>x.s.impairAt<a.s.impairAt?x:a,rows[0]);
+  const hi=Math.max.apply(null,rows.map(x=>x.s.impairAt));
+  bar.innerHTML="<b>מבחן קיצון פעיל · קיצוץ 15% במחירי יחידות שטרם נמכרו.</b><br>"+
+    "המודל מבוסס על כלכלת הפרויקט בפועל מתוך המצגת, ולא על שיעור רווח אחיד. "+
+    "לכל פרויקט <b>סף ירידת ערך משלו</b>, השווה לשיעור הרווח הגולמי שלו — מ־"+
+    pctS(lo.s.impairAt)+" ב"+lo.n+" ועד "+pctS(hi)+". "+
+    (trig.length?("<b>בקיצוץ 15% נוצרת ירידת ערך ב־"+trig.length+" פרויקטים.</b>")
+      :"בקיצוץ 15% <b>לא נוצרת ירידת ערך באף פרויקט</b> — שווי המימוש נותר מעל העלות.")+
+    " מה שכן נוצר, לפי IFRS 15, הוא התאמת cumulative catch-up על ההכנסה שהוכרה עד היום, ורק על החלק שטרם נמכר."+
+    "<br>פגיעה מיידית בהון <span class='num'>"+fmt(st.imm)+"</span> · עתידית נוספת <span class='num'>"+fmt(st.fut)+
+    "</span> · מרווח יחס ההון מתכווץ מ־<span class='num'>"+((b.ratio-THRESH.ratio)*100).toFixed(1)+
+    "</span> ל־<span class='num'>"+((c.ratio-THRESH.ratio)*100).toFixed(1)+"</span> נקודות."+
+    "<br><span style='color:var(--t3);font-size:11px'>בסיס: מצגת משקיעים 31.3.2026 · מועד שונה מהגילוי הרבעוני שבטבלאות</span>";
+}
+function setStress(on){
+  STRESS=on;
+  document.body.classList.toggle("stress",on);
+  const t=document.getElementById("stressToggle");
+  t.classList.toggle("on",on);t.setAttribute("aria-checked",String(on));
+  renderAll(true);
+}
+function renderEvents(){
+  const el=document.getElementById("eventsList");
+  if(!el)return;
+  el.innerHTML=EVENTS.map(e=>'<div class="al"><span class="dot '+e.k+'"></span><span class="tx">'+
+    '<span class="tt">'+e.t+'</span><span class="ds">'+e.d+' \u00b7 '+e.s+'</span></span>'+
+    (e.k==="hi"?'<span class="add">\u05dc\u05de\u05e2\u05e7\u05d1</span>':"")+'</div>').join("");
+  const row=(l,v)=>'<tr><td>'+l+'</td><td class="n num">'+v+'</td></tr>';
+  document.getElementById("bondTable").innerHTML=
+    row("מועד הנפקה",dmy(BOND.issued))+
+    row("ערך נקוב",fmt(BOND.nominal))+
+    row("יתרה במאזן · 30.6.2026",fmt(BOND.balance))+
+    row("הצמדה","<span class='pos'>לא צמודה</span>")+
+    row('ריבית נקובה<span class="ttip" data-tip="ריבית שקלית לא צמודה. מאחר שאין הצמדה למדד, זו גם הריבית הריאלית — בניגוד לאג\'\'ח צמודה שבה העלות בפועל גבוהה יותר. לאימות מול שטר הנאמנות סעיף 6.5.">?</span>',
+      "<span class='warnc'>"+pctS(BOND.coupon)+"</span>")+
+    row("ריבית שנתית על היתרה","<span class='warnc'>"+fmt(BOND.balance*BOND.coupon)+"</span>")+
+    row("תשלומי קרן",BOND.installments)+
+    row("פירעון קרן אחרון",dmy(BOND.finalPrincipal))+
+    row("תשואה שוטפת בשוק",'<span class="na">— דורש נתוני מסחר</span>')+
+    row("שווי בבורסה · 31.12.2025",fmt(BOND.market.exchangeValue))+
+    row("נאמן",BOND.trustee)+
+    row("דירוג",'<span class="na">אינן מדורגות</span>');
+  const w=340,h=120,PT=18,PB=26,PS=56;
+  const mx=Math.max.apply(null,WC.map(x=>x.v))*1.12;
+  const x=i=>PS+(i/(WC.length-1))*(w-PS-14), y=v=>PT+(1-v/mx)*(h-PT-PB);
+  const d=WC.map((p,i)=>(i?"L":"M")+x(i).toFixed(1)+","+y(p.v).toFixed(1)).join(" ");
+  document.getElementById("wcChart").innerHTML=
+    '<svg viewBox="0 0 '+w+' '+h+'" width="100%" height="'+h+'">'+
+    '<path d="'+d+'" fill="none" stroke="var(--neg)" stroke-width="1.9" stroke-linecap="round"/>'+
+    WC.map((p,i)=>'<circle cx="'+x(i).toFixed(1)+'" cy="'+y(p.v).toFixed(1)+'" r="3" fill="var(--neg)"/>'+
+      '<text class="tk" x="'+x(i).toFixed(1)+'" y="'+(y(p.v)-9).toFixed(1)+'" text-anchor="middle" fill="var(--neg)">'+fmt(p.v)+'</text>'+
+      '<text class="tk" x="'+x(i).toFixed(1)+'" y="'+(h-8)+'" text-anchor="middle">'+p.l+'</text>').join("")+
+    '<text class="tk" x="'+(w-14)+'" y="10" text-anchor="end">\u05d0\u05dc\u05e4\u05d9 \u20aa</text></svg>';
+  const annInt=BOND.balance*BOND.coupon;
+  const bn=document.getElementById("bondNote");
+  if(bn) bn.innerHTML=
+    "ריבית שנתית של "+fmt(annInt)+" על יתרת האג״ח. הרווח התפעולי ברבעון היה "+fmt(239)+
+    " — כלומר <b class='negc'>ריבית האג״ח לרבעון גדולה פי "+((annInt/4)/239).toFixed(1)+
+    " מהרווח התפעולי</b>. המזומן הפנוי, "+fmt(2265)+", מכסה "+Math.round(2265/annInt*100)+
+    "% משנת ריבית אחת."+
+    "<br>מול כלכלת הפרויקטים: שיעורי הרווח הגולמי נעים בין 20.1% ל־37.8%, כלומר החוב עומד "+
+    "<b>12.6 עד 30.3 נקודות מתחת לרווחיות הפרויקטים</b>. באלכסנדר ינאי, בעל השיעור הנמוך ביותר, המרווח הוא הצר ביותר.";
+  document.getElementById("wcNote").innerHTML=
+    "\u05d4\u05d4\u05d5\u05df \u05d4\u05d7\u05d5\u05d6\u05e8 \u05e0\u05e9\u05d7\u05e7 \u05d1-"+Math.round((1-WC[2].v/WC[0].v)*100)+
+    "% \u05d1\u05e9\u05e0\u05d4 \u05d5\u05d7\u05e6\u05d9. \u05d4\u05d5\u05d0 \u05e2\u05d3\u05d9\u05d9\u05df \u05d7\u05d9\u05d5\u05d1\u05d9, \u05d0\u05da \u05e0\u05e9\u05e2\u05df \u05e2\u05dc \u05de\u05dc\u05d0\u05d9 \u05d1\u05e0\u05d9\u05d9\u05e0\u05d9\u05dd \u05e9\u05dc "+
+    fmt(184054)+" \u05e9\u05e0\u05d6\u05d9\u05dc\u05d5\u05ea\u05d5 \u05ea\u05dc\u05d5\u05d9\u05d4 \u05d1\u05e7\u05e6\u05d1 \u05d4\u05e9\u05d9\u05d5\u05d5\u05e7 \u2014 \u05d5\u05e9\u05dc\u05d5\u05e9\u05d4 \u05e4\u05e8\u05d5\u05d9\u05e7\u05d8\u05d9\u05dd \u05d1\u05e4\u05e2\u05e8 \u05e9\u05dc\u05d9\u05dc\u05d9 \u05de\u05e2\u05d9\u05d3\u05d9\u05dd \u05e9\u05d4\u05e7\u05e6\u05d1 \u05d0\u05d9\u05d8\u05d9.";
+}
+function renderAll(animate){
+  renderStressBar();renderCovenants(animate);renderProjects(animate);renderEvents();
+  renderHome();renderAnalytic();renderRelated();renderFollow();
+  renderLiquidity();renderLeverage();renderWarnings();renderProjSubs();
+  growBars(document);
+}
+
+/* ═══════════ מחוון מקור ═══════════ */
+function relTime(from){
+  const mins=Math.floor((Date.now()-from.getTime())/60000);
+  if(mins<1)return "עכשיו";
+  if(mins<60)return "לפני "+mins+" דק׳";
+  const h=Math.floor(mins/60); if(h<24)return "לפני "+h+" שע׳";
+  const d=Math.floor(h/24); if(d<31)return "לפני "+d+" ימים";
+  const mo=Math.floor(d/30.44); if(mo<12)return "לפני "+mo+" חודשים";
+  return "לפני "+(d/365.25).toFixed(1)+" שנים";
+}
+function renderLive(){
+  const el=document.getElementById("liveStatus"), tx=document.getElementById("liveText");
+  if(SOURCE.mode==="live"&&SOURCE.lastSync){
+    el.className="live ok";
+    tx.innerHTML="<b>מקור חי</b> <span class='sep'>·</span> סונכרן "+relTime(SOURCE.lastSync);
+  }else{
+    el.className="live manual";
+    tx.innerHTML="<b>"+SOURCE.label+"</b> <span class='sep'>·</span> הזנה ידנית <span class='sep'>·</span> נכון ל־"+relTime(SOURCE.asOf);
+  }
+}
+
+/* ═══════════ Zen ═══════════ */
+const zen=document.getElementById("zenBtn");
+function toggleZen(){
+  if(!document.fullscreenElement){
+    (document.documentElement.requestFullscreen||document.documentElement.webkitRequestFullscreen||function(){}).call(document.documentElement);
+  }else{(document.exitFullscreen||document.webkitExitFullscreen||function(){}).call(document);}
+}
+zen.addEventListener("click",toggleZen);
+zen.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();toggleZen();}});
+document.addEventListener("fullscreenchange",()=>{
+  document.body.classList.toggle("zen",!!document.fullscreenElement);});
+document.addEventListener("keydown",e=>{
+  if(e.key==="f"&&!/INPUT|TEXTAREA/.test(document.activeElement.tagName)){toggleZen();}
+  if(e.key==="s"&&!/INPUT|TEXTAREA/.test(document.activeElement.tagName)){setStress(!STRESS);}});
+
+/* ═══════════ חיווט ═══════════ */
+["Div","WD","Debt"].forEach(id=>{
+  const key=id==="Div"?"div":id==="WD"?"wd":"debt";
+  const el=document.getElementById("s"+id);
+  el.addEventListener("input",()=>{
+    SIM[key]=Number(el.value);
+    document.getElementById("v"+id).textContent=fmt(SIM[key]);
+    renderCovenants(false);renderProjects(false);
   });
 });
+document.getElementById("resetSim").addEventListener("click",()=>{
+  SIM.div=SIM.wd=SIM.debt=0;
+  ["Div","WD","Debt"].forEach(id=>{document.getElementById("s"+id).value=0;
+    document.getElementById("v"+id).textContent="0";});
+  renderCovenants(true);renderProjects(true);
+});
+const tg=document.getElementById("stressToggle");
+tg.addEventListener("click",()=>setStress(!STRESS));
+tg.addEventListener("keydown",e=>{if(e.key===" "||e.key==="Enter"){e.preventDefault();setStress(!STRESS);}});
+document.getElementById("btnCsv").addEventListener("click",exportCsv);
+const bPL=document.getElementById("btnPL"),bBS=document.getElementById("btnBS");
+if(bPL)bPL.addEventListener("click",()=>{ANALYTIC_VIEW="pl";renderAnalytic();growBars(document);});
+if(bBS)bBS.addEventListener("click",()=>{ANALYTIC_VIEW="bs";renderAnalytic();growBars(document);});
+document.getElementById("btnGap").addEventListener("click",()=>{sortKey="gap";sortDir=-1;renderProjects(false);});
 
-/* ---------- טעינה ---------- */
-document.getElementById('kpis').innerHTML=Array.from({length:6},()=>`<div class="card">${skeleton(74)}</div>`).join('');
-['trend','alerts','projects','bridge','deals','reports'].forEach(id=>{
-  document.getElementById(id).innerHTML=skeleton(id==='trend'?200:120);
+/* ═══════════════════════════════════════════════════════
+   מודול המסכים · נתונים ורינדור לכל הלשוניות
+   ═══════════════════════════════════════════════════════ */
+
+/* ── מאזן · 30.6.26 | 30.6.25 (הוצג מחדש) | 31.12.25 · data/app/statements.json ── */
+const BSCOL=STMT.balanceSheet.columns;
+const BS=STMT.balanceSheet.rows.map(r=>[r.label,r.current,r.priorYearSame,r.priorYearEnd,r.side]);
+
+/* ── רווח והפסד · 6ח26 | 6ח25 | Q2/26 | Q2/25 | 2025 ── */
+const PLCOL=STMT.incomeStatement.columns;
+const PL=STMT.incomeStatement.rows.map(r=>[r.label,r.h1,r.h1Prior,r.q2,r.q2Prior,r.fyPrior]);
+const SUMROWS=new Set(STMT.incomeStatement.subtotalRows);
+
+/* ── פרויקטים בתכנון ובהתחדשות עירונית · data/app/projects.json ── */
+const projRowArr=r=>[r.name,r.type,r.marketed!==undefined?r.marketed:r.consent,r.eta,
+  r.revenue,r.cost,r.grossProfit,r.margin,r.surplus,r.share];
+const PLANNING=PROJ.planning.map(projRowArr);
+const URBAN=PROJ.urbanRenewal.map(projRowArr);
+const DELIVERIES=PROJ.deliveries.map(d=>[d.period,d.units,d.value]);
+const DELIVERED_LIST=PROJ.deliveredList;
+
+/* ── צדדים קשורים ── */
+const RELATED=RELSRC.rows.map(r=>[r.label,r.current,r.priorYearEnd]);
+
+/* ═══════════════════════════════════════════════════════
+   מעקב · אחסון מקומי
+   הפריטים נשמרים ב-localStorage של הדפדפן, בתוך try/catch.
+   אחסון חסום או מלא אינו מפיל את הדף — הוא מוריד את המעקב
+   לזיכרון בלבד ומדליק חיווי. ייצוא JSON ו-CSV הוא הגיבוי.
+   ═══════════════════════════════════════════════════════ */
+const FU_KEY="mytown.followups.v1";
+const FU_STATES=["פתוח","הוסבר","נסגר","הועבר"];
+let FU_PERSIST=true;
+const fuNewId=()=>"f"+Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+function fuSeed(){
+  return SEED.items.map(i=>({id:fuNewId(),t:i.title,src:i.source,sev:i.severity,
+    amt:i.amount,st:i.status,note:i.note||""}));
+}
+function fuLoad(){
+  try{
+    const raw=localStorage.getItem(FU_KEY);
+    if(raw){
+      const parsed=JSON.parse(raw);
+      if(Array.isArray(parsed))return parsed.map(f=>Object.assign({id:fuNewId(),note:""},f));
+    }
+  }catch(e){FU_PERSIST=false;}
+  return fuSeed();
+}
+function fuSave(){
+  if(!FU_PERSIST)return;
+  try{localStorage.setItem(FU_KEY,JSON.stringify(FOLLOWUPS));}
+  catch(e){FU_PERSIST=false;toast("האחסון המקומי חסום · המעקב יישמר לסשן הזה בלבד");}
+}
+let FOLLOWUPS=fuLoad();
+
+function fuAdd(item){
+  const t=(item.t||"").trim();
+  if(!t)return null;
+  if(FOLLOWUPS.some(f=>f.t===t&&f.src===item.src)){toast("כבר במעקב · "+t);return null;}
+  const id=fuNewId();
+  FOLLOWUPS.push(Object.assign({id,sev:"md",amt:null,st:"פתוח",note:""},item,{t,id}));
+  fuSave();renderFollow();
+  toast("נוסף למעקב · "+t);
+  return id;
+}
+function fuRemove(id){
+  const i=FOLLOWUPS.findIndex(f=>f.id===id);
+  if(i<0)return;
+  const gone=FOLLOWUPS.splice(i,1)[0];
+  fuSave();renderFollow();toast("הוסר מהמעקב · "+gone.t);
+}
+function fuCycle(id){
+  const f=FOLLOWUPS.find(x=>x.id===id);
+  if(!f)return;
+  f.st=FU_STATES[(FU_STATES.indexOf(f.st)+1)%FU_STATES.length];
+  fuSave();renderFollow();
+}
+function fuNote(id){
+  const f=FOLLOWUPS.find(x=>x.id===id);
+  if(!f)return;
+  const v=window.prompt("הסבר לפריט: "+f.t,f.note||"");
+  if(v===null)return;
+  f.note=v.trim();
+  if(f.note&&f.st==="פתוח")f.st="הוסבר";
+  fuSave();renderFollow();
+}
+function fuReset(){
+  if(!window.confirm("לאפס את המעקב לרשימת הזרע? כל הפריטים וההסברים שנוספו יימחקו."))return;
+  FOLLOWUPS=fuSeed();fuSave();renderFollow();toast("המעקב אופס");
+}
+function download(name,text,mime){
+  const url=URL.createObjectURL(new Blob([text],{type:mime}));
+  const a=document.createElement("a");
+  a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1200);
+}
+function fuExportJson(){
+  download("maytown-followups.json",
+    JSON.stringify({exportedAt:new Date().toISOString(),period:META.source.label,
+      items:FOLLOWUPS},null,2),"application/json");
+}
+function fuExportCsv(){
+  const esc=v=>{const s=String(v==null?"":v);return /[",\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;};
+  const head=["פריט","מסך מקור","סכום","חומרה","סטטוס","הסבר"];
+  const body=FOLLOWUPS.map(f=>[f.t,f.src,f.amt==null?"":f.amt,
+    f.sev==="hi"?"גבוהה":f.sev==="md"?"בינונית":"נמוכה",f.st,f.note].map(esc).join(","));
+  const meta=["מייטאון · נייר עבודה · אוסף המעקב","תקופה: "+META.source.label,
+    "הופק: "+new Date().toLocaleString("he-IL"),"סכומים באלפי ש״ח",""];
+  download("maytown-followups.csv",
+    "﻿"+meta.map(esc).join("\n")+"\n"+head.join(",")+"\n"+body.join("\n"),
+    "text/csv;charset=utf-8;");
+}
+function fuImport(file){
+  const rd=new FileReader();
+  rd.onload=()=>{
+    try{
+      const p=JSON.parse(rd.result);
+      const items=Array.isArray(p)?p:p.items;
+      if(!Array.isArray(items))throw new Error("המבנה אינו רשימת פריטים");
+      FOLLOWUPS=items.map(f=>Object.assign({id:fuNewId(),sev:"md",amt:null,st:"פתוח",note:""},f));
+      fuSave();renderFollow();toast("יובאו "+FOLLOWUPS.length+" פריטים");
+    }catch(e){toast("הייבוא נכשל · "+e.message);}
+  };
+  rd.readAsText(file);
+}
+
+/* ── הודעת רגע ── */
+let toastTimer=null;
+function toast(msg){
+  let el=document.getElementById("toast");
+  if(!el){
+    el=document.createElement("div");
+    el.id="toast";el.className="toast";
+    document.body.appendChild(el);
+  }
+  el.textContent=msg;
+  el.classList.add("on");
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>el.classList.remove("on"),2600);
+}
+/* "(1,234)" → 1234 · הסוגריים הן סימון שלילי חשבונאי, והמעקב מחזיק גודל */
+function parseNum(s){
+  const t=String(s||"").replace(/[^\d.]/g,"");
+  return t?Number(t):null;
+}
+
+/* ═══════════ עזרי מבחן ═══════════ */
+/* סף כפול · שני הספים נחצו → אדום · אחד מהם → ענבר · אף אחד → לא חריגה.
+   מעבר סימן מטופל ב-testCell ונדלק אדום בלי קשר לספים. */
+const EXC=META.exceptionThresholds;
+function isException(cur,base){
+  if(!Number.isFinite(cur)||!Number.isFinite(base))return null;
+  const d=Math.abs(cur-base);
+  if(d===0)return null;
+  const overAbs=d>=EXC.abs;
+  if(base===0)return overAbs?"both":"one";      /* סעיף חדש · אין אחוז, הסכום מכריע */
+  const overPct=d/Math.abs(base)>=EXC.pct;
+  return overAbs&&overPct?"both":(overAbs||overPct)?"one":null;
+}
+function testCell(cur,base){
+  if(!Number.isFinite(cur)||!Number.isFinite(base))return {h:'<span class="na">—</span>',ex:null,d:0};
+  const d=cur-base;
+  const sign=(cur<0&&base>0)||(cur>0&&base<0);
+  let pctTxt;
+  if(base===0) pctTxt='<span class="na">חדש</span>';
+  else if(base<0) pctTxt='<span class="na">בסיס שלילי</span>';
+  else pctTxt=(d>=0?"▲ ":"▼ ")+Math.abs(d/base*100).toFixed(1)+"%";
+  const ex=isException(cur,base);
+  const cls=sign?"negc":ex==="both"?"negc":ex==="one"?"warnc":d>=0?"pos":"negc";
+  return {h:'<span class="'+cls+'">'+fmt(d)+'</span> <span style="font-size:10px;color:var(--t3)">'+pctTxt+'</span>'+
+    (sign?'<span class="flag">מעבר סימן</span>':""),ex:sign?"sign":ex,d:Math.abs(d)};
+}
+
+/* ═══════════ 1 · בית ═══════════ */
+function renderHome(){
+  const c=computeCovenants();
+  const el=id=>document.getElementById(id);
+  if(!el("homeKpi"))return;
+  el("homeKpi").innerHTML=
+    '<div class="card grad st-warn"><div class="lbl">יחס הון מתואם למאזן</div>'+
+      '<div class="big num warnc" data-count="'+c.ratio+'" data-kind="pct">'+pctS(c.ratio)+'</div>'+
+      '<div class="mini">סף 15.0% · הקובננט הצר · מרווח <b class="warnc num">+'+((c.ratio-0.15)*100).toFixed(1)+'</b> נק׳</div></div>'+
+    '<div class="card grad st-pos"><div class="lbl">הון עצמי מתואם</div>'+
+      '<div class="big num" data-count="'+c.adjEquity+'">'+fmt(c.adjEquity)+'</div>'+
+      '<div class="mini">סף 25,000 · מרווח <b class="pos num">+'+fmt(c.adjEquity-25000)+'</b></div></div>'+
+    '<div class="card grad st-neg"><div class="lbl">הפסד נקי · רבעון 2/2026</div>'+
+      '<div class="big num negc">(2,311)</div>'+
+      '<div class="mini">רבעון קודם (3,260) · שיפור <span class="num pos">949</span></div></div>'+
+    '<div class="card grad st-neg"><div class="lbl">ריבית אג״ח שנתית</div>'+
+      '<div class="big num negc" data-count="'+(BOND.balance*BOND.coupon)+'">'+fmt(BOND.balance*BOND.coupon)+'</div>'+
+      '<div class="mini">7.5% לא צמודה · פי 4.1 מהרווח התפעולי הרבעוני</div></div>';
+
+  el("homeQuarter").innerHTML='<table><thead><tr><th>סעיף</th><th class="n">Q2/2026</th>'+
+    '<th class="n">Q1/2026</th><th class="n">שינוי</th><th class="n">Q2/2025</th><th class="n">מול אשתקד</th></tr></thead><tbody>'+
+    [["הכנסות",32899,27081,11498],["רווח גולמי",7421,5911,-613],
+     ["רווח תפעולי",239,-762,-5872],["הפסד נקי",-2311,-3260,-7413]].map(r=>{
+      const t2=testCell(r[1],r[2]),t3=testCell(r[1],r[3]);
+      return '<tr'+(r[0]==="הפסד נקי"?' class="sum"':"")+'><td>'+r[0]+'</td>'+
+        '<td class="n num">'+fmt(r[1])+'</td><td class="n num">'+fmt(r[2])+'</td>'+
+        '<td class="n num">'+t2.h+'</td><td class="n num">'+fmt(r[3])+'</td>'+
+        '<td class="n num">'+t3.h+'</td></tr>';}).join("")+'</tbody></table>'+
+    '<div class="src">רבעון בודד נגזר בחיסור מהמצטבר · בסיס שלילי מוצג בסכום ללא אחוז · מקור: דוחות כספיים 30.6.2026</div>';
+
+  el("homeAlerts").innerHTML=[
+    ["hi","ריבית האג״ח פי 4.1 מהרווח התפעולי","3,914 לשנה מול רווח תפעולי רבעוני של 239"],
+    ["hi","קפיצה באשראי שוטף · פי 2.5","30,198 ← 75,100 בחצי שנה"],
+    ["hi","ז׳בוטינסקי 105 · בונים בלי למכור","ביצוע 52.7% מול שיווק 8%"],
+    ["md","ההון החוזר נשחק ב־58%","86,300 ← 36,357 בשנה וחצי"],
+    ["ok","עמידה בשלושת הקובננטים","ללא חריגה למועד הדוח"]
+  ].map(a=>'<div class="al"><span class="dot '+a[0]+'"></span><span class="tx"><span class="tt">'+a[1]+
+    '</span><span class="ds">'+a[2]+'</span></span><span class="add">למעקב</span></div>').join("");
+
+  /* מידע למשקיע */
+  el("invKpi").innerHTML=
+    '<div class="card grad"><div class="lbl">חוב אג״ח · קרן וריבית</div><div class="mid num">'+fmt(BOND.valueWithAccrued)+'</div>'+
+      '<div class="mini">חלויות 12ח׳ 6,200 · יתרה 45,988</div></div>'+
+    '<div class="card grad st-warn"><div class="lbl">כיסוי מזומן לחלויות 12ח׳</div><div class="mid num warnc">37%</div>'+
+      '<div class="mini">מזומן פנוי 2,265</div></div>'+
+    '<div class="card grad st-warn"><div class="lbl">ריבית נקובה</div><div class="mid num warnc">7.5%</div>'+
+      '<div class="mini">שקלית לא צמודה · ריאלית זהה</div></div>'+
+    '<div class="card grad"><div class="lbl">פירעון קרן אחרון</div><div class="mid">01.10.2028</div>'+
+      '<div class="mini">ארבעה תשלומי קרן · מועדים לאימות</div></div>';
+
+  el("invRisk").innerHTML='<table><thead><tr><th>סימן</th><th class="n">הנתון</th><th>משמעות</th></tr></thead><tbody>'+
+    [["מרווח הקובננט הצר",pctS(c.ratio-0.15,1)+" נק׳","יחס הון למאזן · תחת קיצון 15% מתכווץ ל־0.5 נק׳"],
+     ["ריבית מול רווח תפעולי","פי 4.1","ריבית אג״ח רבעונית 979 מול רווח תפעולי 239"],
+     ["מרווח מעל עלות החוב","12.6–30.3 נק׳","שיעורי רווח גולמי 20.1%–37.8% מול חוב ב־7.5%"],
+     ["ריכוזיות פרויקט יחיד","73%","קריית מלאכי מכלל העלות להשלמה"],
+     ["בנייה מקדימה מכירות","3 פרויקטים","מימון מאשראי במקום מתקבולי רוכשים"],
+     ["קצב שחיקת ההון","6,400 לשנה","כ־3.5 שנים עד סף ההון המתואם"]
+    ].map(r=>'<tr><td>'+r[0]+'</td><td class="n num warnc">'+r[1]+'</td>'+
+      '<td style="font-size:11.5px;color:var(--t2)">'+r[2]+'</td></tr>').join("")+'</tbody></table>'+
+    '<div class="src">כל השורות מחושבות · אינן נתונים מדווחים</div>';
+
+  el("invWarn").innerHTML=[
+    ["ok","גירעון בהון החוזר","אין · חיובי 36,357 · אך נשחק מ־86,300"],
+    ["ok","הון עצמי שלילי","אין · חיובי 37,570"],
+    ["hi","תזרים שלילי מתמשך מפעילות שוטפת","קיימת · מצוין בדוחות ברמת הסולו"],
+    ["ok","הערת עסק חי","אין · סקירת קוסט פורר גבאי את קסירר ללא הסתייגות"]
+  ].map(a=>'<div class="al"><span class="dot '+a[0]+'"></span><span class="tx"><span class="tt">'+a[1]+
+    '</span><span class="ds">'+a[2]+'</span></span></div>').join("");
+}
+
+/* ═══════════ 2.1 · אנליטי ═══════════ */
+let ANALYTIC_VIEW="pl";
+function renderAnalytic(){
+  const el=document.getElementById("analyticBody");
+  if(!el)return;
+  const exceptions=[];
+  let html="";
+
+  if(ANALYTIC_VIEW==="bs"){
+    html='<div class="scroller"><table><thead><tr><th class="frz">סעיף</th>'+
+      '<th class="n">30.6.2026</th><th class="n">31.12.2025</th><th class="n">שינוי מצטבר</th>'+
+      '<th class="n">30.6.2025</th><th class="n">מול אשתקד</th></tr></thead><tbody>';
+    BS.forEach(r=>{
+      const [n,cur,ly,fy,kind]=r;
+      const t1=testCell(cur,fy),t2=testCell(cur,ly);
+      if(t1.ex)exceptions.push({n,test:"מצטבר",d:t1.d,ex:t1.ex});
+      if(t2.ex)exceptions.push({n,test:"מול אשתקד",d:t2.d,ex:t2.ex});
+      html+='<tr'+(kind==="ס"?' class="sum"':"")+'><td class="frz">'+n+'</td>'+
+        '<td class="n num">'+fmt(cur)+'</td><td class="n num">'+fmt(fy)+'</td>'+
+        '<td class="n num">'+t1.h+'</td><td class="n num">'+fmt(ly)+'</td>'+
+        '<td class="n num">'+t2.h+'</td></tr>';
+    });
+    html+='</tbody></table></div>'+
+      '<div class="src">שני מבחנים · יתרה מול יתרה, ללא עיבוד · המבחן השוטף מול 31.3.2026 חסום: אין פירוט יתרות לאותו מועד</div>';
+  }else{
+    html='<div class="scroller"><table><thead><tr><th class="frz">סעיף</th>'+
+      '<th class="n">Q2/2026</th><th class="n">Q1/2026</th><th class="n">מבחן 2</th>'+
+      '<th class="n">Q2/2025</th><th class="n">מבחן 3</th><th class="n">מנורמל 2026</th>'+
+      '<th class="n">2025 בפועל</th><th class="n">מבחן 1</th></tr></thead><tbody>';
+    PL.forEach(r=>{
+      const [n,h26,h25,q2_26,q2_25,y25]=r;
+      const q1_26=h26-q2_26;
+      const norm=h26*2;                      // נרמול גס · שני רבעונים
+      const t2=testCell(q2_26,q1_26), t3=testCell(q2_26,q2_25), t1=testCell(norm,y25);
+      if(t2.ex)exceptions.push({n,test:"מבחן 2 · מול רבעון קודם",d:t2.d,ex:t2.ex});
+      if(t3.ex)exceptions.push({n,test:"מבחן 3 · מול מקביל אשתקד",d:t3.d,ex:t3.ex});
+      if(t1.ex)exceptions.push({n,test:"מבחן 1 · נרמול",d:t1.d,ex:"one"});
+      html+='<tr'+(SUMROWS.has(n)?' class="sum"':"")+'><td class="frz">'+n+'</td>'+
+        '<td class="n num">'+fmt(q2_26)+'</td><td class="n num">'+fmt(q1_26)+'</td>'+
+        '<td class="n num">'+t2.h+'</td>'+
+        '<td class="n num">'+fmt(q2_25)+'</td><td class="n num">'+t3.h+'</td>'+
+        '<td class="n num na">'+fmt(norm)+'</td><td class="n num">'+fmt(y25)+'</td>'+
+        '<td class="n num">'+t1.h.replace(/class="(pos|negc)"/,'class="warnc"')+'</td></tr>';
+    });
+    html+='</tbody></table></div>'+
+      '<div class="src">רבעון בודד נגזר בחיסור: Q1/2026 = מצטבר 6ח פחות Q2 · מבחן 1 בענבר בלבד, הנרמול גס ומניח פיזור אחיד · '+
+      'מקדם עונתיות דורש את ארבעת רבעוני 2025 בנפרד</div>';
+  }
+  el.innerHTML=html;
+
+  /* טבלת חריגות · מיון לפי סכום */
+  exceptions.sort((a,b)=>b.d-a.d);
+  document.getElementById("analyticEx").innerHTML=exceptions.length?
+    '<table><thead><tr><th>סעיף</th><th>מבחן</th><th class="n">סכום החריגה</th><th class="n">חומרה</th><th>הסבר</th></tr></thead><tbody>'+
+    exceptions.slice(0,14).map(e=>'<tr><td>'+e.n+'</td><td style="font-size:11.5px;color:var(--t2)">'+e.test+'</td>'+
+      '<td class="n num '+(e.ex==="sign"||e.ex==="both"?"negc":"warnc")+'">'+fmt(e.d)+'</td>'+
+      '<td class="n"><span class="pill '+(e.ex==="sign"?"bad":e.ex==="both"?"bad":"wrn")+'">'+
+      (e.ex==="sign"?"מעבר סימן":e.ex==="both"?"חריגה":"לבדיקה")+'</span></td>'+
+      '<td><span class="add">הוסף הסבר</span></td></tr>').join("")+'</tbody></table>'+
+    '<div class="src">מיון לפי סכום, יורד · סף כפול: 10% וגם 375 אלפי ש״ח · מעבר סימן נדלק תמיד</div>'
+    :'<p class="na" style="padding:16px">לא נמצאו חריגות מעל הספים.</p>';
+}
+
+/* ═══════════ 2.2 · צדדים קשורים ═══════════ */
+function renderRelated(){
+  const el=document.getElementById("relatedBody");
+  if(!el)return;
+  el.innerHTML='<table><thead><tr><th>סעיף</th><th class="n">30.6.2026</th>'+
+    '<th class="n">31.12.2025</th><th class="n">שינוי</th></tr></thead><tbody>'+
+    RELATED.map(r=>{const t=testCell(r[1],r[2]);
+      return '<tr><td>'+r[0]+'</td><td class="n num">'+fmt(r[1])+'</td>'+
+        '<td class="n num">'+fmt(r[2])+'</td><td class="n num">'+
+        (r[2]===null?'<span class="pill gap">חדש</span>':t.h)+'</td></tr>';}).join("")+
+    '<tr class="sum"><td>סך חשיפה לצדדים קשורים</td>'+
+    '<td class="n num">'+fmt(RELATED.filter(r=>r[1]>0).reduce((a,r)=>a+r[1],0))+'</td>'+
+    '<td class="n num">'+fmt(RELATED.filter(r=>r[2]>0).reduce((a,r)=>a+r[2],0))+'</td>'+
+    '<td class="n na">—</td></tr></tbody></table>';
+  document.getElementById("relatedInsight").innerHTML=
+    '<div class="al"><span class="dot hi"></span><span class="tx"><span class="tt">חו״ז חדש מול השותף · 24,135</span>'+
+    '<span class="ds">64% מההון העצמי · סעיף שלא היה קיים ב־31.12.2025 · זהות השותף ותנאי היתרה אינם בגילוי</span></span>'+
+    '<span class="add">למעקב</span></div>'+
+    '<div class="al"><span class="dot md"></span><span class="tx"><span class="tt">אותה עסקה משתי זוויות</span>'+
+    '<span class="ds">הלוואות הבעלים ירדו ב־1,378 · בדיוק הסכום שנזקף לקרן עסקאות עם בעלי שליטה · '+
+    'הדירקטוריון וועדת הביקורת אישרו כעסקה מזכה</span></span></div>'+
+    '<div class="al"><span class="dot md"></span><span class="tx"><span class="tt">נחיתות ההלוואות</span>'+
+    '<span class="ds">קרן וריבית הלוואות הבעלים נחותות לפירעון האג״ח · הריבית נצברת ומשולמת רק לאחר הפירעון הסופי</span></span></div>'+
+    '<div class="al"><span class="dot na"></span><span class="tx"><span class="tt">חסום · תנאי העסקאות</span>'+
+    '<span class="ds">שיעורי ריבית, מועדי פירעון ותיעוד האישורים · מקור: ביאור צדדים קשורים בדוח המלא</span></span></div>';
+}
+
+/* ═══════════ 2.4 · מעקב ═══════════ */
+function renderFollow(){
+  const el=document.getElementById("followBody");
+  if(!el)return;
+  const open=FOLLOWUPS.filter(f=>f.st==="פתוח").length;
+  const explained=FOLLOWUPS.filter(f=>f.note).length;
+  document.getElementById("followKpi").innerHTML=
+    '<div class="card grad"><div class="lbl">פריטים פתוחים</div><div class="mid num">'+open+'</div>'+
+      '<div class="mini">מתוך '+FOLLOWUPS.length+' שנאספו · '+explained+' עם הסבר</div></div>'+
+    '<div class="card grad st-neg"><div class="lbl">חומרה גבוהה</div><div class="mid num negc">'+
+      FOLLOWUPS.filter(f=>f.sev==="hi").length+'</div><div class="mini">דורשים טיפול לפני חתימה</div></div>'+
+    '<div class="card grad"><div class="lbl">סכום מצטבר</div><div class="mid num">'+
+      fmt(FOLLOWUPS.reduce((a,f)=>a+(f.amt||0),0))+'</div><div class="mini">סך החריגות שנאספו</div></div>'+
+    '<div class="card grad"><div class="lbl">תקופה</div><div class="mid">Q2/2026</div>'+
+      '<div class="mini">'+META.source.asOf.split("-").reverse().join(".")+' · מאוחד</div></div>';
+
+  const sev=f=>f.sev==="hi"?["bad","גבוהה"]:f.sev==="md"?["wrn","בינונית"]:["","נמוכה"];
+  el.innerHTML=
+    '<div class="act">'+
+      '<button id="fuCsv">ייצוא נייר עבודה · CSV</button>'+
+      '<button id="fuJson">ייצוא JSON</button>'+
+      '<button id="fuImp">ייבוא JSON</button>'+
+      '<input type="file" id="fuFile" accept=".json,application/json" hidden>'+
+      '<span class="grow"></span>'+
+      '<button id="fuReset" class="danger">איפוס לרשימת הזרע</button>'+
+    '</div>'+
+    (FOLLOWUPS.length?
+    '<div class="scroller"><table><thead><tr><th>פריט</th><th>מקור</th><th class="n">סכום</th>'+
+    '<th class="n">חומרה</th><th class="n">סטטוס</th><th>הסבר</th><th></th></tr></thead><tbody>'+
+    FOLLOWUPS.map(f=>{const[sc,st]=sev(f);
+      return '<tr data-id="'+f.id+'"><td>'+f.t+'</td>'+
+      '<td style="font-size:11.5px;color:var(--t2)">'+f.src+'</td>'+
+      '<td class="n num">'+fmt(f.amt)+'</td>'+
+      '<td class="n"><span class="pill '+sc+'">'+st+'</span></td>'+
+      '<td class="n"><span class="pill fu-st" title="לחיצה מקדמת סטטוס">'+f.st+'</span></td>'+
+      '<td class="fu-note" title="לחיצה פותחת שדה הסבר">'+
+        (f.note?f.note:'<span class="add">הוסף הסבר</span>')+'</td>'+
+      '<td class="n"><span class="fu-x" title="הסרה מהמעקב">✕</span></td></tr>';}).join("")+
+    '</tbody></table></div>'
+    :'<p class="na" style="padding:18px 4px">האוסף ריק. כל לחיצה על ״למעקב״ בשאר המסכים מוסיפה פריט לכאן.</p>')+
+    '<div class="src">האוסף נבנה מלחיצות ״למעקב״ בכל המסכים · סטטוס: '+FU_STATES.join(" ← ")+' · '+
+    (FU_PERSIST?'נשמר מקומית בדפדפן הזה — ייצוא JSON הוא הגיבוי ודרך ההעברה בין מכשירים'
+      :'<span class="warnc">האחסון המקומי חסום · הפריטים חיים בסשן הזה בלבד — ייצא לפני סגירת הדף</span>')+
+    '</div>';
+
+  document.getElementById("fuCsv").addEventListener("click",fuExportCsv);
+  document.getElementById("fuJson").addEventListener("click",fuExportJson);
+  const file=document.getElementById("fuFile");
+  document.getElementById("fuImp").addEventListener("click",()=>file.click());
+  file.addEventListener("change",()=>{if(file.files[0])fuImport(file.files[0]);file.value="";});
+  document.getElementById("fuReset").addEventListener("click",fuReset);
+  el.querySelectorAll("tbody tr").forEach(tr=>{
+    const id=tr.dataset.id;
+    tr.querySelector(".fu-st").addEventListener("click",()=>fuCycle(id));
+    tr.querySelector(".fu-note").addEventListener("click",()=>fuNote(id));
+    tr.querySelector(".fu-x").addEventListener("click",()=>fuRemove(id));
+  });
+}
+
+/* ═══════════ 3.2 · נזילות ═══════════ */
+const dmy=iso=>iso.split("-").reverse().join(".");
+
+function renderLiquidity(){
+  const el=document.getElementById("liqBody");
+  if(!el)return;
+  const avail=BASE.cashFree, restricted=BASE.restricted+BASE.escrow;
+  const lease12=1360;
+  const due12=NEXT12.principal+NEXT12.interest+BASE.bankCredit+lease12;
+  document.getElementById("liqKpi").innerHTML=
+    '<div class="card grad st-warn"><div class="lbl">הון חוזר</div><div class="mid num warnc">'+fmt(WC[2].v)+'</div>'+
+      '<div class="mini">נשחק מ־'+fmt(WC[0].v)+' · ירידה של '+
+      Math.round((1-WC[2].v/WC[0].v)*100)+'%</div></div>'+
+    '<div class="card grad st-neg"><div class="lbl">מזומן זמין לשירות חוב</div><div class="mid num negc">'+fmt(avail)+'</div>'+
+      '<div class="mini">'+fmt(restricted)+' נוספים מוגבלים ואינם זמינים</div></div>'+
+    '<div class="card grad"><div class="lbl">חלויות 12 חודשים</div><div class="mid num">'+fmt(due12)+'</div>'+
+      '<div class="mini">אג״ח קרן '+fmt(NEXT12.principal)+' וריבית '+fmt(NEXT12.interest)+
+      ' · בנקאי '+fmt(BASE.bankCredit)+' · חכירה '+fmt(lease12)+'</div></div>'+
+    '<div class="card grad st-neg"><div class="lbl">כיסוי מזומן</div><div class="mid num negc">'+
+      (avail/due12*100).toFixed(1)+'%</div>'+
+      '<div class="mini">מזומן פנוי מול כלל החלויות</div></div>';
+
+  /* ── לוח שירות החוב של האג״ח · נגזר מתנאי השטר ── */
+  const svc=BOND.schedule;
+  const totP=svc.reduce((a,r)=>a+r.principal,0), totI=svc.reduce((a,r)=>a+r.interest,0);
+  const bondTbl=
+    '<div class="scroller"><table><thead><tr><th>מועד</th><th class="n">קרן</th>'+
+    '<th class="n">ריבית</th><th class="n">סך תשלום</th><th class="n">יתרת קרן אחרי</th></tr></thead><tbody>'+
+    svc.map(r=>'<tr'+(r.principal?' class="sum"':"")+'><td class="num">'+dmy(r.date)+'</td>'+
+      '<td class="n num">'+(r.principal?fmt(r.principal):'<span class="na">—</span>')+'</td>'+
+      '<td class="n num">'+fmt(r.interest)+'</td>'+
+      '<td class="n num'+(r.total>10000?" negc":"")+'">'+fmt(r.total)+'</td>'+
+      '<td class="n num">'+fmt(r.balance)+'</td></tr>').join("")+
+    '<tr class="sum"><td>סה״כ עד הפירעון הסופי</td><td class="n num">'+fmt(totP)+'</td>'+
+    '<td class="n num">'+fmt(totI)+'</td><td class="n num">'+fmt(totP+totI)+'</td>'+
+    '<td class="n num">0</td></tr></tbody></table></div>'+
+    '<div class="src">נגזר מתנאי שטר הנאמנות ולא מוקלד: קרן '+fmt(BOND.nominalAtIssue)+
+    ' בארבעה תשלומים לא שווים ('+BOND.principalPayments.map(p=>(p.pct*100)+"%").join(" · ")+
+    ') · ריבית קבועה לא צמודה '+pctS(BOND.coupon)+' משולמת פעמיים בשנה על היתרה הבלתי מסולקת · '+
+    'מקור: נספח א׳ לדוח הדירקטוריון 31.12.2025 ס׳ 1 · ביאור 17</div>';
+
+  el.innerHTML=
+    '<table><thead><tr><th>מקור נזילות</th><th class="n">סכום</th><th>זמינות לשירות חוב</th></tr></thead><tbody>'+
+    [["מזומנים ושווי מזומנים",BASE.cashFree,"ok","זמין"],
+     ["פיקדונות מוגבלים",BASE.restricted,"bad","משועבד"],
+     ["מזומנים בחשבונות ליווי",BASE.escrow,"bad","משועבד לפרויקטים ולרוכשים"],
+     ["נכסים בגין חוזים",21457,"wrn","תלוי בקצב הגבייה"],
+     ["מלאי בניינים למכירה",184054,"wrn","תלוי בקצב השיווק"]
+    ].map(r=>'<tr><td>'+r[0]+'</td><td class="n num">'+fmt(r[1])+'</td>'+
+      '<td><span class="pill '+r[2]+'">'+r[3]+'</span></td>'+
+      '</tr>').join("")+
+    '</tbody></table>'+
+    '<div style="margin-top:16px;font-size:12.5px;color:var(--t2);line-height:1.75">'+
+    '<b class="warnc">ההון החוזר החיובי אינו מעיד על נזילות.</b> מתוך 241,118 נכסים שוטפים, '+
+    '184,054 הם מלאי בניינים שנזילותו תלויה בקצב השיווק, ו־'+fmt(restricted)+' נוספים משועבדים. '+
+    'המזומן שבאמת זמין לשירות חוב הוא '+fmt(avail)+' בלבד — כ־1% מהנכסים השוטפים, '+
+    'מול '+fmt(NEXT12.principal+NEXT12.interest)+' שירות אג״ח ב־12 החודשים הקרובים לבדם.</div>'+
+    '<div style="margin-top:22px"><h2 style="margin-bottom:12px">לוח שירות החוב · אג״ח סדרה א׳</h2>'+
+    bondTbl+'</div>'+
+    '<div class="src">חסום · תזרים מזומנים חזוי, מסגרות אשראי לא מנוצלות, ותנאי הליווי הבנקאי לכל פרויקט · '+
+    'נורת אזהרה דולקת מחייבת תזרים חזוי בדוח</div>';
+}
+
+/* ═══════════ 3.3 · מינוף ═══════════ */
+function renderLeverage(){
+  const el=document.getElementById("levBody");
+  if(!el)return;
+  const debtFin=BASE.bankCredit+5625+BOND.balance+10000+10122;
+  const netDebt=debtFin-BASE.cashFree;
+  document.getElementById("levKpi").innerHTML=
+    '<div class="card grad st-neg"><div class="lbl">התחייבויות להון</div><div class="mid num negc">7.47</div>'+
+      '<div class="mini">280,828 מול 37,570</div></div>'+
+    '<div class="card grad st-warn"><div class="lbl">הון למאזן</div><div class="mid num warnc">11.8%</div>'+
+      '<div class="mini">לפני התאמות הקובננט · מתואם 20.1%</div></div>'+
+    '<div class="card grad"><div class="lbl">חוב פיננסי נטו</div><div class="mid num">'+fmt(netDebt)+'</div>'+
+      '<div class="mini">בניכוי מזומן פנוי בלבד</div></div>'+
+    '<div class="card grad"><div class="lbl">חוב נטו ל־EBITDA</div><div class="mid na">לא בר חישוב</div>'+
+      '<div class="mini">הרווח התפעולי שלילי במצטבר · בסיס שלילי</div></div>';
+  const src=[["אשראי בנקאי · שוטף",75100,"#FF5A6E"],["אשראי בנקאי · לא שוטף",5625,"#FF5A6E"],
+    ["אגרות חוב",52188,"#FFB547"],["הלוואות בעלי מניות",10000,"#3D8BFF"],
+    ["הלוואות בעלים · נחותות",10122,"#3D8BFF"],["צדדים קשורים",19554,"#3D8BFF"],
+    ["התחייבויות לבעלי מקרקעין",72086,"#2FD4C4"],["חכירה",4461,"#8FA6AF"]];
+  const tot=src.reduce((a,r)=>a+r[1],0);
+  el.innerHTML='<table><thead><tr><th>מקור מימון</th><th class="n">סכום</th><th class="n">שיעור</th><th>סוג</th></tr></thead><tbody>'+
+    src.map(r=>'<tr><td>'+r[0]+'</td><td class="n num">'+fmt(r[1])+'</td>'+
+      '<td class="n"><span class="mbar"><i data-w="'+(r[1]/tot*100).toFixed(1)+'"></i><b>'+
+      (r[1]/tot*100).toFixed(1)+'%</b></span></td>'+
+      '<td><span class="pill" style="box-shadow:0 0 0 1px '+r[2]+'66;color:'+r[2]+'">'+
+      (r[0].indexOf("בעלי מקרקעין")>=0?"אינו חוב פיננסי":r[0].indexOf("בעלים")>=0||r[0].indexOf("קשורים")>=0?"נחות":"פיננסי")+
+      '</span></td></tr>').join("")+
+    '<tr class="sum"><td>סך מקורות</td><td class="n num">'+fmt(tot)+'</td><td class="n num">100%</td><td></td></tr>'+
+    '</tbody></table>'+
+    '<div style="margin-top:16px;font-size:12.5px;color:var(--t2);line-height:1.75">'+
+    '<b class="warnc">שתי תמונות מינוף, ושתיהן נכונות.</b> ההתחייבות לבעלי מקרקעין, 72,086, אינה חוב פיננסי '+
+    'אלא התחייבות למתן שירותי בנייה — והיא מנוכה מהמאזן המתואם לצורך הקובננט. '+
+    'הכללתה מנפחת את המינוף כלפי מעלה; התעלמות ממנה מעוותת כלפי מטה. '+
+    'החוב הפיננסי הצרוף הוא '+fmt(debtFin)+', כלומר יחס של '+(debtFin/BASE.equityConsolidated).toFixed(2)+' להון.</div>';
+}
+
+/* ═══════════ 3.4 · אזהרות ═══════════ */
+function renderWarnings(){
+  const el=document.getElementById("warnBody");
+  if(!el)return;
+  el.innerHTML=[
+    ["ok","גירעון בהון החוזר","כבויה","הון חוזר חיובי 36,357 · אך נשחק מ־86,300 בשנה וחצי"],
+    ["ok","הון עצמי שלילי","כבויה","הון עצמי חיובי 37,570"],
+    ["hi","תזרים שלילי מתמשך מפעילות שוטפת","דולקת","מצוין בדוחות ברמת הסולו · מחייבת גילוי מורחב ותזרים חזוי"],
+    ["ok","הערת עסק חי","כבויה","סקירת רו״ח ללא הסתייגות"]
+  ].map(a=>'<div class="al"><span class="dot '+a[0]+'"></span><span class="tx">'+
+    '<span class="tt">'+a[1]+' <span class="pill '+(a[0]==="hi"?"bad":"ok")+'">'+a[2]+'</span></span>'+
+    '<span class="ds">'+a[3]+'</span></span>'+(a[0]==="hi"?'<span class="add">למעקב</span>':"")+'</div>').join("");
+  document.getElementById("warnAudit").innerHTML=
+    '<table><tbody>'+
+    [["רואה החשבון המבקר","קוסט, פורר, גבאי את קסירר"],
+     ["סוג הדוח","סקירה רבעונית · ללא הסתייגות"],
+     ["סיווג התאגיד","תאגיד קטן · מלוא ההקלות לפי תקנה 5ד(ב)"],
+     ["תקינה","IFRS"],
+     ["מועד הפיכה לתאגיד מדווח","08.12.2024 · אג״ח סדרה א׳"],
+     ["נאמן האג״ח","משמרת · חברה לשירותי נאמנות"]
+    ].map(r=>'<tr><td>'+r[0]+'</td><td class="n">'+r[1]+'</td></tr>').join("")+'</tbody></table>'+
+    '<div style="margin-top:14px;font-size:12px;color:var(--t2);line-height:1.7">'+
+    'סיווג ״תאגיד קטן״ מקנה הקלות בהיקף הגילוי — פחות ביאורים, פטור מדיווח על אפקטיביות הבקרה הפנימית, '+
+    'וסף מהותיות גבוה יותר. <b>זו הסיבה שחלק מהנתונים שהאפליקציה מחפשת אינם קיימים בגילוי.</b></div>';
+}
+
+/* ═══════════ 4.2/4.3 · טבלת פרויקטים גנרית ═══════════ */
+function projTable(rows,mktLabel){
+  const tot=rows.reduce((a,r)=>({rev:a.rev+r[4],cost:a.cost+r[5],gp:a.gp+r[6],sur:a.sur+r[8]}),
+    {rev:0,cost:0,gp:0,sur:0});
+  return '<div class="scroller"><table><thead><tr><th class="frz">פרויקט</th><th>סוג</th>'+
+    '<th class="n">'+mktLabel+'</th><th class="n">צפי סיום</th><th class="n">הכנסות צפויות</th>'+
+    '<th class="n">עלויות</th><th class="n">רווח גולמי</th><th class="n">שיעור</th>'+
+    '<th class="n">סף ירידת ערך</th><th class="n">עודפים צפויים</th><th class="n">חלק החברה</th></tr></thead><tbody>'+
+    rows.map(r=>{
+      const impair=1-r[5]/r[4];
+      return '<tr><td class="frz">'+r[0]+'</td>'+
+      '<td style="font-size:11px;color:var(--t2)">'+r[1]+'</td>'+
+      '<td class="n"><span class="mbar'+(r[2]<0.2?" warn":"")+'"><i data-w="'+(r[2]*100).toFixed(0)+'"></i><b>'+
+        (r[2]*100).toFixed(0)+'%</b></span></td>'+
+      '<td class="n num" style="font-size:11.5px">'+r[3]+'</td>'+
+      '<td class="n num">'+fmt(r[4])+'</td><td class="n num">'+fmt(r[5])+'</td>'+
+      '<td class="n num pos">'+fmt(r[6])+'</td>'+
+      '<td class="n num">'+pctS(r[7])+'</td>'+
+      '<td class="n num'+(impair<0.22?" warnc":"")+'">'+pctS(impair)+'</td>'+
+      '<td class="n num pos">'+fmt(r[8])+'</td>'+
+      '<td class="n num'+(r[9]<1?" infoc":"")+'">'+(r[9]*100).toFixed(0)+'%</td></tr>';}).join("")+
+    '<tr class="sum"><td class="frz">סה״כ</td><td></td><td class="n na">—</td><td class="n na">—</td>'+
+    '<td class="n num">'+fmt(tot.rev)+'</td><td class="n num">'+fmt(tot.cost)+'</td>'+
+    '<td class="n num pos">'+fmt(tot.gp)+'</td><td class="n num">'+pctS(tot.gp/tot.rev)+'</td>'+
+    '<td class="n na">—</td><td class="n num pos">'+fmt(tot.sur)+'</td><td class="n na">—</td></tr>'+
+    '</tbody></table></div>';
+}
+function renderProjSubs(){
+  const ex=document.getElementById("execBody");
+  if(ex){
+    const rows=PROJECTS.filter(p=>Number.isFinite(p.rev)&&p.rem!==0&&p.name.indexOf("קריית מלאכי")<0)
+      .map(p=>[p.name,"בביצוע",Number.isFinite(p.mktB)?p.mktB:0,p.ends,p.rev,p.cost,p.gp,p.gp/p.rev,p.surplus,p.share]);
+    ex.innerHTML=projTable(rows,"שיווק");
+    document.getElementById("execKpi").innerHTML=
+      '<div class="card grad"><div class="lbl">פרויקטים בביצוע</div><div class="mid num">'+SCOPE.inExec+'</div>'+
+        '<div class="mini">'+SCOPE.unitsExec+' יח״ד</div></div>'+
+      '<div class="card grad"><div class="lbl">הכנסות צפויות</div><div class="mid num">'+fmt(SCOPE.revExec)+'</div>'+
+        '<div class="mini">עודפים '+fmt(SCOPE.surplusExec)+'</div></div>'+
+      '<div class="card grad st-warn"><div class="lbl">הון עצמי מושקע</div><div class="mid num">'+fmt(44000)+'</div>'+
+        '<div class="mini">כ־117% מההון העצמי המאוחד</div></div>'+
+      '<div class="card grad st-neg"><div class="lbl">הפרויקט החשוף ביותר</div><div class="mid">ז׳בוטינסקי 105</div>'+
+        '<div class="mini">שווק 8% · ביצוע 52.7% · חשיפה 78,255</div></div>';
+  }
+  const pl=document.getElementById("planBody");
+  if(pl){
+    pl.innerHTML=projTable(PLANNING,"שיווק");
+    document.getElementById("planKpi").innerHTML=
+      '<div class="card grad"><div class="lbl">פרויקטים בתכנון</div><div class="mid num">'+PLANNING.length+'</div>'+
+        '<div class="mini">'+SCOPE.unitsPlanning+' יח״ד</div></div>'+
+      '<div class="card grad"><div class="lbl">הכנסות צפויות</div><div class="mid num">'+fmt(SCOPE.revPlanning)+'</div>'+
+        '<div class="mini">עודפים '+fmt(SCOPE.surplusPlanning)+'</div></div>'+
+      '<div class="card grad st-neg"><div class="lbl">ריכוזיות</div><div class="mid num negc">69%</div>'+
+        '<div class="mini">קריית מלאכי מסך ההכנסות בתכנון</div></div>'+
+      '<div class="card grad"><div class="lbl">התחדשות עירונית · ייזום</div><div class="mid num">'+fmt(SCOPE.revUrban)+'</div>'+
+        '<div class="mini">'+URBAN.length+' פרויקטים · עודפים '+fmt(SCOPE.surplusUrban)+'</div></div>';
+    document.getElementById("urbanBody").innerHTML=projTable(URBAN,"שיעור הסכמה");
+  }
+  const dn=document.getElementById("doneBody");
+  if(dn){
+    document.getElementById("doneKpi").innerHTML=
+      '<div class="card grad st-pos"><div class="lbl">פרויקטים שנמסרו</div><div class="mid num">'+SCOPE.delivered+'</div>'+
+        '<div class="mini">'+SCOPE.deliveredUnits+' יח״ד מאז ההקמה ב־2010</div></div>'+
+      '<div class="card grad"><div class="lbl">מסירות 2025</div><div class="mid num">18</div>'+
+        '<div class="mini">היקף כספי '+fmt(37734)+'</div></div>'+
+      '<div class="card grad"><div class="lbl">מסירות H1/2026</div><div class="mid num">6</div>'+
+        '<div class="mini">היקף כספי '+fmt(26173)+'</div></div>'+
+      '<div class="card grad st-pos"><div class="lbl">האחרון שהושלם</div><div class="mid">בילטמור 12</div>'+
+        '<div class="mini">תעודת גמר 26.4.2026</div></div>';
+    dn.innerHTML='<table><thead><tr><th>תקופה</th><th class="n">יח״ד שנמסרו</th>'+
+      '<th class="n">היקף כספי · ללא מע״מ</th><th class="n">ממוצע ליח״ד</th></tr></thead><tbody>'+
+      DELIVERIES.map(d=>'<tr><td>'+d[0]+'</td><td class="n num">'+d[1]+'</td>'+
+        '<td class="n num">'+fmt(d[2])+'</td><td class="n num">'+fmt(d[2]/d[1])+'</td></tr>').join("")+
+      '<tr class="sum"><td>סה״כ</td><td class="n num">'+DELIVERIES.reduce((a,d)=>a+d[1],0)+'</td>'+
+      '<td class="n num">'+fmt(DELIVERIES.reduce((a,d)=>a+d[2],0))+'</td>'+
+      '<td class="n num">'+fmt(DELIVERIES.reduce((a,d)=>a+d[2],0)/DELIVERIES.reduce((a,d)=>a+d[1],0))+'</td></tr>'+
+      '</tbody></table>'+
+      '<div style="margin-top:16px"><div class="lbl" style="margin-bottom:10px">פרויקטים שנמסרו · רשימה חלקית</div>'+
+      '<div style="display:flex;flex-wrap:wrap;gap:7px">'+
+      DELIVERED_LIST.map(n=>'<span class="pill">'+n+'</span>').join("")+'</div></div>'+
+      '<div style="margin-top:16px;font-size:12.5px;color:var(--t2);line-height:1.75">'+
+      '<b>בילטמור 12 · הפער שאסור להציג לחוד.</b> עלות מצטברת 50,391 מול ערך בספרים 69,859. '+
+      'ההפרש אינו רווח — הוא נובע מההתחייבות למתן שירותי בנייה לבעלים הקיימים, הנרשמת בערך בספרים '+
+      'ולא בעלות המצטברת. הכנסות הפרויקט 64,734, רווח גולמי 19,246, ועודפים צפויים 17,396 המשועבדים למחזיקי האג״ח.</div>'+
+      '<div class="src">חסום · רווחיות בפועל לפרויקט, סטיות מתקציב, ופירוט הפרויקטים ההיסטוריים</div>';
+  }
+}
+
+/* ═══════════ ניווט ═══════════ */
+const tabs=document.querySelectorAll(".tab"), subBar=document.getElementById("subBar"),
+      screens=document.querySelectorAll(".screen");
+const MENU={
+  home:[["ראשי",""],["מידע למשקיע",""]],
+  audit:[["אנליטי","מבחני שינוי רבעוני ומצטבר על סעיפי המאזן והרווח והפסד, לצד הדוחות הכספיים המלאים"],
+    ["צדדים קשורים","מטריצת יתרות מול בעלי שליטה וצדדים קשורים, תנועות בתקופה ותיעוד אישורים"],
+    ["אירועים","אירועים מהותיים בתקופת הדיווח ולאחריה, מתוך הדיווחים המיידיים"],
+    ["מעקב","אוסף הפריטים שנשלחו מכל שאר המסכים, עם קישור חזרה למקור ולתקופה"]],
+  strength:[["קובננטים",""],
+    ["נזילות","הון חוזר, תזרים מזומנים חזוי, ולוח פירעונות אג״ח והלוואות"],
+    ["מינוף","יחסי חוב להון, חוב נטו לרווח תפעולי, והרכב מקורות המימון"],
+    ["אזהרות","נורות אזהרה לפי תקנות ניירות ערך וחוות דעת רואה החשבון המבקר"]],
+  proj:[["מרכז",""],
+    ["בביצוע","כרטיס פרויקט מלא לכל פרויקט בהקמה — עלויות, שיווק, לוח זמנים וחריגות"],
+    ["בתכנון","פרויקטים בשלבי תכנון, מצב הרוב הנדרש והיתרי הבנייה"],
+    ["הושלמו","פרויקטים שהקמתם ומכירתם הסתיימו, עם סיכום רווחיות בפועל"]]
+};
+const TABNAMES={home:"בית",audit:"ביקורת",strength:"איתנות",proj:"פרויקטים"};
+let CURRENT={tab:"strength",idx:0};
+function screenName(){
+  const m=MENU[CURRENT.tab];
+  return (TABNAMES[CURRENT.tab]||"")+(m&&m[CURRENT.idx]?" · "+m[CURRENT.idx][0]:"");
+}
+function show(tab,idx){
+  CURRENT={tab,idx};
+  screens.forEach(s=>s.classList.add("hide"));
+  const built=document.getElementById("scr-"+tab+"-"+idx);
+  if(built){
+    built.classList.remove("hide");
+    if(tab==="strength"&&idx===0)renderCovenants(true);
+    if(tab==="proj"&&idx===0)renderProjects(true);
+    return;
+  }
+  const item=MENU[tab][idx];
+  document.getElementById("ph1").textContent=item[0];
+  document.getElementById("ph2").textContent=item[1];
+  document.getElementById("ph").classList.remove("hide");
+}
+function renderSub(tab){
+  const items=MENU[tab];
+  subBar.replaceChildren();
+  if(items.length<2){subBar.style.display="none";show(tab,0);return;}
+  subBar.style.display="flex";
+  items.forEach((pair,i)=>{
+    const s=document.createElement("span");
+    s.textContent=pair[0];
+    if(i===0)s.classList.add("on");
+    s.addEventListener("click",()=>{
+      subBar.querySelectorAll("span").forEach(x=>x.classList.remove("on"));
+      s.classList.add("on");show(tab,i);});
+    subBar.appendChild(s);
+  });
+  show(tab,0);
+}
+function goTo(tab){tabs.forEach(x=>x.classList.toggle("on",x.dataset.t===tab));renderSub(tab);}
+tabs.forEach(t=>t.addEventListener("click",()=>goTo(t.dataset.t)));
+
+/* ═══════════ חיווט "למעקב" · מאזין אחד לכל המסכים ═══════════
+   כל לחיצה קוראת את ההקשר מה-DOM שסביבה — כותרת, חומרה וסכום —
+   ולכן אין צורך לגעת בכל פונקציית רינדור בנפרד. */
+document.addEventListener("click",e=>{
+  const btn=e.target.closest(".add");
+  if(!btn||btn.closest("#followBody"))return;   /* למסך המעקב יש טיפול משלו */
+
+  const al=btn.closest(".al");
+  if(al){
+    const tt=al.querySelector(".tt"), dot=al.querySelector(".dot");
+    const sev=dot&&dot.classList.contains("hi")?"hi":dot&&dot.classList.contains("md")?"md":"lo";
+    fuAdd({t:(tt?tt.textContent:"").replace(/\s+/g," ").trim(),src:screenName(),sev});
+    return;
+  }
+
+  const tr=btn.closest("tr");
+  if(tr){
+    const c=tr.children;
+    const title=c[0]?c[0].textContent.trim():"";
+    const test=c[1]?c[1].textContent.trim():"";
+    const pill=tr.querySelector(".pill");
+    const id=fuAdd({t:title+(test?" · "+test:""),src:screenName(),
+      sev:pill&&pill.classList.contains("bad")?"hi":"md",
+      amt:c[2]?parseNum(c[2].textContent):null});
+    if(id)fuNote(id);                            /* פותח מיד את שדה ההסבר */
+  }
 });
 
-const grab = u => fetch(u+'?t='+Date.now()).then(r=>r.ok?r.json():Promise.reject(new Error('HTTP '+r.status)));
-
-Promise.allSettled([grab('data/latest.json'), grab('data/financials.json')])
-  .then(([mkt,fin])=>{
-    if(fin.status==='fulfilled') FIN=fin.value;
-    if(mkt.status==='fulfilled') return mkt.value;
-    if(FIN) return {updatedAt:FIN.generatedAt, bond:null, reports:null, deals:null};
-    throw new Error('no data');
-  })
-  .then(j=>{ RAW=j; render(); })
-  .catch(e=>{
-    document.getElementById('kpis').innerHTML='';
-    document.getElementById('trend').innerHTML=errorBox(
-      'לא נמצא הקובץ data/latest.json',
-      'אם זו ההרצה הראשונה — פתח את לשונית Actions ברפו והרץ את "עדכון נתוני מייטאון" ידנית. הקובץ ייווצר ויישמר אוטומטית.');
-    ['alerts','projects','bridge','deals','reports'].forEach(id=>document.getElementById(id).innerHTML=empty('ממתין לשליפה ראשונה.',''));
-    document.getElementById('statusChip').className='chip is-negative';
-    document.getElementById('statusChip').querySelector('.lamp').className='lamp is-negative';
-    document.getElementById('statusText').textContent='אין נתונים';
-  });
+renderLive();
+setInterval(renderLive,60000);
+renderAll(false);
+goTo("strength");
 </script>
 </body>
 </html>
