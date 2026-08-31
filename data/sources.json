@@ -1,0 +1,56 @@
+{
+  "updatedAt": "2026-08-31T05:55:12.075Z",
+  "company": {
+    "name": "קבוצת מיי טאון בע\"מ",
+    "tase": 2449,
+    "corpId": "514444660"
+  },
+  "sources": {
+    "maya-reports": {
+      "title": "דיווחי מאיה",
+      "data": null,
+      "fetchedAt": null,
+      "stale": true,
+      "via": null,
+      "error": "mayaapi · company/reports: HTTP שגוי | mayaapi · v1/company/reports: HTTP שגוי"
+    },
+    "magna-reports": {
+      "title": "דיווחי מגנא",
+      "data": null,
+      "fetchedAt": null,
+      "stale": true,
+      "via": null,
+      "error": "magna · חיפוש לפי ח.פ.: HTTP שגוי | magna · דף התוצאות · פרסור HTML: HTTP שגוי"
+    },
+    "bond-quote": {
+      "title": "ציטוט אג״ח סדרה א׳",
+      "data": null,
+      "fetchedAt": null,
+      "stale": true,
+      "via": null,
+      "error": "mayaapi · שער נייר: HTTP שגוי | ביזפורטל · פרסור טקסט: HTTP שגוי"
+    },
+    "news": {
+      "title": "כתבות שפורסמו",
+      "data": null,
+      "fetchedAt": null,
+      "stale": true,
+      "via": null,
+      "error": "Google News RSS: HTTP שגוי | ביזפורטל · חיפוש: HTTP שגוי"
+    }
+  },
+  "xbrlOnDisk": {
+    "files": [
+      "Kiwi_App_File2025-01-092106.xbrl",
+      "Kiwi_App_File2026-01-030392.xbrl",
+      "Kiwi_App_File2026-01-049263.xbrl",
+      "Kiwi_App_File2026-01-078335.xbrl"
+    ],
+    "references": [
+      "2025-01-092106",
+      "2026-01-030392",
+      "2026-01-049263",
+      "2026-01-078335"
+    ]
+  }
+}

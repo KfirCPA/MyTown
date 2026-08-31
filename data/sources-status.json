@@ -1,0 +1,102 @@
+{
+  "ranAt": "2026-08-31T05:55:12.075Z",
+  "env": "הרצה מקומית",
+  "results": [
+    {
+      "id": "maya-reports",
+      "title": "דיווחי מאיה",
+      "why": "רשימת הדיווחים המיידיים והתקופתיים · מזהה דוח חדש שטרם נטען",
+      "ok": false,
+      "via": null,
+      "count": 0,
+      "attempts": [
+        {
+          "candidate": "mayaapi · company/reports",
+          "url": "https://mayaapi.tase.co.il/api/company/reports?companyId=2449&lang=he",
+          "status": 403,
+          "ms": 186,
+          "result": "HTTP שגוי"
+        },
+        {
+          "candidate": "mayaapi · v1/company/reports",
+          "url": "https://mayaapi.tase.co.il/api/v1/company/reports?companyId=2449&lang=he",
+          "status": 403,
+          "ms": 34,
+          "result": "HTTP שגוי"
+        }
+      ]
+    },
+    {
+      "id": "magna-reports",
+      "title": "דיווחי מגנא",
+      "why": "אתר ההפצה של רשות ניירות ערך · המקור הרשמי לקבצי ה-XBRL",
+      "ok": false,
+      "via": null,
+      "count": 0,
+      "attempts": [
+        {
+          "candidate": "magna · חיפוש לפי ח.פ.",
+          "url": "https://www.magna.isa.gov.il/api/reports/search?corporateNumber=514444660&pageSize=30",
+          "status": 403,
+          "ms": 112,
+          "result": "HTTP שגוי"
+        },
+        {
+          "candidate": "magna · דף התוצאות · פרסור HTML",
+          "url": "https://www.magna.isa.gov.il/?q=514444660",
+          "status": 403,
+          "ms": 22,
+          "result": "HTTP שגוי"
+        }
+      ]
+    },
+    {
+      "id": "bond-quote",
+      "title": "ציטוט אג״ח סדרה א׳",
+      "why": "התשואה השוטפת · הפריט האחרון שחסר בלשונית מידע למשקיע",
+      "ok": false,
+      "via": null,
+      "count": 0,
+      "attempts": [
+        {
+          "candidate": "mayaapi · שער נייר",
+          "url": "https://mayaapi.tase.co.il/api/security/lastsaleeod?securityId=1214626&lang=he",
+          "status": 403,
+          "ms": 5,
+          "result": "HTTP שגוי"
+        },
+        {
+          "candidate": "ביזפורטל · פרסור טקסט",
+          "url": "https://www.bizportal.co.il/bonds/quote/generalview/1214626",
+          "status": 403,
+          "ms": 51,
+          "result": "HTTP שגוי"
+        }
+      ]
+    },
+    {
+      "id": "news",
+      "title": "כתבות שפורסמו",
+      "why": "הקשר חיצוני לדיווחים · מה שהעיתונות מדווחת ואינו בגילוי",
+      "ok": false,
+      "via": null,
+      "count": 0,
+      "attempts": [
+        {
+          "candidate": "Google News RSS",
+          "url": "https://news.google.com/rss/search?q=%22%D7%A7%D7%91%D7%95%D7%A6%D7%AA%20%D7%9E%D7%99%D7%99%20%D7%98%D7%90%D7%95%D7%9F%22&hl=he&gl=IL&ceid=IL:he",
+          "status": 403,
+          "ms": 10,
+          "result": "HTTP שגוי"
+        },
+        {
+          "candidate": "ביזפורטל · חיפוש",
+          "url": "https://www.bizportal.co.il/search?q=%D7%A7%D7%91%D7%95%D7%A6%D7%AA%20%D7%9E%D7%99%D7%99%20%D7%98%D7%90%D7%95%D7%9F",
+          "status": 403,
+          "ms": 5,
+          "result": "HTTP שגוי"
+        }
+      ]
+    }
+  ]
+}

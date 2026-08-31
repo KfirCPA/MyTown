@@ -2,14 +2,18 @@ name: עדכון נתוני מייטאון
 
 on:
   schedule:
-    - cron: '10 6 * * 0-4'
+    - cron: '10 6 * * 0-4'   # ימים א׳–ה׳, 06:10 UTC
   workflow_dispatch:
 
 permissions:
   contents: write
 
+concurrency:
+  group: mytown-update
+  cancel-in-progress: false
+
 jobs:
-  fetch:
+  update:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -18,17 +22,41 @@ jobs:
         with:
           node-version: '20'
 
-      - name: שליפת נתוני שוק
-        run: node scripts/fetch.mjs
+      # שליפה מהמקורות הציבוריים · מאיה, מגנא, ציטוט האג״ח ועיתונות.
+      # נכשלת בשקט בכוונה: מקור שנפל מסומן כמיושן ואינו מוחק נתון קודם,
+      # והיומן המלא נשמר ל-data/sources-status.json ומוצג בלשונית הבקרה.
+      - name: שליפת מקורות
+        run: node scripts/fetch-sources.mjs
         continue-on-error: true
 
+      # פרסור ה-XBRL · שער הוולידציה. דוח שנכשל מסומן ואינו נבלע בשקט.
       - name: פרסור דוחות XBRL
         run: node scripts/parse-xbrl.mjs
 
+      # התאמה וגזירה · משווה כל מספר ידני מול ה-XBRL, ורק אם אין סטייה
+      # כותב את מה שה-XBRL מכסה. סטייה עוצרת את הכתיבה ומפילה את הריצה.
+      - name: התאמה וגזירת נתונים
+        id: build
+        run: node scripts/build-app-data.mjs --write
+        continue-on-error: true
+
       - name: שמירה ברפו
+        if: always()
         run: |
           git config user.name "mytown-bot"
           git config user.email "bot@users.noreply.github.com"
-          git add data/latest.json data/financials.json
-          git diff --staged --quiet || git commit -m "נתונים: $(date -u +%Y-%m-%d)"
-          git push
+          git add data/
+          if git diff --staged --quiet; then
+            echo "אין שינוי בנתונים"
+          else
+            git commit -m "נתונים: $(date -u +%Y-%m-%d)"
+            git push
+          fi
+
+      # נכשל רק בסוף, אחרי שהנתונים והיומן כבר נשמרו — כדי שהכישלון יהיה
+      # גלוי במייל של GitHub ובלשונית הבקרה, ולא ימחק את הראיות.
+      - name: כישלון על סטייה בהתאמה
+        if: steps.build.outcome == 'failure'
+        run: |
+          echo "::error::ההתאמה מצאה סטייה בין הנתונים הידניים ל-XBRL. ראה data/reconcile.json ואת לשונית הבקרה."
+          exit 1
