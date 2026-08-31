@@ -687,6 +687,12 @@ function bondSchedule(b,fromISO){
   });
   return rows;
 }
+/* ציטוט השוק · נכנס רק אם השליפה האחרונה הצליחה ולא סומנה כמיושנת.
+   נתון מסחר ישן גרוע מנתון חסר, כי הוא נראה טרי. */
+const QUOTE=(SOURCES&&SOURCES.sources&&SOURCES.sources["bond-quote"]&&
+  !SOURCES.sources["bond-quote"].stale)?SOURCES.sources["bond-quote"].data:null;
+const QUOTE_AT=QUOTE?SOURCES.sources["bond-quote"].fetchedAt:null;
+
 const BOND=Object.assign({},BONDSRC,{
   nominal:BONDSRC.nominalAtIssue*(1-BONDSRC.principalPayments
     .filter(p=>p.date<=META.source.asOf).reduce((a,p)=>a+p.pct,0)),
@@ -694,7 +700,8 @@ const BOND=Object.assign({},BONDSRC,{
   valueWithAccrued:BONDSRC.carrying.accruedPrincipalPlusInterest,
   installments:BONDSRC.principalPayments.length,
   finalPrincipal:BONDSRC.principalPayments[BONDSRC.principalPayments.length-1].date,
-  marketYield:BONDSRC.market.yield,
+  marketYield:QUOTE&&Number.isFinite(QUOTE.yieldGross)?QUOTE.yieldGross/100:BONDSRC.market.yield,
+  quote:QUOTE,
   schedule:bondSchedule(BONDSRC,META.source.asOf)
 });
 /* חלויות 12 החודשים הקרובים · נגזר מהלוח */
@@ -1159,10 +1166,20 @@ function renderEvents(){
     row("ריבית שנתית על היתרה","<span class='warnc'>"+fmt(BOND.balance*BOND.coupon)+"</span>")+
     row("תשלומי קרן",BOND.installments)+
     row("פירעון קרן אחרון",dmy(BOND.finalPrincipal))+
-    row("תשואה שוטפת בשוק",'<span class="na">— דורש נתוני מסחר</span>')+
+    row("תשואה שוטפת בשוק",QUOTE&&Number.isFinite(QUOTE.yieldGross)
+      ?"<span class='negc'>"+QUOTE.yieldGross.toFixed(2)+"%</span> ברוטו"+
+       (Number.isFinite(QUOTE.yieldNet)?" <span class='sep'>·</span> "+QUOTE.yieldNet.toFixed(2)+"% נטו":"")
+      :'<span class="na">— דורש נתוני מסחר</span>')+
+    (QUOTE&&Number.isFinite(QUOTE.govSpread)
+      ?row("מרווח מעל ממשלתי","<span class='warnc'>"+QUOTE.govSpread.toFixed(2)+"%</span>")+
+       row("מח״מ",QUOTE.duration!=null?QUOTE.duration.toFixed(2)+" שנים":"—")+
+       row("שער בסיס",QUOTE.price!=null?QUOTE.price.toFixed(2):"—"):"")+
     row("שווי בבורסה · 31.12.2025",fmt(BOND.market.exchangeValue))+
     row("נאמן",BOND.trustee)+
-    row("דירוג",'<span class="na">אינן מדורגות</span>');
+    row("דירוג",'<span class="na">אינן מדורגות</span>')+
+    (QUOTE&&Number.isFinite(QUOTE.yieldGross)
+      ?'<tr class="sum"><td>פער תשואה מול הריבית הנקובה</td><td class="n num negc">'+
+       ((QUOTE.yieldGross-BOND.coupon*100).toFixed(2))+' נקודות</td></tr>':"");
   const w=340,h=120,PT=18,PB=26,PS=56;
   const mx=Math.max.apply(null,WC.map(x=>x.v))*1.12;
   const x=i=>PS+(i/(WC.length-1))*(w-PS-14), y=v=>PT+(1-v/mx)*(h-PT-PB);

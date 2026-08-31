@@ -35,6 +35,8 @@ const TIMEOUT = 25000;
 /* כותרות HTTP הן ByteString — תו לא-ASCII זורק שגיאה לפני שהבקשה יוצאת.
    ה-UA חייב להישאר באנגלית בלבד. */
 const UA = 'MytownDashboard/2.0 (+https://github.com/RealEstateIL/MyTown; public-filings analysis; contact via repo issues)';
+const BROWSER = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 ' +
+  '(KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36';
 const ONLY = (process.argv.find((a) => a.startsWith('--only=')) || '').split('=')[1];
 const SELFTEST = process.argv.includes('--selftest');
 
@@ -91,6 +93,7 @@ const SOURCES = [
     id: 'maya-reports',
     title: 'דיווחי מאיה',
     why: 'רשימת הדיווחים המיידיים והתקופתיים · מזהה דוח חדש שטרם נטען',
+    blockedOnCI: 'מאיה חוסמת ברמת WAF כתובות של מרכזי נתונים ומחזירה security violation. עובד מהרצה מקומית.',
     candidates: [
       {
         label: 'mayaapi · company/reports',
@@ -124,6 +127,7 @@ const SOURCES = [
     id: 'magna-reports',
     title: 'דיווחי מגנא',
     why: 'אתר ההפצה של רשות ניירות ערך · המקור הרשמי לקבצי ה-XBRL',
+    blockedOnCI: 'מגנא מחזירה 403 עם דף חסימה זהה לכל נתיב. עובד מהרצה מקומית.',
     candidates: [
       {
         label: 'magna · חיפוש לפי ח.פ.',
@@ -154,27 +158,37 @@ const SOURCES = [
     why: 'התשואה השוטפת · הפריט האחרון שחסר בלשונית מידע למשקיע',
     candidates: [
       {
-        label: 'mayaapi · שער נייר',
-        url: `https://mayaapi.tase.co.il/api/security/lastsaleeod?securityId=${BOND_ID}&lang=he`,
-        init: { headers: { 'X-Maya-With': 'allow', Referer: 'https://maya.tase.co.il/', Accept: 'application/json' } },
-        parse: (b) => { const j = json(b); if (!j) return null;
-          const price = j.LastRate ?? j.lastRate ?? j.ClosingRate ?? j.Rate;
-          return Number.isFinite(Number(price))
-            ? { price: Number(price), yield: Number(j.GrossYield ?? j.Yield ?? NaN) || null,
-                date: j.TradeDate || j.Date || null } : null; },
-      },
-      {
-        label: 'ביזפורטל · פרסור טקסט',
+        /* המבנה אומת בגישוש מול הדף החי: טבלת ביצועים בזוגות
+           <td>תווית</td><td dir="ltr">ערך</td>, ולצדה שורת תקציר עם
+           <label>תווית: </label><span>ערך</span>. שני המקורות נקראים,
+           והטבלה גוברת כי היא מדויקת יותר. */
+        label: 'ביזפורטל · טבלת ביצועים',
         url: `https://www.bizportal.co.il/bonds/quote/generalview/${BOND_ID}`,
+        init: { headers: { 'User-Agent': BROWSER, Accept: 'text/html' } },
         parse: (b) => {
-          const t = strip(b);
-          const pick = (label) => { const m = t.match(new RegExp(label + '[^0-9\\-]{0,60}(-?[0-9][0-9.,]*)')); return m ? Number(m[1].replace(/,/g, '')) : null; };
-          const price = pick('שער אחרון');
-          return Number.isFinite(price) ? { price, yield: pick('תשואה'), date: null } : null;
+          const num = (v) => { const n = Number(String(v).replace(/[%,\s]/g, '')); return Number.isFinite(n) ? n : null; };
+          const tbl = {};
+          for (const m of b.matchAll(/<td>([^<]{2,30})<\/td><td dir="ltr">(-?[\d.,]+)<\/td>/g)) tbl[m[1].trim()] = num(m[2]);
+          const lbl = (name) => {
+            const m = b.match(new RegExp(name + ':\\s*<\\/label>\\s*<span[^>]*>([^<]+)<'));
+            return m ? num(m[1]) : null;
+          };
+          const basePrice = (b.match(/<dt>שער בסיס<\/dt><dd>([\d.,]+)<\/dd>/) || [])[1];
+          const out = {
+            price: num(basePrice),
+            yieldGross: tbl['ברוטו להחזקה'] ?? lbl('תשואה ברוטו'),
+            yieldNet: tbl['נטו להחזקה'] ?? lbl('תשואה נטו'),
+            duration: tbl['מח"מ'] ?? lbl('מח"מ'),
+            adjustedGross: tbl['ערך מתואם ברוטו'] ?? null,
+            adjustedNet: tbl['ערך מתואם נטו'] ?? null,
+            yearsToMaturity: tbl['טווח לפדיון'] ?? null,
+            govSpread: tbl['מרווח ממשלתי'] ?? null,
+          };
+          return (Number.isFinite(out.price) || Number.isFinite(out.yieldGross)) ? out : null;
         },
       },
     ],
-    check: (v) => v && Number.isFinite(v.price),
+    check: (v) => v && (Number.isFinite(v.price) || Number.isFinite(v.yieldGross)),
   },
 
   {
@@ -218,9 +232,19 @@ const FIXTURES = {
     expect: (v) => v.length === 2 && v.map((r) => r.reference).includes('2026-01-078335'),
   },
   'bond-quote': {
-    candidate: 1,
-    body: '<div>שער אחרון</div><div>98.42</div><div>תשואה</div><div>8.71</div>',
-    expect: (v) => v.price === 98.42 && v.yield === 8.71,
+    candidate: 0,
+    /* מבנה אמיתי · הועתק מהדף החי בגישוש */
+    body: '<div class="paper_data_wrap"><dl><dt>שער בסיס</dt><dd>100.77</dd></dl></div>' +
+      '<li><label>תשואה ברוטו: </label> <span style=\'font-weight:bold;\'>9.2%</span></li>' +
+      '<table><tbody><tr><td>ברוטו להחזקה</td><td dir="ltr">9.2</td></tr>' +
+      '<tr><td>ערך מתואם ברוטו</td><td dir="ltr">103.12</td></tr>' +
+      '<tr><td>מח"מ</td><td dir="ltr">1.59</td></tr>' +
+      '<tr><td>נטו להחזקה</td><td dir="ltr">7.7</td></tr>' +
+      '<tr><td>ערך מתואם נטו</td><td dir="ltr">102.66</td></tr>' +
+      '<tr><td>טווח לפדיון</td><td dir="ltr">1.73</td></tr>' +
+      '<tr><td>מרווח ממשלתי</td><td dir="ltr">5.87</td></tr></tbody></table>',
+    expect: (v) => v.price === 100.77 && v.yieldGross === 9.2 && v.yieldNet === 7.7 &&
+      v.duration === 1.59 && v.govSpread === 5.87 && v.yearsToMaturity === 1.73,
   },
   news: {
     candidate: 0,
@@ -287,7 +311,7 @@ for (const src of targets) {
     ? { title: src.title, data: r.value, fetchedAt: now, stale: false, via: r.winner, error: null }
     : { title: src.title, data: prev?.data ?? null, fetchedAt: prev?.fetchedAt ?? null, stale: true, via: prev?.via ?? null,
         error: r.attempts.map((a) => `${a.candidate}: ${a.result}`).join(' | ') };
-  status.results.push({ id: src.id, title: src.title, why: src.why, ok: r.ok, via: r.winner,
+  status.results.push({ id: src.id, title: src.title, why: src.why, blockedOnCI: src.blockedOnCI || null, ok: r.ok, via: r.winner,
     count: Array.isArray(r.value) ? r.value.length : r.value ? 1 : 0, attempts: r.attempts });
   console.log(`${r.ok ? '✓' : '✗'} ${src.id} — ${r.ok ? `דרך ${r.winner}` : 'כל המועמדים נפלו'}`);
   for (const a of r.attempts) console.log(`    ${a.candidate}: ${a.result}${a.status ? ` (HTTP ${a.status})` : ''}`);
