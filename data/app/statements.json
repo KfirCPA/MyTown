@@ -1,0 +1,420 @@
+{
+  "_note": "הקובץ נטען על ידי index.html. סכומים באלפי ש״ח אלא אם צוין אחרת.",
+  "balanceSheet": {
+    "columns": {
+      "current": "30.06.2026",
+      "priorYearSame": "30.06.2025",
+      "priorYearEnd": "31.12.2025"
+    },
+    "sideCodes": {
+      "א": "נכס",
+      "ה": "התחייבות",
+      "ן": "הון",
+      "ס": "סיכום"
+    },
+    "rows": [
+      {
+        "label": "מזומנים ושווי מזומנים",
+        "current": 2265,
+        "priorYearSame": 2283,
+        "priorYearEnd": 800,
+        "side": "א"
+      },
+      {
+        "label": "פיקדונות מוגבלים",
+        "current": 795,
+        "priorYearSame": 2007,
+        "priorYearEnd": 1687,
+        "side": "א"
+      },
+      {
+        "label": "מזומנים בחשבונות ליווי",
+        "current": 4062,
+        "priorYearSame": 16511,
+        "priorYearEnd": 1594,
+        "side": "א"
+      },
+      {
+        "label": "נכסים בגין חוזים",
+        "current": 21457,
+        "priorYearSame": 30267,
+        "priorYearEnd": 14584,
+        "side": "א"
+      },
+      {
+        "label": "חייבים ויתרות חובה",
+        "current": 4350,
+        "priorYearSame": 7626,
+        "priorYearEnd": 9761,
+        "side": "א"
+      },
+      {
+        "label": "חו״ז מול השותף",
+        "current": 24135,
+        "priorYearSame": null,
+        "priorYearEnd": null,
+        "side": "א"
+      },
+      {
+        "label": "מלאי בניינים למכירה",
+        "current": 184054,
+        "priorYearSame": 179756,
+        "priorYearEnd": 194817,
+        "side": "א"
+      },
+      {
+        "label": "סה״כ נכסים שוטפים",
+        "current": 241118,
+        "priorYearSame": 238450,
+        "priorYearEnd": 223243,
+        "side": "ס"
+      },
+      {
+        "label": "מלאי מקרקעין לזמן ארוך",
+        "current": 32788,
+        "priorYearSame": 20423,
+        "priorYearEnd": 27449,
+        "side": "א"
+      },
+      {
+        "label": "הלוואות שניתנו",
+        "current": 10995,
+        "priorYearSame": 10429,
+        "priorYearEnd": 12407,
+        "side": "א"
+      },
+      {
+        "label": "השקעה בשווי מאזני",
+        "current": 13122,
+        "priorYearSame": 10926,
+        "priorYearEnd": 13213,
+        "side": "א"
+      },
+      {
+        "label": "נכס זכות שימוש",
+        "current": 6698,
+        "priorYearSame": 8479,
+        "priorYearEnd": 8127,
+        "side": "א"
+      },
+      {
+        "label": "מיסים נדחים",
+        "current": 12857,
+        "priorYearSame": 7263,
+        "priorYearEnd": 10770,
+        "side": "א"
+      },
+      {
+        "label": "רכוש קבוע",
+        "current": 820,
+        "priorYearSame": 501,
+        "priorYearEnd": 741,
+        "side": "א"
+      },
+      {
+        "label": "סה״כ נכסים",
+        "current": 318398,
+        "priorYearSame": 296471,
+        "priorYearEnd": 295950,
+        "side": "ס"
+      },
+      {
+        "label": "אשראי מתאגידים בנקאיים",
+        "current": 75100,
+        "priorYearSame": 15876,
+        "priorYearEnd": 30198,
+        "side": "ה"
+      },
+      {
+        "label": "חלויות שוטפות אג״ח",
+        "current": 6200,
+        "priorYearSame": 9300,
+        "priorYearEnd": 9300,
+        "side": "ה"
+      },
+      {
+        "label": "ספקים",
+        "current": 972,
+        "priorYearSame": 2978,
+        "priorYearEnd": 2684,
+        "side": "ה"
+      },
+      {
+        "label": "התחייבויות בגין חוזים",
+        "current": 5889,
+        "priorYearSame": 14468,
+        "priorYearEnd": 8951,
+        "side": "ה"
+      },
+      {
+        "label": "חכירה לזמן קצר",
+        "current": 1360,
+        "priorYearSame": 3977,
+        "priorYearEnd": 1938,
+        "side": "ה"
+      },
+      {
+        "label": "זכאים ויתרות זכות",
+        "current": 22222,
+        "priorYearSame": 16290,
+        "priorYearEnd": 22375,
+        "side": "ה"
+      },
+      {
+        "label": "התחייבויות לבעלי מקרקעין",
+        "current": 72086,
+        "priorYearSame": 96198,
+        "priorYearEnd": 74328,
+        "side": "ה"
+      },
+      {
+        "label": "צדדים קשורים · שוטף",
+        "current": 10932,
+        "priorYearSame": 6668,
+        "priorYearEnd": 12349,
+        "side": "ה"
+      },
+      {
+        "label": "הלוואות בעלי מניות",
+        "current": 10000,
+        "priorYearSame": 10000,
+        "priorYearEnd": 10000,
+        "side": "ה"
+      },
+      {
+        "label": "סה״כ התחייבויות שוטפות",
+        "current": 204761,
+        "priorYearSame": 175755,
+        "priorYearEnd": 172123,
+        "side": "ס"
+      },
+      {
+        "label": "הלוואות בעלים · לא שוטף",
+        "current": 10122,
+        "priorYearSame": 11500,
+        "priorYearEnd": 11500,
+        "side": "ה"
+      },
+      {
+        "label": "אשראי לא שוטף",
+        "current": 5625,
+        "priorYearSame": null,
+        "priorYearEnd": 6000,
+        "side": "ה"
+      },
+      {
+        "label": "אגרות חוב",
+        "current": 45988,
+        "priorYearSame": 51913,
+        "priorYearEnd": 52054,
+        "side": "ה"
+      },
+      {
+        "label": "צדדים קשורים · לא שוטף",
+        "current": 8622,
+        "priorYearSame": 9244,
+        "priorYearEnd": 7773,
+        "side": "ה"
+      },
+      {
+        "label": "חכירה",
+        "current": 3101,
+        "priorYearSame": 4475,
+        "priorYearEnd": 4566,
+        "side": "ה"
+      },
+      {
+        "label": "מס נדחה",
+        "current": 2609,
+        "priorYearSame": 1861,
+        "priorYearEnd": 1151,
+        "side": "ה"
+      },
+      {
+        "label": "סה״כ התחייבויות לא שוטפות",
+        "current": 76067,
+        "priorYearSame": 78993,
+        "priorYearEnd": 83044,
+        "side": "ס"
+      },
+      {
+        "label": "פרמיה",
+        "current": 51037,
+        "priorYearSame": 51037,
+        "priorYearEnd": 51037,
+        "side": "ן"
+      },
+      {
+        "label": "קרן תשלום מבוסס מניות",
+        "current": 10447,
+        "priorYearSame": 8007,
+        "priorYearEnd": 9467,
+        "side": "ן"
+      },
+      {
+        "label": "קרן עסקאות עם בעלי שליטה",
+        "current": 1378,
+        "priorYearSame": null,
+        "priorYearEnd": null,
+        "side": "ן"
+      },
+      {
+        "label": "קרן עסקאות עם NCI",
+        "current": -5223,
+        "priorYearSame": -5223,
+        "priorYearEnd": -5223,
+        "side": "ן"
+      },
+      {
+        "label": "יתרת הפסד",
+        "current": -20012,
+        "priorYearSame": -12083,
+        "priorYearEnd": -14467,
+        "side": "ן"
+      },
+      {
+        "label": "זכויות מיעוט",
+        "current": -58,
+        "priorYearSame": -16,
+        "priorYearEnd": -32,
+        "side": "ן"
+      },
+      {
+        "label": "סה״כ הון",
+        "current": 37570,
+        "priorYearSame": 41723,
+        "priorYearEnd": 40783,
+        "side": "ס"
+      }
+    ]
+  },
+  "incomeStatement": {
+    "columns": {
+      "h1": "6ח/2026",
+      "h1Prior": "6ח/2025",
+      "q2": "Q2/2026",
+      "q2Prior": "Q2/2025",
+      "fyPrior": "2025"
+    },
+    "subtotalRows": [
+      "סך הכנסות",
+      "רווח גולמי",
+      "רווח תפעולי",
+      "הפסד נקי"
+    ],
+    "rows": [
+      {
+        "label": "הכנסות ממכירת דירות",
+        "h1": 39311,
+        "h1Prior": 25199,
+        "q2": 23337,
+        "q2Prior": 8564,
+        "fyPrior": 46008
+      },
+      {
+        "label": "הכנסות משירותי בנייה",
+        "h1": 20669,
+        "h1Prior": 7345,
+        "q2": 9562,
+        "q2Prior": 2934,
+        "fyPrior": 26440
+      },
+      {
+        "label": "סך הכנסות",
+        "h1": 59980,
+        "h1Prior": 32544,
+        "q2": 32899,
+        "q2Prior": 11498,
+        "fyPrior": 72448
+      },
+      {
+        "label": "עלות בנייה ואחרות",
+        "h1": 28817,
+        "h1Prior": 21429,
+        "q2": 17232,
+        "q2Prior": 8693,
+        "fyPrior": 37824
+      },
+      {
+        "label": "עלות שירותי בנייה",
+        "h1": 17831,
+        "h1Prior": 7259,
+        "q2": 8246,
+        "q2Prior": 3418,
+        "fyPrior": 24602
+      },
+      {
+        "label": "רווח גולמי",
+        "h1": 13332,
+        "h1Prior": 3856,
+        "q2": 7421,
+        "q2Prior": -613,
+        "fyPrior": 10022
+      },
+      {
+        "label": "הנהלה וכלליות",
+        "h1": 10230,
+        "h1Prior": 9120,
+        "q2": 5001,
+        "q2Prior": 4344,
+        "fyPrior": 14171
+      },
+      {
+        "label": "הוצאות ייזום",
+        "h1": 1272,
+        "h1Prior": 967,
+        "q2": 438,
+        "q2Prior": 282,
+        "fyPrior": 2456
+      },
+      {
+        "label": "מכירה ושיווק",
+        "h1": 2353,
+        "h1Prior": 1073,
+        "q2": 1743,
+        "q2Prior": 633,
+        "fyPrior": 3521
+      },
+      {
+        "label": "רווח תפעולי",
+        "h1": -523,
+        "h1Prior": -7304,
+        "q2": 239,
+        "q2Prior": -5872,
+        "fyPrior": -10126
+      },
+      {
+        "label": "הוצאות מימון, נטו",
+        "h1": 5524,
+        "h1Prior": 4401,
+        "q2": 2676,
+        "q2Prior": 2451,
+        "fyPrior": 9587
+      },
+      {
+        "label": "חלק בהפסד שווי מאזני",
+        "h1": -1094,
+        "h1Prior": 0,
+        "q2": -589,
+        "q2Prior": 0,
+        "fyPrior": 1392
+      },
+      {
+        "label": "מסים על ההכנסה",
+        "h1": -1570,
+        "h1Prior": 45,
+        "q2": -715,
+        "q2Prior": -910,
+        "fyPrior": -4171
+      },
+      {
+        "label": "הפסד נקי",
+        "h1": -5571,
+        "h1Prior": -11750,
+        "q2": -2311,
+        "q2Prior": -7413,
+        "fyPrior": -14150
+      }
+    ]
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "ranAt": "2026-08-31T06:24:51.042Z",
+  "env": "GitHub Actions",
+  "results": [
+    {
+      "id": "maya-reports",
+      "title": "דיווחי מאיה",
+      "why": "רשימת הדיווחים המיידיים והתקופתיים · מזהה דוח חדש שטרם נטען",
+      "blockedOnCI": "מאיה חוסמת ברמת WAF כתובות של מרכזי נתונים ומחזירה security violation. עובד מהרצה מקומית.",
+      "ok": false,
+      "via": null,
+      "count": 0,
+      "attempts": [
+        {
+          "candidate": "mayaapi · company/reports",
+          "url": "https://mayaapi.tase.co.il/api/company/reports?companyId=2449&lang=he",
+          "status": 403,
+          "ms": 889,
+          "result": "HTTP שגוי"
+        },
+        {
+          "candidate": "mayaapi · v1/company/reports",
+          "url": "https://mayaapi.tase.co.il/api/v1/company/reports?companyId=2449&lang=he",
+          "status": 403,
+          "ms": 870,
+          "result": "HTTP שגוי"
+        }
+      ]
+    },
+    {
+      "id": "magna-reports",
+      "title": "דיווחי מגנא",
+      "why": "אתר ההפצה של רשות ניירות ערך · המקור הרשמי לקבצי ה-XBRL",
+      "blockedOnCI": "מגנא מחזירה 403 עם דף חסימה זהה לכל נתיב. עובד מהרצה מקומית.",
+      "ok": false,
+      "via": null,
+      "count": 0,
+      "attempts": [
+        {
+          "candidate": "magna · חיפוש לפי ח.פ.",
+          "url": "https://www.magna.isa.gov.il/api/reports/search?corporateNumber=514444660&pageSize=30",
+          "status": 403,
+          "ms": 571,
+          "result": "HTTP שגוי"
+        },
+        {
+          "candidate": "magna · דף התוצאות · פרסור HTML",
+          "url": "https://www.magna.isa.gov.il/?q=514444660",
+          "status": 200,
+          "bytes": 20822,
+          "ms": 12,
+          "result": "הפרסור לא זיהה מבנה"
+        }
+      ]
+    },
+    {
+      "id": "bond-quote",
+      "title": "ציטוט אג״ח סדרה א׳",
+      "why": "התשואה השוטפת · הפריט האחרון שחסר בלשונית מידע למשקיע",
+      "blockedOnCI": null,
+      "ok": true,
+      "via": "ביזפורטל · טבלת ביצועים",
+      "count": 1,
+      "attempts": [
+        {
+          "candidate": "ביזפורטל · טבלת ביצועים",
+          "url": "https://www.bizportal.co.il/bonds/quote/generalview/1214626",
+          "status": 200,
+          "bytes": 186874,
+          "ms": 365,
+          "result": "הצליח"
+        }
+      ]
+    },
+    {
+      "id": "news",
+      "title": "כתבות שפורסמו",
+      "why": "הקשר חיצוני לדיווחים · מה שהעיתונות מדווחת ואינו בגילוי",
+      "blockedOnCI": null,
+      "ok": true,
+      "via": "Google News RSS",
+      "count": 16,
+      "attempts": [
+        {
+          "candidate": "Google News RSS",
+          "url": "https://news.google.com/rss/search?q=%22%D7%A7%D7%91%D7%95%D7%A6%D7%AA%20%D7%9E%D7%99%D7%99%20%D7%98%D7%90%D7%95%D7%9F%22&hl=he&gl=IL&ceid=IL:he",
+          "status": 200,
+          "bytes": 18039,
+          "ms": 220,
+          "result": "הצליח"
+        }
+      ]
+    }
+  ]
+}

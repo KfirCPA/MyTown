@@ -1,0 +1,378 @@
+{
+  "generatedAt": "2026-08-31T11:27:55.461Z",
+  "asOf": "2026-06-30",
+  "xbrlPeriods": [
+    {
+      "file": "Kiwi_App_File2025-01-092106.xbrl",
+      "label": "רבעון 3/2025",
+      "balanceDate": "2025-09-30",
+      "months": 3,
+      "reference": "2025-01-092106",
+      "filedAt": "2025-11-25T17:15:00+02:00",
+      "validationPassed": true
+    },
+    {
+      "file": "Kiwi_App_File2026-01-030392.xbrl",
+      "label": "שנת 2025",
+      "balanceDate": "2025-12-31",
+      "months": 12,
+      "reference": "2026-01-030392",
+      "filedAt": "2026-03-31T11:23:00+02:00",
+      "validationPassed": true
+    },
+    {
+      "file": "Kiwi_App_File2026-01-049263.xbrl",
+      "label": "רבעון 1/2026",
+      "balanceDate": "2026-03-31",
+      "months": 3,
+      "reference": "2026-01-049263",
+      "filedAt": "2026-05-27T14:11:00+02:00",
+      "validationPassed": true
+    },
+    {
+      "file": "Kiwi_App_File2026-01-078335.xbrl",
+      "label": "רבעון 2/2026",
+      "balanceDate": "2026-06-30",
+      "months": 3,
+      "reference": "2026-01-078335",
+      "filedAt": "2026-08-20T13:37:00+02:00",
+      "validationPassed": true
+    }
+  ],
+  "counts": {
+    "ok": 32,
+    "fail": 0,
+    "skip": 9,
+    "warn": 0
+  },
+  "findings": [
+    {
+      "level": "ok",
+      "area": "בסיס",
+      "label": "סך נכסים",
+      "detail": "base.totalAssets · 318,398",
+      "xbrl": 318398,
+      "manual": 318398
+    },
+    {
+      "level": "ok",
+      "area": "בסיס",
+      "label": "הון מאוחד",
+      "detail": "base.equityConsolidated · 37,570",
+      "xbrl": 37570,
+      "manual": 37570
+    },
+    {
+      "level": "ok",
+      "area": "בסיס",
+      "label": "הון המיוחס לבעלים",
+      "detail": "base.ownersEquity · 37,628",
+      "xbrl": 37628,
+      "manual": 37628
+    },
+    {
+      "level": "ok",
+      "area": "בסיס",
+      "label": "זכויות מיעוט",
+      "detail": "base.nci · ‎-58",
+      "xbrl": -58,
+      "manual": -58
+    },
+    {
+      "level": "ok",
+      "area": "בסיס",
+      "label": "הון חוזר",
+      "detail": "base.workingCapital · 36,357",
+      "xbrl": 36357,
+      "manual": 36357
+    },
+    {
+      "level": "ok",
+      "area": "מאזן",
+      "label": "סה״כ נכסים שוטפים",
+      "detail": "241,118",
+      "xbrl": 241118,
+      "manual": 241118
+    },
+    {
+      "level": "ok",
+      "area": "מאזן",
+      "label": "סה״כ נכסים",
+      "detail": "318,398",
+      "xbrl": 318398,
+      "manual": 318398
+    },
+    {
+      "level": "ok",
+      "area": "מאזן",
+      "label": "סה״כ התחייבויות שוטפות",
+      "detail": "204,761",
+      "xbrl": 204761,
+      "manual": 204761
+    },
+    {
+      "level": "ok",
+      "area": "מאזן",
+      "label": "סה״כ התחייבויות לא שוטפות",
+      "detail": "76,067",
+      "xbrl": 76067,
+      "manual": 76067
+    },
+    {
+      "level": "ok",
+      "area": "מאזן",
+      "label": "סה״כ הון",
+      "detail": "37,570",
+      "xbrl": 37570,
+      "manual": 37570
+    },
+    {
+      "level": "ok",
+      "area": "סכימה",
+      "label": "סה״כ נכסים שוטפים · 30.06.2026",
+      "detail": "241,118",
+      "xbrl": 241118,
+      "manual": 241118
+    },
+    {
+      "level": "skip",
+      "area": "סכימה",
+      "label": "סה״כ נכסים שוטפים · 30.06.2025",
+      "detail": "שורה חסרה בעמודה — הקטע לא נבדק",
+      "xbrl": null,
+      "manual": null
+    },
+    {
+      "level": "skip",
+      "area": "סכימה",
+      "label": "סה״כ נכסים שוטפים · 31.12.2025",
+      "detail": "שורה חסרה בעמודה — הקטע לא נבדק",
+      "xbrl": null,
+      "manual": null
+    },
+    {
+      "level": "ok",
+      "area": "סכימה",
+      "label": "סה״כ התחייבויות שוטפות · 30.06.2026",
+      "detail": "204,761",
+      "xbrl": 204761,
+      "manual": 204761
+    },
+    {
+      "level": "ok",
+      "area": "סכימה",
+      "label": "סה״כ התחייבויות שוטפות · 30.06.2025",
+      "detail": "175,755",
+      "xbrl": 175755,
+      "manual": 175755
+    },
+    {
+      "level": "ok",
+      "area": "סכימה",
+      "label": "סה״כ התחייבויות שוטפות · 31.12.2025",
+      "detail": "172,123",
+      "xbrl": 172123,
+      "manual": 172123
+    },
+    {
+      "level": "ok",
+      "area": "סכימה",
+      "label": "סה״כ התחייבויות לא שוטפות · 30.06.2026",
+      "detail": "76,067",
+      "xbrl": 76067,
+      "manual": 76067
+    },
+    {
+      "level": "skip",
+      "area": "סכימה",
+      "label": "סה״כ התחייבויות לא שוטפות · 30.06.2025",
+      "detail": "שורה חסרה בעמודה — הקטע לא נבדק",
+      "xbrl": null,
+      "manual": null
+    },
+    {
+      "level": "ok",
+      "area": "סכימה",
+      "label": "סה״כ התחייבויות לא שוטפות · 31.12.2025",
+      "detail": "83,044",
+      "xbrl": 83044,
+      "manual": 83044
+    },
+    {
+      "level": "ok",
+      "area": "סכימה",
+      "label": "סה״כ הון · 30.06.2026",
+      "detail": "37,569",
+      "xbrl": 37569,
+      "manual": 37570
+    },
+    {
+      "level": "skip",
+      "area": "סכימה",
+      "label": "סה״כ הון · 30.06.2025",
+      "detail": "שורה חסרה בעמודה — הקטע לא נבדק",
+      "xbrl": null,
+      "manual": null
+    },
+    {
+      "level": "skip",
+      "area": "סכימה",
+      "label": "סה״כ הון · 31.12.2025",
+      "detail": "שורה חסרה בעמודה — הקטע לא נבדק",
+      "xbrl": null,
+      "manual": null
+    },
+    {
+      "level": "ok",
+      "area": "סכימה",
+      "label": "סה״כ נכסים · 30.06.2026",
+      "detail": "318,398",
+      "xbrl": 318398,
+      "manual": 318398
+    },
+    {
+      "level": "ok",
+      "area": "סכימה",
+      "label": "סה״כ נכסים · 30.06.2025",
+      "detail": "296,471",
+      "xbrl": 296471,
+      "manual": 296471
+    },
+    {
+      "level": "ok",
+      "area": "סכימה",
+      "label": "סה״כ נכסים · 31.12.2025",
+      "detail": "295,950",
+      "xbrl": 295950,
+      "manual": 295950
+    },
+    {
+      "level": "ok",
+      "area": "רווה״ס",
+      "label": "סך הכנסות · Q2 מדווח",
+      "detail": "32,899",
+      "xbrl": 32899,
+      "manual": 32899
+    },
+    {
+      "level": "skip",
+      "area": "רווה״ס",
+      "label": "סך הכנסות · Q2 אשתקד",
+      "detail": "אין תקופה תואמת ב-XBRL",
+      "xbrl": null,
+      "manual": null
+    },
+    {
+      "level": "ok",
+      "area": "רווה״ס",
+      "label": "סך הכנסות · שנה קודמת",
+      "detail": "72,448",
+      "xbrl": 72448,
+      "manual": 72448
+    },
+    {
+      "level": "ok",
+      "area": "רווה״ס",
+      "label": "סך הכנסות · מצטבר = Q1 + Q2",
+      "detail": "59,980",
+      "xbrl": 59980,
+      "manual": 59980
+    },
+    {
+      "level": "ok",
+      "area": "רווה״ס",
+      "label": "רווח גולמי · Q2 מדווח",
+      "detail": "7,421",
+      "xbrl": 7421,
+      "manual": 7421
+    },
+    {
+      "level": "skip",
+      "area": "רווה״ס",
+      "label": "רווח גולמי · Q2 אשתקד",
+      "detail": "אין תקופה תואמת ב-XBRL",
+      "xbrl": null,
+      "manual": null
+    },
+    {
+      "level": "ok",
+      "area": "רווה״ס",
+      "label": "רווח גולמי · שנה קודמת",
+      "detail": "10,022",
+      "xbrl": 10022,
+      "manual": 10022
+    },
+    {
+      "level": "ok",
+      "area": "רווה״ס",
+      "label": "רווח גולמי · מצטבר = Q1 + Q2",
+      "detail": "13,332",
+      "xbrl": 13332,
+      "manual": 13332
+    },
+    {
+      "level": "ok",
+      "area": "רווה״ס",
+      "label": "רווח תפעולי · Q2 מדווח",
+      "detail": "239",
+      "xbrl": 239,
+      "manual": 239
+    },
+    {
+      "level": "skip",
+      "area": "רווה״ס",
+      "label": "רווח תפעולי · Q2 אשתקד",
+      "detail": "אין תקופה תואמת ב-XBRL",
+      "xbrl": null,
+      "manual": null
+    },
+    {
+      "level": "ok",
+      "area": "רווה״ס",
+      "label": "רווח תפעולי · שנה קודמת",
+      "detail": "‎-10,126",
+      "xbrl": -10126,
+      "manual": -10126
+    },
+    {
+      "level": "ok",
+      "area": "רווה״ס",
+      "label": "רווח תפעולי · מצטבר = Q1 + Q2",
+      "detail": "‎-523",
+      "xbrl": -523,
+      "manual": -523
+    },
+    {
+      "level": "ok",
+      "area": "רווה״ס",
+      "label": "הפסד נקי · Q2 מדווח",
+      "detail": "‎-2,311",
+      "xbrl": -2311,
+      "manual": -2311
+    },
+    {
+      "level": "skip",
+      "area": "רווה״ס",
+      "label": "הפסד נקי · Q2 אשתקד",
+      "detail": "אין תקופה תואמת ב-XBRL",
+      "xbrl": null,
+      "manual": null
+    },
+    {
+      "level": "ok",
+      "area": "רווה״ס",
+      "label": "הפסד נקי · שנה קודמת",
+      "detail": "‎-14,150",
+      "xbrl": -14150,
+      "manual": -14150
+    },
+    {
+      "level": "ok",
+      "area": "רווה״ס",
+      "label": "הפסד נקי · מצטבר = Q1 + Q2",
+      "detail": "‎-5,571",
+      "xbrl": -5571,
+      "manual": -5571
+    }
+  ]
+}

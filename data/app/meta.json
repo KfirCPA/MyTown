@@ -1,0 +1,168 @@
+{
+  "_note": "הקובץ נטען על ידי index.html. סכומים באלפי ש״ח אלא אם צוין אחרת.",
+  "source": {
+    "mode": "manual",
+    "label": "דוח רבעוני 30.6.2026 + מצגת 31.3.2026",
+    "asOf": "2026-06-30",
+    "lastSync": null
+  },
+  "layers": {
+    "A": {
+      "date": "2026-06-30",
+      "source": "גילוי רבעוני נספח א׳"
+    },
+    "B": {
+      "date": "2026-03-31",
+      "source": "מצגת משקיעים 24.5.2026"
+    }
+  },
+  "base": {
+    "ownersEquity": 37628,
+    "nci": -58,
+    "equityConsolidated": 37570,
+    "subLoans": 10122,
+    "totalAssets": 318398,
+    "cashFree": 2265,
+    "depositsFree": 541,
+    "buildServices": 72086,
+    "contractLiab": 5889,
+    "bondAccrued": 53685,
+    "finCollateral": 0,
+    "pledgedAssets": 88542,
+    "grossMargin": 0.226,
+    "pledgedBookShare": 0.743,
+    "accumDeficit": -20012,
+    "bondCurrent": 6200,
+    "bondNonCurrent": 45988,
+    "restricted": 795,
+    "escrow": 4062,
+    "bankCredit": 75100,
+    "bankCreditPrior": 30198,
+    "workingCapital": 36357
+  },
+  "thresholds": {
+    "equity": 25000,
+    "ratio": 0.15,
+    "debtCol": 0.7,
+    "_source": "שטר הנאמנות ס' 6.4.1-6.4.2 · ביאור 17 לדוחות 31.12.2025",
+    "_conflict": "נספח א' לדוח הדירקטוריון נוקב ביחס מזערי של 12% ומחשב 19.3% ל-31.12.2025; ביאור 17 נוקב 15% ומחשב 20%. הפער לא יושב במקור."
+  },
+  "exceptionThresholds": {
+    "pct": 0.1,
+    "abs": 375,
+    "_basis": "אחוז · 10% ברירת מחדל. סכום · 375 = 1% מההון העצמי 37,570, לא מהמאזן: במינוף 7.47 עיגון למאזן היה מייצר סף 3,184 וכמעט דבר לא היה נדלק.",
+    "_rule": "שני הספים → אדום · סף אחד → ענבר · מעבר סימן → אדום תמיד"
+  },
+  "covenantsPriorPeriod": {
+    "date": "2025-12-31",
+    "adjEquity": 40815,
+    "adjBalance": 211871,
+    "ratio": 0.193,
+    "debtA": 63172,
+    "debtB": 0,
+    "collateralC": 92208,
+    "debtCol": 0.685,
+    "_source": "נספח א' לדוח הדירקטוריון ליום 31.12.2025, ס' 7"
+  },
+  "equityTrend": [
+    {
+      "label": "30.9.25",
+      "value": 38132
+    },
+    {
+      "label": "31.12.25",
+      "value": 40783
+    },
+    {
+      "label": "31.3.26",
+      "value": 38016
+    },
+    {
+      "label": "30.6.26",
+      "value": 37570
+    }
+  ],
+  "workingCapital": [
+    {
+      "label": "31.3.25",
+      "value": 86300
+    },
+    {
+      "label": "30.9.25",
+      "value": 54371
+    },
+    {
+      "label": "31.12.25",
+      "value": 51120
+    },
+    {
+      "label": "31.3.26",
+      "value": 48049
+    },
+    {
+      "label": "30.6.26",
+      "value": 36357
+    }
+  ],
+  "scope": {
+    "projects": 73,
+    "inExec": 7,
+    "inPlanning": 7,
+    "urbanRenewal": 14,
+    "unitsExec": 159,
+    "unitsPlanning": 336,
+    "unitsUrban": 2014,
+    "unitsEarly": 3296,
+    "revExec": 367947,
+    "revPlanning": 664880,
+    "revUrban": 3153056,
+    "surplusExec": 104757,
+    "surplusPlanning": 129972,
+    "surplusUrban": 699917,
+    "delivered": 29,
+    "deliveredUnits": 433
+  },
+  "derivedFrom": {
+    "source": "data/financials.json · XBRL מגנא",
+    "at": "2026-08-31T06:24:54.422Z",
+    "fields": [
+      "base.totalAssets",
+      "base.equityConsolidated",
+      "base.ownersEquity",
+      "base.nci",
+      "base.workingCapital",
+      "equityTrend",
+      "workingCapital"
+    ],
+    "note": "שאר השדות ידניים. ה-XBRL מכיל כ-50 סעיפים מצרפיים בלבד ואינו מכסה אותם."
+  },
+  "bankCovenants": {
+    "_source": "תיאור עסקי התאגיד · פרק א׳ ס׳ 11.3 · דוח תקופתי 2025",
+    "_consequence": "אי עמידה אינה עילה להעמדה לפירעון מיידי, אך מקנה למממן שיקול דעת לנקוט צעדים.",
+    "_declared": "נכון ל-31.12.2025 החברה מצהירה שאינה בהפרה של אמות המידה.",
+    "_openQuestion": "הקריאה המילולית של \"שיעורו מהמאזן\" נכשלת בכל התאריכים, כולל 31.12.2025 שבו החברה מצהירה על עמידה. מכאן שהגדרת \"המאזן\" בהסכמי המימון אינה המאזן החשבונאי — ככל הנראה מאזן מתואם — וההגדרה עצמה אינה בגילוי. עד לקבלת הסכמי המימון, המסך מציג את שתי הקריאות ואינו קובע הפרה.",
+    "tests": [
+      {
+        "label": "הון עצמי המיוחס לבעלי המניות",
+        "floor": 5000,
+        "ratioFloor": 0.15,
+        "basis": "ownersEquity",
+        "note": "שני התנאים במצטבר"
+      },
+      {
+        "label": "הון עצמי מוחשי · לרבות הלוואות בעלים",
+        "floor": 12000,
+        "ratioFloor": 0.3,
+        "basis": "ownersEquityPlusOwnerLoans",
+        "note": "שני התנאים במצטבר · ההון המוחשי אינו מוגדר בגילוי"
+      }
+    ],
+    "negativePledge": "התחייבות שלא ליצור שעבוד שוטף כללי על הנכסים, למעט לבנק המממן.",
+    "externalFinancing": {
+      "total": 61876,
+      "avgRate": 0.0685,
+      "spread": "פריים ‎+1.1% עד ‎+1.2%",
+      "asOf": "2025-12-31"
+    }
+  }
+}
