@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-31T06:17:52.235Z",
+  "updatedAt": "2026-08-31T06:20:23.230Z",
   "company": {
     "name": "קבוצת מיי טאון בע\"מ",
     "tase": 2449,
@@ -130,7 +130,7 @@
           "source": "חדשות אפס שמונה"
         }
       ],
-      "fetchedAt": "2026-08-31T06:17:52.235Z",
+      "fetchedAt": "2026-08-31T06:20:23.230Z",
       "stale": false,
       "via": "Google News RSS",
       "error": null
