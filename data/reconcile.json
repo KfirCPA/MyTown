@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-31T18:39:58.206Z",
+  "generatedAt": "2026-08-31T19:32:42.395Z",
   "asOf": "2026-06-30",
   "xbrlPeriods": [
     {
@@ -40,7 +40,7 @@
     }
   ],
   "counts": {
-    "ok": 32,
+    "ok": 35,
     "fail": 0,
     "skip": 9,
     "warn": 0
@@ -395,6 +395,30 @@
       "detail": "‎-5,571",
       "xbrl": -5571,
       "manual": -5571
+    },
+    {
+      "level": "ok",
+      "area": "פרויקטים",
+      "label": "לכל פרויקט שלב מוצהר",
+      "detail": "8 פרויקטים",
+      "xbrl": null,
+      "manual": null
+    },
+    {
+      "level": "ok",
+      "area": "פרויקטים",
+      "label": "ספירת הפרויקטים בביצוע",
+      "detail": "7",
+      "xbrl": 7,
+      "manual": 7
+    },
+    {
+      "level": "ok",
+      "area": "פרויקטים",
+      "label": "סיווג מול העלות שנותרה",
+      "detail": "עקבי",
+      "xbrl": null,
+      "manual": null
     }
   ]
 }

@@ -211,6 +211,33 @@ function dateKey(label) {
   return new Date(2000 + y, m - 1, d).getTime();
 }
 
+/* ═══════════ 5ב · שלב הפרויקט ═══════════
+   הרשימה "בביצוע" נגזרה פעם מביטוי סינון, ולכן פרויקט אחד הוחרג בשקט
+   ואחר נשאר ברשימה רק בגלל ש-rem שלו היה null. עכשיו השלב מוצהר בנתון,
+   והבדיקות כאן מוודאות שההצהרה נשארת עקבית. */
+const proj = JSON.parse(await readFile(`${APP}/projects.json`, 'utf8'));
+const STAGES = proj._stages?.values || ['בביצוע', 'הושלם'];
+{
+  const noStage = proj.inExecution.filter((x) => !STAGES.includes(x.stage));
+  if (noStage.length)
+    add('fail', 'פרויקטים', 'שלב חסר או לא חוקי', noStage.map((x) => x.name).join(', '));
+  else add('ok', 'פרויקטים', 'לכל פרויקט שלב מוצהר', proj.inExecution.length + ' פרויקטים');
+
+  const inExec = proj.inExecution.filter((x) => x.stage === 'בביצוע').length;
+  const declared = meta.scope?.inExec;
+  if (Number.isFinite(declared)) {
+    const ok = inExec === declared;
+    add(ok ? 'ok' : 'fail', 'פרויקטים', 'ספירת הפרויקטים בביצוע',
+      ok ? String(inExec) : `בנתון ${inExec} מול scope.inExec ${declared}`, inExec, declared);
+  } else add('skip', 'פרויקטים', 'ספירת הפרויקטים בביצוע', 'אין scope.inExec');
+
+  /* עלות שנותרה אפס פירושה שאין מה להשלים — כזה אינו "בביצוע" */
+  const done = proj.inExecution.filter((x) => x.rem === 0 && x.stage !== 'הושלם');
+  if (done.length)
+    add('fail', 'פרויקטים', 'עלות להשלמה אפס אך אינו מסווג כהושלם', done.map((x) => x.name).join(', '));
+  else add('ok', 'פרויקטים', 'סיווג מול העלות שנותרה', 'עקבי');
+}
+
 /* ═══════════ 6 · שעון הדיווח ═══════════
    הפער האחרון באוטומציה: מגנא חוסמת את הראנר, ולכן קובץ XBRL חדש נטען
    ידנית. מה שכן אפשר לעשות אוטומטית הוא לדעת מתי מצפים לו ולהתריע.

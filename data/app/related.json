@@ -2,43 +2,51 @@
   "_note": "הקובץ נטען על ידי index.html. סכומים באלפי ש״ח אלא אם צוין אחרת.",
   "columns": {
     "current": "30.06.2026",
-    "priorYearEnd": "31.12.2025"
+    "priorYearEnd": "31.12.2025",
+    "priorYearSame": "30.06.2025"
   },
   "rows": [
     {
       "label": "צדדים קשורים · שוטף",
       "current": 10932,
-      "priorYearEnd": 12349
+      "priorYearEnd": 12349,
+      "priorYearSame": 6668
     },
     {
       "label": "צדדים קשורים · לא שוטף",
       "current": 8622,
-      "priorYearEnd": 7773
+      "priorYearEnd": 7773,
+      "priorYearSame": 9244
     },
     {
       "label": "הלוואות בעלי מניות · שוטף",
       "current": 10000,
-      "priorYearEnd": 10000
+      "priorYearEnd": 10000,
+      "priorYearSame": 10000
     },
     {
       "label": "הלוואות בעלים · לא שוטף",
       "current": 10122,
-      "priorYearEnd": 11500
+      "priorYearEnd": 11500,
+      "priorYearSame": 11500
     },
     {
       "label": "חו״ז מול השותף",
       "current": 24135,
-      "priorYearEnd": null
+      "priorYearEnd": null,
+      "priorYearSame": null
     },
     {
       "label": "קרן עסקאות עם בעלי שליטה",
       "current": 1378,
-      "priorYearEnd": null
+      "priorYearEnd": null,
+      "priorYearSame": null
     },
     {
       "label": "קרן עסקאות עם NCI",
       "current": -5223,
-      "priorYearEnd": -5223
+      "priorYearEnd": -5223,
+      "priorYearSame": -5223
     }
   ],
   "blocked": [
@@ -47,5 +55,6 @@
     "מועדי פירעון",
     "אישורי ועדת ביקורת ודירקטוריון",
     "זהות השותף בחו״ז"
-  ]
+  ],
+  "_derivedFrom": "עמודות ההשוואה נגזרות מ-statements.json · אותו מאזן, אותם מספרים"
 }
