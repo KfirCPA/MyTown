@@ -1,6 +1,6 @@
 {
-  "ranAt": "2026-08-31T05:55:12.075Z",
-  "env": "הרצה מקומית",
+  "ranAt": "2026-08-31T06:15:51.271Z",
+  "env": "GitHub Actions",
   "results": [
     {
       "id": "maya-reports",
@@ -14,14 +14,14 @@
           "candidate": "mayaapi · company/reports",
           "url": "https://mayaapi.tase.co.il/api/company/reports?companyId=2449&lang=he",
           "status": 403,
-          "ms": 186,
+          "ms": 791,
           "result": "HTTP שגוי"
         },
         {
           "candidate": "mayaapi · v1/company/reports",
           "url": "https://mayaapi.tase.co.il/api/v1/company/reports?companyId=2449&lang=he",
           "status": 403,
-          "ms": 34,
+          "ms": 552,
           "result": "HTTP שגוי"
         }
       ]
@@ -38,15 +38,16 @@
           "candidate": "magna · חיפוש לפי ח.פ.",
           "url": "https://www.magna.isa.gov.il/api/reports/search?corporateNumber=514444660&pageSize=30",
           "status": 403,
-          "ms": 112,
+          "ms": 345,
           "result": "HTTP שגוי"
         },
         {
           "candidate": "magna · דף התוצאות · פרסור HTML",
           "url": "https://www.magna.isa.gov.il/?q=514444660",
-          "status": 403,
-          "ms": 22,
-          "result": "HTTP שגוי"
+          "status": 200,
+          "bytes": 20822,
+          "ms": 7,
+          "result": "הפרסור לא זיהה מבנה"
         }
       ]
     },
@@ -62,15 +63,16 @@
           "candidate": "mayaapi · שער נייר",
           "url": "https://mayaapi.tase.co.il/api/security/lastsaleeod?securityId=1214626&lang=he",
           "status": 403,
-          "ms": 5,
+          "ms": 767,
           "result": "HTTP שגוי"
         },
         {
           "candidate": "ביזפורטל · פרסור טקסט",
           "url": "https://www.bizportal.co.il/bonds/quote/generalview/1214626",
-          "status": 403,
-          "ms": 51,
-          "result": "HTTP שגוי"
+          "status": 200,
+          "bytes": 186865,
+          "ms": 226,
+          "result": "הפרסור לא זיהה מבנה"
         }
       ]
     },
@@ -78,23 +80,17 @@
       "id": "news",
       "title": "כתבות שפורסמו",
       "why": "הקשר חיצוני לדיווחים · מה שהעיתונות מדווחת ואינו בגילוי",
-      "ok": false,
-      "via": null,
-      "count": 0,
+      "ok": true,
+      "via": "Google News RSS",
+      "count": 16,
       "attempts": [
         {
           "candidate": "Google News RSS",
           "url": "https://news.google.com/rss/search?q=%22%D7%A7%D7%91%D7%95%D7%A6%D7%AA%20%D7%9E%D7%99%D7%99%20%D7%98%D7%90%D7%95%D7%9F%22&hl=he&gl=IL&ceid=IL:he",
-          "status": 403,
-          "ms": 10,
-          "result": "HTTP שגוי"
-        },
-        {
-          "candidate": "ביזפורטל · חיפוש",
-          "url": "https://www.bizportal.co.il/search?q=%D7%A7%D7%91%D7%95%D7%A6%D7%AA%20%D7%9E%D7%99%D7%99%20%D7%98%D7%90%D7%95%D7%9F",
-          "status": 403,
-          "ms": 5,
-          "result": "HTTP שגוי"
+          "status": 200,
+          "bytes": 18057,
+          "ms": 190,
+          "result": "הצליח"
         }
       ]
     }
