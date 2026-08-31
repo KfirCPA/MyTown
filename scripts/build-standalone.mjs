@@ -12,7 +12,8 @@ import { existsSync } from 'node:fs';
 
 const APP = ['meta', 'bond', 'statements', 'projects', 'related', 'events', 'followups.seed'];
 const OPTIONAL = ['data/sources.json', 'data/sources-status.json', 'data/reconcile.json'];
-const OUT = 'dist/mytown-standalone.html';
+const ARTIFACT = process.argv.includes('--artifact');
+const OUT = ARTIFACT ? 'dist/mytown-artifact.html' : 'dist/mytown-standalone.html';
 
 const data = {};
 for (const name of APP) data[name] = JSON.parse(await readFile(`data/app/${name}.json`, 'utf8'));
@@ -27,11 +28,26 @@ const payload = JSON.stringify(data)
   .replace(/</g, '\\u003c').replace(/>/g, '\\u003e').replace(/\u2028|\u2029/g, (c) => '\\u' + c.charCodeAt(0).toString(16));
 
 const banner = `<script>window.__MYTOWN_DATA__=JSON.parse(${JSON.stringify(payload)});` +
-  `window.__MYTOWN_BUILT__=${JSON.stringify(new Date().toISOString())};</script>\n`;
+  `window.__MYTOWN_BUILT__=${JSON.stringify(new Date().toISOString())};` +
+  (ARTIFACT ? 'window.__MYTOWN_SANDBOX__=true;document.documentElement.lang="he";document.documentElement.dir="rtl";' : '') +
+  `</script>\n`;
 
 const marker = '<script type="module">';
 if (!html.includes(marker)) { console.error('לא נמצא תג הסקריפט הראשי'); process.exit(1); }
-const out = html.replace(marker, banner + marker);
+let out = html.replace(marker, banner + marker);
+
+/* מצב ארטיפקט · המארח מספק בעצמו doctype, head ו-body, ומזריק לתוכם.
+   הכיווניות שיושבת על תג html מועברת לסקריפט, כי אין לנו גישה לתג. */
+if (ARTIFACT) {
+  const head = out.match(/<head>([\s\S]*?)<\/head>/i);
+  const body = out.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
+  if (!head || !body) { console.error('לא נמצאו head או body לחילוץ'); process.exit(1); }
+  const keep = head[1]
+    .replace(/<meta[^>]*charset[^>]*>/gi, '')
+    .replace(/<meta[^>]*viewport[^>]*>/gi, '')
+    .trim();
+  out = keep + '\n' + body[1].trim() + '\n';
+}
 
 await mkdir('dist', { recursive: true });
 await writeFile(OUT, out, 'utf8');

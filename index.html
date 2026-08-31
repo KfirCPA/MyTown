@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>מייטאון · מרכז בקרה</title>
+<title>מרכז בקרה מייטאון</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -23,7 +23,7 @@
 html{scroll-behavior:smooth}
 body{background:var(--void);color:var(--t1);
   font-family:"Heebo",system-ui,sans-serif;font-size:14px;line-height:1.55;
-  -webkit-font-smoothing:antialiased;padding-bottom:34px;transition:background .35s}
+  -webkit-font-smoothing:antialiased;padding-bottom:62px;transition:background .35s}
 .num{font-family:"JetBrains Mono",Consolas,monospace;font-variant-numeric:tabular-nums lining-nums;
   font-feature-settings:"tnum" 1,"lnum" 1;letter-spacing:-.01em}
 .wrap{max-width:1560px;margin:0 auto;padding:0 14px}
@@ -263,6 +263,14 @@ tr.neg td.n{color:var(--t2)}
   box-shadow:0 0 0 1px var(--accent),0 6px 26px rgba(0,0,0,.6);
   opacity:0;pointer-events:none;transition:opacity .22s var(--ease),transform .22s var(--ease)}
 .toast.on{opacity:1;transform:translate(50%,0)}
+/* ═══ הצהרה · קבועה בתחתית ═══ */
+.disclaimer{position:fixed;bottom:0;right:0;left:0;z-index:35;
+  background:var(--sunken);border-top:1px solid var(--hair);
+  padding:8px 22px;font-size:10.5px;line-height:1.6;color:var(--t3);
+  display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.disclaimer b{color:var(--t2);font-weight:500}
+.disclaimer .dot-sep{color:var(--hair)}
+body.zen .disclaimer{display:none}
 
 .pos{color:var(--pos)}.negc{color:var(--neg)}.warnc{color:var(--warn)}.infoc{color:var(--info)}
 .na{color:var(--t3)}
@@ -1348,6 +1356,12 @@ function fuReset(){
   FOLLOWUPS=fuSeed();fuSave();renderFollow();toast("המעקב אופס");
 }
 function download(name,text,mime){
+  /* בסביבת תצוגה מוגנת הדפדפן חוסם הורדה שהדף עצמו מתחיל. עדיף לומר זאת
+     מאשר להשאיר כפתור שנראה עובד ואינו עושה דבר. */
+  if(typeof window!=="undefined"&&window.__MYTOWN_SANDBOX__){
+    toast("ההורדה חסומה בתצוגה הזו · הרץ את הרפו מקומית כדי לייצא");
+    return;
+  }
   const url=URL.createObjectURL(new Blob([text],{type:mime}));
   const a=document.createElement("a");
   a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();
@@ -2090,5 +2104,15 @@ setInterval(renderLive,60000);
 renderAll(false);
 goTo("strength");
 </script>
+<div class="disclaimer">
+  <b>ניתוח עצמאי.</b>
+  <span>הדף אינו מטעם קבוצת מיי טאון בע״מ ואינו פרסום שלה.</span>
+  <span class="dot-sep">·</span>
+  <span>נבנה מהגילוי הפומבי במאיה ובמגנא ומדוחות כספיים מבוקרים וסקורים.</span>
+  <span class="dot-sep">·</span>
+  <span>אינו תחליף לדוחות הרשמיים, אינו חוות דעת ואינו ייעוץ השקעות.</span>
+  <span class="dot-sep">·</span>
+  <span>סכומים באלפי ש״ח.</span>
+</div>
 </body>
 </html>
