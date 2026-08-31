@@ -158,6 +158,8 @@ body.stress input[type=range]::-webkit-slider-thumb{background:var(--neg);box-sh
 .btn{background:var(--raised);border:0;border-radius:6px;box-shadow:0 0 0 1px var(--hair);padding:8px 14px;
   font-size:11.5px;color:var(--t2);cursor:pointer;font-family:inherit;transition:box-shadow .15s,color .15s}
 .btn:hover{box-shadow:0 0 0 1px var(--accent);color:var(--glow)}
+.btn.on{background:linear-gradient(135deg,rgba(15,169,160,.24),rgba(20,128,138,.24));
+  color:var(--glow);box-shadow:0 0 0 1px var(--glow)}
 .simnote{font-size:10.5px;color:var(--t3);line-height:1.6;flex:1;min-width:220px}
 
 /* ═══ TOOLTIP ═══ */
@@ -241,6 +243,32 @@ tr.neg td.n{color:var(--t2)}
 .al .add{font-size:10px;color:var(--t3);border-radius:5px;box-shadow:0 0 0 1px var(--hair);
   padding:4px 9px;cursor:pointer;white-space:nowrap;transition:box-shadow .15s,color .15s}
 .al .add:hover{box-shadow:0 0 0 1px var(--accent);color:var(--glow)}
+
+/* ═══ אייקון שקט · לא לשונית ═══
+   מסך הבקרה הוא כלי תחזוקה של בעל האתר, לא מסך תוכן. הוא נשאר נגיש
+   בלחיצה אחת אבל אינו עומד בשורה אחת עם ארבעת מסכי התוכן. */
+.ico.on{box-shadow:0 0 0 1px var(--glow);color:var(--glow)}
+
+/* ═══ בורר תקופות ההשוואה ═══
+   הטבלה החזיקה תשע עמודות ודרשה גלילה אופקית. במקום זה בוחרים מול מה
+   משווים, והטבלה מציגה ארבע עמודות שנכנסות למסך אחד. */
+.periodsel{display:flex;gap:7px;flex-wrap:wrap;align-items:center;
+  padding-bottom:13px;margin-bottom:13px;border-bottom:1px solid var(--hair)}
+.periodsel .lbl2{font-size:9.5px;letter-spacing:.1em;color:var(--t3);margin-left:4px}
+.periodsel .p{font-size:11.5px;color:var(--t2);background:rgba(5,10,13,.55);
+  box-shadow:0 0 0 1px var(--hair);border-radius:6px;padding:7px 12px;cursor:pointer;
+  white-space:nowrap;transition:box-shadow .15s,color .15s,background .15s}
+.periodsel .p:hover{box-shadow:0 0 0 1px var(--accent);color:var(--t1)}
+.periodsel .p.on{background:linear-gradient(135deg,rgba(15,169,160,.22),rgba(20,128,138,.22));
+  color:var(--glow);box-shadow:0 0 0 1px var(--glow)}
+.periodsel .norm{margin-right:auto;display:flex;align-items:center;gap:7px;
+  font-size:11px;color:var(--t2);cursor:pointer;user-select:none}
+.periodsel .norm .sw2{width:30px;height:17px;border-radius:9px;background:var(--sunken);
+  box-shadow:0 0 0 1px var(--hair);position:relative;transition:background .2s}
+.periodsel .norm .sw2::after{content:"";position:absolute;top:2px;right:2px;width:13px;height:13px;
+  border-radius:50%;background:var(--t3);transition:transform .2s,background .2s}
+.periodsel .norm.on .sw2{background:rgba(15,169,160,.3);box-shadow:0 0 0 1px var(--accent)}
+.periodsel .norm.on .sw2::after{transform:translateX(-13px);background:var(--glow)}
 
 /* ═══ מעקב · כפתורים, פעולות והודעת רגע ═══ */
 .add{font-size:10px;color:var(--t3);border-radius:5px;box-shadow:0 0 0 1px var(--hair);
@@ -345,6 +373,9 @@ svg{display:block;overflow:visible}
   <div class="tog" id="stressToggle" role="switch" aria-checked="false" tabindex="0">
     <span class="sw"></span><span class="txt">מבחן קיצון · 15%−</span>
   </div>
+  <div class="ico" id="ctrlBtn" role="button" tabindex="0" title="מקורות ובקרה" aria-label="מקורות ובקרה">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9L17 7M7 17l-2.1 2.1"/></svg>
+  </div>
   <div class="ico" id="zenBtn" role="button" tabindex="0" title="מסך מלא · Zen" aria-label="מסך מלא">
     <svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
   </div>
@@ -356,7 +387,6 @@ svg{display:block;overflow:visible}
     <div class="tab" data-t="audit">ביקורת</div>
     <div class="tab on" data-t="strength">איתנות</div>
     <div class="tab" data-t="proj">פרויקטים</div>
-    <div class="tab" data-t="ctrl">בקרה</div>
   </div>
 
   <div class="sub" id="subBar"></div>
@@ -477,10 +507,11 @@ svg{display:block;overflow:visible}
       <h2>מבחני שינוי
         <span class="ttip" data-tip="סעיפים מאזניים: יתרה מול יתרה, ללא עיבוד. סעיפי רווח והפסד: שלושה מבחנים במקביל. הרבעון הבודד נגזר בחיסור מהמצטבר.">?</span>
       </h2>
-      <div style="display:flex;gap:9px;margin-bottom:14px;flex-wrap:wrap">
+      <div style="display:flex;gap:9px;margin-bottom:11px;flex-wrap:wrap">
         <button class="btn" id="btnPL">רווח והפסד</button>
         <button class="btn" id="btnBS">מאזן</button>
       </div>
+      <div class="periodsel" id="periodSel"></div>
       <div id="analyticBody"></div>
     </div>
     <div class="card" style="margin-top:14px">
@@ -683,6 +714,8 @@ const [SOURCES,SRCSTATUS,RECON]=await Promise.all(
 
 /* תאריכים מוצגים בפורמט מקומי · ISO נשאר בקבצים */
 const dmy=iso=>iso?iso.split("-").reverse().join("."):"—";
+/* צורה קצרה לכותרות טבלה · 30.06.2026 → 30.6.26 · חוסכת את הגלישה בנייד */
+const dmyS=d=>{const[a,b,c]=String(d).split(".");return c?Number(a)+"."+Number(b)+"."+c.slice(-2):d;};
 
 /* ── נגזר מהנתונים · אין כאן ערכים, רק מיפוי ── */
 const SOURCE={
@@ -1249,7 +1282,7 @@ function renderEvents(){
 function renderAll(animate){
   renderStressBar();renderCovenants(animate);renderProjects(animate);renderEvents();
   renderHome();renderAnalytic();renderRelated();renderFollow();
-  renderLiquidity();renderLeverage();renderWarnings();renderProjSubs();renderControl();renderBankCov();
+  renderLiquidity();renderLeverage();renderWarnings();renderProjSubs();renderControl();renderBankCov();renderPeriodSel();
   growBars(document);
 }
 
@@ -1299,8 +1332,13 @@ tg.addEventListener("click",()=>setStress(!STRESS));
 tg.addEventListener("keydown",e=>{if(e.key===" "||e.key==="Enter"){e.preventDefault();setStress(!STRESS);}});
 document.getElementById("btnCsv").addEventListener("click",exportCsv);
 const bPL=document.getElementById("btnPL"),bBS=document.getElementById("btnBS");
-if(bPL)bPL.addEventListener("click",()=>{ANALYTIC_VIEW="pl";renderAnalytic();growBars(document);});
-if(bBS)bBS.addEventListener("click",()=>{ANALYTIC_VIEW="bs";renderAnalytic();growBars(document);});
+const setView=v=>{ANALYTIC_VIEW=v;
+  if(bPL)bPL.classList.toggle("on",v==="pl");
+  if(bBS)bBS.classList.toggle("on",v==="bs");
+  renderPeriodSel();renderAnalytic();growBars(document);};
+if(bPL)bPL.classList.add("on");   /* מבט הפתיחה */
+if(bPL)bPL.addEventListener("click",()=>setView("pl"));
+if(bBS)bBS.addEventListener("click",()=>setView("bs"));
 document.getElementById("btnGap").addEventListener("click",()=>{sortKey="gap";sortDir=-1;renderProjects(false);});
 
 /* ═══════════════════════════════════════════════════════
@@ -1606,64 +1644,116 @@ function renderHome(){
 
 /* ═══════════ 2.1 · אנליטי ═══════════ */
 let ANALYTIC_VIEW="pl";
+/* ═══════════ 2.1 · אנליטי ═══════════
+   הטבלה החזיקה תשע עמודות ודרשה גלילה אופקית בנייד. במקום זה בוחרים
+   מול מה משווים, והטבלה מציגה ארבע עמודות בלבד.
+
+   שלושת המבחנים ממשיכים לרוץ במלואם גם כשמוצג רק אחד — טבלת החריגות
+   נבנית מכולם. הבחירה משנה מה רואים, לא מה נבדק. */
+let ANALYTIC_CMP="q1";      /* רווה״ס: q1 · q2p · fy   |   מאזן: pye · pys */
+let ANALYTIC_NORM=true;     /* נרמול · רלוונטי רק מול שנה מלאה */
+
+function cmpOptions(){
+  return ANALYTIC_VIEW==="bs"
+    ? [["pye","מול "+D_PYE,"סוף השנה הקודמת"],
+       ["pys","מול "+D_PYS,"מקביל אשתקד"]]
+    : [["q1","מול "+Q1L,"רבעון קודם · מבחן 2"],
+       ["q2p","מול "+Q2PL,"מקביל אשתקד · מבחן 3"],
+       ["fy","מול "+FYPL,"שנה מלאה · מבחן 1"]];
+}
+function renderPeriodSel(){
+  const el=document.getElementById("periodSel");
+  if(!el)return;
+  const opts=cmpOptions();
+  if(!opts.some(o=>o[0]===ANALYTIC_CMP))ANALYTIC_CMP=opts[0][0];
+  el.innerHTML='<span class="lbl2">בסיס ההשוואה</span>'+
+    opts.map(o=>'<span class="p'+(o[0]===ANALYTIC_CMP?" on":"")+'" data-c="'+o[0]+'" title="'+o[2]+'">'+
+      o[1]+'</span>').join("")+
+    (ANALYTIC_VIEW==="pl"&&ANALYTIC_CMP==="fy"
+      ?'<span class="norm'+(ANALYTIC_NORM?" on":"")+'" id="normTog" role="switch" tabindex="0" '+
+       'aria-checked="'+ANALYTIC_NORM+'" title="מצטבר חצי שנה מוכפל בשניים · פיזור אחיד">'+
+       '<span class="sw2"></span>נרמול לשנה מלאה</span>':"");
+  el.querySelectorAll(".p").forEach(b=>b.addEventListener("click",()=>{
+    ANALYTIC_CMP=b.dataset.c;renderPeriodSel();renderAnalytic();growBars(document);}));
+  const nt=el.querySelector("#normTog");
+  if(nt){
+    const flip=()=>{ANALYTIC_NORM=!ANALYTIC_NORM;renderPeriodSel();renderAnalytic();};
+    nt.addEventListener("click",flip);
+    nt.addEventListener("keydown",e=>{if(e.key===" "||e.key==="Enter"){e.preventDefault();flip();}});
+  }
+}
+
 function renderAnalytic(){
   const el=document.getElementById("analyticBody");
   if(!el)return;
   const exceptions=[];
-  let html="";
+  let rows="", head="", note="";
 
   if(ANALYTIC_VIEW==="bs"){
-    html='<div class="scroller"><table><thead><tr><th class="frz">סעיף</th>'+
-      '<th class="n">'+D_CUR+'</th><th class="n">'+D_PYE+'</th><th class="n">שינוי מול '+D_PYE+'</th>'+
-      '<th class="n">'+D_PYS+'</th><th class="n">שינוי מול '+D_PYS+'</th></tr></thead><tbody>';
+    const base=ANALYTIC_CMP==="pys"?{i:2,label:D_PYS}:{i:3,label:D_PYE};
+    head='<th class="frz">סעיף</th><th class="n">'+dmyS(D_CUR)+'</th>'+
+         '<th class="n">'+dmyS(base.label)+'</th><th class="n">שינוי</th>';
     BS.forEach(r=>{
       const [n,cur,ly,fy,kind]=r;
-      const t1=testCell(cur,fy),t2=testCell(cur,ly);
-      if(t1.ex)exceptions.push({n,test:"מצטבר",d:t1.d,ex:t1.ex});
-      if(t2.ex)exceptions.push({n,test:"מול אשתקד",d:t2.d,ex:t2.ex});
-      html+='<tr'+(kind==="ס"?' class="sum"':"")+'><td class="frz">'+n+'</td>'+
-        '<td class="n num">'+fmt(cur)+'</td><td class="n num">'+fmt(fy)+'</td>'+
-        '<td class="n num">'+t1.h+'</td><td class="n num">'+fmt(ly)+'</td>'+
-        '<td class="n num">'+t2.h+'</td></tr>';
+      /* שני המבחנים נבדקים תמיד · רק אחד מוצג */
+      const tPye=testCell(cur,fy), tPys=testCell(cur,ly);
+      if(tPye.ex)exceptions.push({n,test:"מול "+D_PYE,d:tPye.d,ex:tPye.ex});
+      if(tPys.ex)exceptions.push({n,test:"מול "+D_PYS,d:tPys.d,ex:tPys.ex});
+      const val=base.i===2?ly:fy, t=base.i===2?tPys:tPye;
+      rows+='<tr'+(kind==="ס"?' class="sum"':"")+'><td class="frz">'+n+'</td>'+
+        '<td class="n num">'+fmt(cur)+'</td><td class="n num">'+fmt(val)+'</td>'+
+        '<td class="n num">'+t.h+'</td></tr>';
     });
-    html+='</tbody></table></div>'+
-      '<div class="src">שני מבחנים · יתרה מול יתרה, ללא עיבוד · המבחן השוטף מול 31.3.2026 חסום: אין פירוט יתרות לאותו מועד</div>';
+    note="יתרה מול יתרה, ללא עיבוד · שני המבחנים נבדקים תמיד, הבורר קובע איזה מוצג · "+
+      "המבחן השוטף מול 31.3.2026 חסום: אין פירוט יתרות לאותו מועד";
   }else{
-    html='<div class="scroller"><table><thead><tr><th class="frz">סעיף</th>'+
-      '<th class="n">'+Q2L+'</th><th class="n">'+Q1L+'</th><th class="n">מבחן 2 · מול '+Q1L+'</th>'+
-      '<th class="n">'+Q2PL+'</th><th class="n">מבחן 3 · מול '+Q2PL+'</th><th class="n">מנורמל</th>'+
-      '<th class="n">'+FYPL+' בפועל</th><th class="n">מבחן 1 · מול '+FYPL+'</th></tr></thead><tbody>';
+    const isFY=ANALYTIC_CMP==="fy", normed=isFY&&ANALYTIC_NORM;
+    head='<th class="frz">סעיף</th>'+
+      '<th class="n">'+(isFY?(normed?"6ח מנורמל":"מצטבר 6ח"):Q2L)+'</th>'+
+      '<th class="n">'+(ANALYTIC_CMP==="q1"?Q1L:ANALYTIC_CMP==="q2p"?Q2PL:FYPL)+'</th>'+
+      '<th class="n">שינוי</th>';
     PL.forEach(r=>{
-      const [n,h26,h25,q2_26,q2_25,y25]=r;
-      const q1_26=h26-q2_26;
-      const norm=h26*2;                      // נרמול גס · שני רבעונים
-      const t2=testCell(q2_26,q1_26), t3=testCell(q2_26,q2_25), t1=testCell(norm,y25);
-      if(t2.ex)exceptions.push({n,test:"מבחן 2 · מול רבעון קודם",d:t2.d,ex:t2.ex});
-      if(t3.ex)exceptions.push({n,test:"מבחן 3 · מול מקביל אשתקד",d:t3.d,ex:t3.ex});
-      if(t1.ex)exceptions.push({n,test:"מבחן 1 · נרמול",d:t1.d,ex:"one"});
-      html+='<tr'+(SUMROWS.has(n)?' class="sum"':"")+'><td class="frz">'+n+'</td>'+
-        '<td class="n num">'+fmt(q2_26)+'</td><td class="n num">'+fmt(q1_26)+'</td>'+
-        '<td class="n num">'+t2.h+'</td>'+
-        '<td class="n num">'+fmt(q2_25)+'</td><td class="n num">'+t3.h+'</td>'+
-        '<td class="n num na">'+fmt(norm)+'</td><td class="n num">'+fmt(y25)+'</td>'+
-        '<td class="n num">'+t1.h.replace(/class="(pos|negc)"/,'class="warnc"')+'</td></tr>';
+      const [n,h1,h1p,q2,q2p,fy]=r;
+      const q1=h1-q2, norm=h1*2;
+      /* שלושת המבחנים רצים תמיד · טבלת החריגות נבנית מכולם */
+      const t2=testCell(q2,q1), t3=testCell(q2,q2p), t1=testCell(norm,fy);
+      if(t2.ex)exceptions.push({n,test:"מבחן 2 · מול "+Q1L,d:t2.d,ex:t2.ex});
+      if(t3.ex)exceptions.push({n,test:"מבחן 3 · מול "+Q2PL,d:t3.d,ex:t3.ex});
+      if(t1.ex)exceptions.push({n,test:"מבחן 1 · נרמול מול "+FYPL,d:t1.d,ex:"one"});
+      const cur=isFY?(normed?norm:h1):q2;
+      const base=ANALYTIC_CMP==="q1"?q1:ANALYTIC_CMP==="q2p"?q2p:fy;
+      const t=isFY?(normed?t1:testCell(h1,fy)):ANALYTIC_CMP==="q1"?t2:t3;
+      rows+='<tr'+(SUMROWS.has(n)?' class="sum"':"")+'><td class="frz">'+n+'</td>'+
+        '<td class="n num'+(isFY&&normed?" na":"")+'">'+fmt(cur)+'</td>'+
+        '<td class="n num">'+fmt(base)+'</td>'+
+        '<td class="n num">'+(isFY?t.h.replace(/class="(pos|negc)"/,'class="warnc"'):t.h)+'</td></tr>';
     });
-    html+='</tbody></table></div>'+
-      '<div class="src">רבעון בודד נגזר בחיסור: Q1/2026 = מצטבר 6ח פחות Q2 · מבחן 1 בענבר בלבד, הנרמול גס ומניח פיזור אחיד · '+
-      'מקדם עונתיות דורש את ארבעת רבעוני 2025 בנפרד</div>';
+    note=ANALYTIC_CMP==="q1"
+      ? "הרבעון הבודד נגזר בחיסור: "+Q1L+" = מצטבר 6ח פחות "+Q2L
+      : ANALYTIC_CMP==="q2p"
+      ? "רבעון מול הרבעון המקביל אשתקד · שניהם רבעונים בדידים מה-XBRL"
+      : normed
+      ? "מצטבר 6ח מוכפל בשניים · נרמול גס שמניח פיזור אחיד. בנדל״ן זו הנחה גרועה, "+
+        "ולכן המבחן בענבר בלבד ולעולם לא אדום. מקדם עונתיות דורש את ארבעת רבעוני "+FYPL+" בנפרד"
+      : "מצטבר חצי שנה מול שנה מלאה · אינו בר השוואה ישירה. הדלק את הנרמול כדי להשוות";
+    note+=" · שלושת המבחנים רצים תמיד, הבורר קובע איזה מוצג";
   }
-  el.innerHTML=html;
+
+  el.innerHTML='<div class="scroller"><table><thead><tr>'+head+'</tr></thead><tbody>'+
+    rows+'</tbody></table></div><div class="src">'+note+'</div>';
 
   /* טבלת חריגות · מיון לפי סכום */
   exceptions.sort((a,b)=>b.d-a.d);
   document.getElementById("analyticEx").innerHTML=exceptions.length?
-    '<table><thead><tr><th>סעיף</th><th>מבחן</th><th class="n">סכום החריגה</th><th class="n">חומרה</th><th>הסבר</th></tr></thead><tbody>'+
+    '<div class="scroller"><table><thead><tr><th>סעיף</th><th>מבחן</th><th class="n">סכום החריגה</th>'+
+    '<th class="n">חומרה</th><th>הסבר</th></tr></thead><tbody>'+
     exceptions.slice(0,14).map(e=>'<tr><td>'+e.n+'</td><td style="font-size:11.5px;color:var(--t2)">'+e.test+'</td>'+
       '<td class="n num '+(e.ex==="sign"||e.ex==="both"?"negc":"warnc")+'">'+fmt(e.d)+'</td>'+
       '<td class="n"><span class="pill '+(e.ex==="sign"?"bad":e.ex==="both"?"bad":"wrn")+'">'+
       (e.ex==="sign"?"מעבר סימן":e.ex==="both"?"חריגה":"לבדיקה")+'</span></td>'+
-      '<td><span class="add">הוסף הסבר</span></td></tr>').join("")+'</tbody></table>'+
-    '<div class="src">מיון לפי סכום, יורד · סף כפול: 10% וגם 375 אלפי ש״ח · מעבר סימן נדלק תמיד</div>'
+      '<td><span class="add">הוסף הסבר</span></td></tr>').join("")+'</tbody></table></div>'+
+    '<div class="src">מיון לפי סכום, יורד · סף כפול: '+pctS(EXC.pct,0)+' וגם '+fmt(EXC.abs)+
+    ' אלפי ש״ח · מעבר סימן נדלק תמיד · נבנה מכל המבחנים, לא רק מהמוצג</div>'
     :'<p class="na" style="padding:16px">לא נמצאו חריגות מעל הספים.</p>';
 }
 
@@ -2191,8 +2281,20 @@ function renderSub(tab){
   });
   show(tab,0);
 }
-function goTo(tab){tabs.forEach(x=>x.classList.toggle("on",x.dataset.t===tab));renderSub(tab);}
+function goTo(tab){
+  tabs.forEach(x=>x.classList.toggle("on",x.dataset.t===tab));
+  const cb=document.getElementById("ctrlBtn");
+  if(cb)cb.classList.toggle("on",tab==="ctrl");
+  renderSub(tab);
+}
 tabs.forEach(t=>t.addEventListener("click",()=>goTo(t.dataset.t)));
+/* הבקרה נגישה מהאייקון בבאנר ומ-#ctrl בכתובת · אינה לשונית תוכן */
+const ctrlBtn=document.getElementById("ctrlBtn");
+if(ctrlBtn){
+  const open=()=>goTo(CURRENT.tab==="ctrl"?"strength":"ctrl");
+  ctrlBtn.addEventListener("click",open);
+  ctrlBtn.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();open();}});
+}
 
 /* ═══════════ חיווט "למעקב" · מאזין אחד לכל המסכים ═══════════
    כל לחיצה קוראת את ההקשר מה-DOM שסביבה — כותרת, חומרה וסכום —
@@ -2224,7 +2326,7 @@ document.addEventListener("click",e=>{
 
 renderPeriod();
 renderAll(false);
-goTo("strength");
+goTo(location.hash==="#ctrl"?"ctrl":"strength");
 </script>
 <div class="disclaimer">
   <b>ניתוח עצמאי.</b>
