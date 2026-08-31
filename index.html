@@ -48,6 +48,7 @@ body.stress .stressbar{display:block;animation:flash .6s var(--ease)}
   -webkit-backdrop-filter:blur(14px) saturate(150%);backdrop-filter:blur(14px) saturate(150%);
   border-bottom:1px solid rgba(15,169,160,.55);
   padding:15px 22px;display:flex;align-items:center;gap:15px;flex-wrap:wrap;transition:background .35s}
+.brand{min-width:0}
 .banner h1{font-size:19px;font-weight:600;letter-spacing:.01em;line-height:1.25}
 .banner .tagline{font-size:10.5px;color:var(--t2);letter-spacing:.09em;margin-top:2px}
 .sp{flex:1}
@@ -290,26 +291,60 @@ svg{display:block;overflow:visible}
   .simgrid{grid-template-columns:1fr}}
 @media(max-width:640px){.grid3,.grid4{grid-template-columns:1fr}.ttip::after{width:210px}
   .card{padding:17px 18px}.banner{padding:12px 15px}}
+/* ═══ פס בסיס ההשוואה ═══
+   כל שינוי שמוצג במסך נמדד מול משהו. השורה הזו אומרת מול מה, לכל מסך
+   בנפרד, כי כל מסך משווה לבסיס אחר. בלעדיה "ירד 58%" הוא מספר בלי מובן. */
+.cmpbar{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;
+  padding:9px 13px;margin:10px 0 4px;border-radius:8px;
+  background:rgba(5,10,13,.45);box-shadow:0 0 0 1px var(--hair);
+  font-size:11.5px;color:var(--t2);line-height:1.6}
+.cmpbar .k{font-size:9.5px;letter-spacing:.1em;color:var(--t3);flex:none}
+.cmpbar b{color:var(--t1);font-weight:500}
+.cmpbar .vs{color:var(--accent);padding:0 2px}
+
+/* ═══ נייד ═══
+   הבאנר הדביק בלע כמעט מחצית מהמסך בנייד. הוא נגלל החוצה, ובמקומו
+   נשארת הניווט — מה שבאמת צריך להיות בהישג יד בזמן תפעול. */
+@media(max-width:820px){
+  /* הכותרת והפקדים חולקים שורה אחת · אחרת כל אחד תופס שורה משלו */
+  .banner{position:static;padding:11px 14px;gap:10px;flex-wrap:nowrap;align-items:flex-start}
+  .banner h1{font-size:16px}
+  .banner .tagline{font-size:10px;letter-spacing:.04em}
+  .brand{flex:1}
+  .banner .sp{display:none}
+  .tog{padding-top:3px}
+  .tog .txt{display:none}
+  /* חמש לשוניות לא נכנסות לרוחב · גלילה אופקית עדיפה על שבירה לשתי שורות */
+  .nav{position:sticky;top:0;z-index:38;background:var(--void);
+    flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;
+    padding:8px 0;margin-bottom:0;box-shadow:0 6px 14px -8px rgba(0,0,0,.9)}
+  .nav::-webkit-scrollbar{display:none}
+  .tab{flex:none;padding:9px 14px;font-size:13px}
+  .sub{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;gap:14px}
+  .sub::-webkit-scrollbar{display:none}
+  .sub span{flex:none}
+  .cmpbar{margin-top:8px}
+  body{padding-bottom:96px}
+  .disclaimer{padding:7px 14px;font-size:9.5px;gap:6px}
+}
+@media(max-width:520px){
+  .banner .tagline{line-height:1.5}
+  .disclaimer span:not(:first-of-type){display:none}
+}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
 <body>
 
 <div class="banner">
-  <div>
+  <div class="brand">
     <h1>קבוצת מיי טאון בע״מ</h1>
-    <div class="tagline">מרכז בקרה · באלפי ש״ח</div>
-  </div>
-  <div class="live manual" id="liveStatus" title="מקור הנתונים">
-    <span class="pip"></span><span id="liveText">—</span>
+    <div class="tagline" id="periodLine">—</div>
   </div>
   <div class="sp"></div>
   <div class="tog" id="stressToggle" role="switch" aria-checked="false" tabindex="0">
     <span class="sw"></span><span class="txt">מבחן קיצון · 15%−</span>
   </div>
-  <div class="dd">30 ביוני 2026</div>
-  <div class="dd">מאוחד</div>
-  <div class="chip">רבעוני · סקירה</div>
   <div class="ico" id="zenBtn" role="button" tabindex="0" title="מסך מלא · Zen" aria-label="מסך מלא">
     <svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
   </div>
@@ -325,6 +360,7 @@ svg{display:block;overflow:visible}
   </div>
 
   <div class="sub" id="subBar"></div>
+  <div class="cmpbar" id="cmpBar"></div>
   <div class="stressbar" id="stressBar"></div>
 
   <!-- ═══ COVENANTS ═══ -->
@@ -645,6 +681,9 @@ try{
 const [SOURCES,SRCSTATUS,RECON]=await Promise.all(
   ["data/sources.json","data/sources-status.json","data/reconcile.json"].map(loadOptional));
 
+/* תאריכים מוצגים בפורמט מקומי · ISO נשאר בקבצים */
+const dmy=iso=>iso?iso.split("-").reverse().join("."):"—";
+
 /* ── נגזר מהנתונים · אין כאן ערכים, רק מיפוי ── */
 const SOURCE={
   mode:META.source.mode,
@@ -659,8 +698,8 @@ const EQUITY_TREND=META.equityTrend.map(p=>({label:p.label,v:p.value}));
 const WC=META.workingCapital.map(p=>({l:p.label,v:p.value}));
 const WC_FIRST=WC[0], WC_LAST=WC[WC.length-1];
 const SCOPE=META.scope;
-const LAYER={A:{d:META.layers.A.date,src:META.layers.A.source},
-             B:{d:META.layers.B.date,src:META.layers.B.source}};
+const LAYER={A:{d:dmy(META.layers.A.date),src:META.layers.A.source},
+             B:{d:dmy(META.layers.B.date),src:META.layers.B.source}};
 const PROJECTS=PROJ.inExecution;
 const TOTALS=PROJ.totals;
 const EVENTS=EVSRC.events.map(e=>({d:e.date,t:e.title,s:e.detail,k:e.kind}));
@@ -890,7 +929,7 @@ function bulletCard(o){
     '<div class="marg"><span class="lbl">מרווח</span>'+
       '<span class="v num '+(breach?"negc":near?"warnc":"pos")+'">'+(margin>=0?"+":"−")+o.fmt(Math.abs(margin))+'</span>'+
       '<span class="lbl">'+(breach?"חריגה מהאמה":o.note)+'</span>'+
-      (changed?'<span class="delta">מדווח '+o.fmt(o.base)+'</span>':"")+'</div>'+
+      (changed?'<span class="delta">המדווח ל־'+D_CUR+': '+o.fmt(o.base)+'</span>':"")+'</div>'+
     '<div class="src">'+o.src+'</div></div>';
 }
 
@@ -935,7 +974,7 @@ function renderCovenants(animate){
   document.getElementById("sparkEquity").innerHTML=sparkline(EQUITY_TREND,320,100);
   const burn=6400;
   document.getElementById("equityNote").innerHTML=
-    "ההון ירד מ־"+fmt(40783)+" ל־"+fmt(37570)+" בחצי שנה, שחיקה של "+fmt(3213)+
+    "ההון ירד מ־"+fmt(40783)+" ב־"+D_PYE+" ל־"+fmt(37570)+" ב־"+D_CUR+", שחיקה של "+fmt(3213)+
     ". בקצב שנתי של כ־"+fmt(burn)+", המרווח הנוכחי מסף ההון המתואם מספיק לכ־"+
     ((c.adjEquity-THRESH.equity)/burn).toFixed(1)+" שנים.";
   document.getElementById("liqChart").innerHTML=barChart([
@@ -956,8 +995,10 @@ function renderCovenants(animate){
       "פגיעה מיידית בהון "+fmt(s.imm)+" · פגיעה עתידית נוספת "+fmt(s.fut)+" · ירידת ערך מלאי מתחילה רק מקיצוץ של "+pctS(IMPAIR_AT)]);}
   if(SIM.div>0&&BASE.accumDeficit<0)A.push(["hi","חלוקה אינה עומדת במבחן הרווח",
     "לחברה יתרת הפסד של "+fmt(BASE.accumDeficit)+" · חלוקה תחייב אישור בית משפט לפי סעיף 303 לחוק החברות"]);
-  A.push(["hi","שחיקת הון וגידול ביתרת ההפסד","הון "+fmt(40783)+" ← "+fmt(37570)+" · יתרת הפסד "+fmt(-14467)+" ← "+fmt(-20012)]);
-  A.push(["hi","קפיצה באשראי שוטף",fmt(BASE.bankCreditPrior)+" ← "+fmt(BASE.bankCredit)+" · פי "+(BASE.bankCredit/BASE.bankCreditPrior).toFixed(1)+" בחצי שנה"]);
+  A.push(["hi","שחיקת הון וגידול ביתרת ההפסד",D_PYE+": הון "+fmt(40783)+" ויתרת הפסד "+fmt(-14467)+
+    " ← "+D_CUR+": הון "+fmt(37570)+" ויתרת הפסד "+fmt(-20012)]);
+  A.push(["hi","קפיצה באשראי שוטף",D_PYE+": "+fmt(BASE.bankCreditPrior)+" ← "+D_CUR+": "+fmt(BASE.bankCredit)+
+    " · פי "+(BASE.bankCredit/BASE.bankCreditPrior).toFixed(1)]);
   A.push([c.ratio-THRESH.ratio<0.02?"hi":"md","יחס ההון הוא הקובננט הצר","מרווח "+((c.ratio-THRESH.ratio)*100).toFixed(1)+" נקודות מהסף"]);
   A.push(["md","תזרים שלילי מתמשך בסולו","מצוין בדוחות · הון חוזר חיובי "+fmt(BASE.workingCapital)]);
   if(!STRESS&&c.adjEquity>=THRESH.equity&&c.ratio>=THRESH.ratio&&c.debtCol<=THRESH.debtCol&&!SIM.div&&!SIM.wd&&!SIM.debt)
@@ -1057,7 +1098,7 @@ function renderProjects(animate){
   document.getElementById("gapChart").innerHTML=gapChart(330);
   const worst=rows.filter(r=>r.gap!==null&&r.gap>0).length;
   document.getElementById("gapNote").innerHTML=worst+" פרויקטים בפער שלילי מסבירים היטב את הקפיצה באשראי השוטף מ־"+
-    fmt(BASE.bankCreditPrior)+" ל־"+fmt(BASE.bankCredit)+"."+
+    fmt(BASE.bankCreditPrior)+" ב־"+D_PYE+" ל־"+fmt(BASE.bankCredit)+" ב־"+D_CUR+"."+
     (STRESS?" תחת קיצון, ערך המכירות שנחתמו נשחק ב־15% והפערים מתרחבים בהתאם.":"");
   document.getElementById("projAlerts").innerHTML=[
     ["hi","\u05e1\u05ea\u05d9\u05e8\u05d4 \u05d1\u05d7\u05dc\u05e7 \u05d4\u05d7\u05d1\u05e8\u05d4 \u00b7 \u05e7\u05e8\u05d9\u05d9\u05ea \u05de\u05dc\u05d0\u05db\u05d9",
@@ -1222,26 +1263,6 @@ function relTime(from){
   const mo=Math.floor(d/30.44); if(mo<12)return "לפני "+mo+" חודשים";
   return "לפני "+(d/365.25).toFixed(1)+" שנים";
 }
-/* החיווי אומר את האמת על שתי שכבות שונות: הדוחות הכספיים מוזנים ידנית,
-   ומקורות השוק והעיתונות נשלפים אוטומטית. ערבוב השתיים לכדי "מקור חי"
-   אחד היה מסתיר איזה חלק מהמסך באמת טרי. */
-function renderLive(){
-  const el=document.getElementById("liveStatus"), tx=document.getElementById("liveText");
-  const res=(SRCSTATUS&&SRCSTATUS.results)||[];
-  const live=res.filter(r=>r.ok).length;
-  const ranAt=SRCSTATUS&&SRCSTATUS.ranAt?new Date(SRCSTATUS.ranAt):null;
-  const base="<b>"+SOURCE.label+"</b> <span class='sep'>·</span> דוחות בהזנה ידנית"+
-    " <span class='sep'>·</span> נכון ל־"+relTime(SOURCE.asOf);
-  if(!res.length){
-    el.className="live manual";
-    tx.innerHTML=base+" <span class='sep'>·</span> טרם רצה שליפה אוטומטית";
-    return;
-  }
-  el.className=live===res.length?"live ok":live?"live manual":"live bad";
-  tx.innerHTML=base+" <span class='sep'>·</span> מקורות אוטומטיים "+live+" מתוך "+res.length+
-    (ranAt?" <span class='sep'>·</span> נשלפו "+relTime(ranAt):"");
-}
-
 /* ═══════════ Zen ═══════════ */
 const zen=document.getElementById("zenBtn");
 function toggleZen(){
@@ -1434,6 +1455,57 @@ function parseNum(s){
   return t?Number(t):null;
 }
 
+/* ═══════════ תקופה ובסיס השוואה ═══════════
+   שני דברים שהמשתמש חייב לדעת בכל רגע: לאיזו תקופה הנתונים, ומול מה
+   נמדד כל שינוי. מצב השליפה האוטומטית אינו אחד מהם — הוא שאלה תפעולית
+   ומקומו בלשונית הבקרה, לא מעל כל מסך. */
+const Q2L=PLCOL.q2, Q1L=Q2L.replace(/^Q2/,"Q1"), Q2PL=PLCOL.q2Prior, FYPL=PLCOL.fyPrior;
+const D_CUR=BSCOL.current, D_PYE=BSCOL.priorYearEnd, D_PYS=BSCOL.priorYearSame;
+const heQ=q=>"רבעון "+q.replace(/^Q/,"");
+
+function renderPeriod(){
+  const el=document.getElementById("periodLine");
+  if(!el)return;
+  el.innerHTML="מרכז בקרה <span class='sep'>·</span> "+heQ(Q2L)+" ליום <b>"+D_CUR+
+    "</b> <span class='sep'>·</span> מאוחד <span class='sep'>·</span> באלפי ש״ח";
+}
+
+/* לכל מסך הבסיס שלו. אין בסיס אחד גלובלי, ולכן אין גם משפט אחד גלובלי. */
+const LAYERS="שכבה A · גילוי רבעוני <b>"+LAYER.A.d+"</b> <span class='vs'>·</span> "+
+             "שכבה B · מצגת משקיעים <b>"+LAYER.B.d+"</b> · אין לערבב";
+const CMP={
+  "home-0":["בסיס השוואה","<b>"+Q2L+"</b> <span class='vs'>מול</span> <b>"+Q1L+
+    "</b> <span class='vs'>ומול</span> <b>"+Q2PL+"</b> <span class='vs'>·</span> יתרות ליום <b>"+D_CUR+"</b>"],
+  "home-1":["בסיס השוואה","יתרות ליום <b>"+D_CUR+"</b> <span class='vs'>·</span> ספי הקובננטים משטר הנאמנות "+
+    "<span class='vs'>·</span> ציטוט השוק לפי השליפה האחרונה"],
+  "audit-0":["בסיס השוואה","מאזן: <b>"+D_CUR+"</b> <span class='vs'>מול</span> <b>"+D_PYE+
+    "</b> <span class='vs'>ומול</span> <b>"+D_PYS+"</b> <span class='vs'>|</span> "+
+    "רווח והפסד: <b>"+Q2L+"</b> <span class='vs'>מול</span> <b>"+Q1L+
+    "</b> <span class='vs'>ומול</span> <b>"+Q2PL+"</b>"],
+  "audit-1":["בסיס השוואה","יתרות <b>"+D_CUR+"</b> <span class='vs'>מול</span> <b>"+D_PYE+"</b>"],
+  "audit-2":["תקופה","אירועים מהותיים עד <b>"+D_CUR+"</b> ולאחריו <span class='vs'>·</span> הכתבות ממקור חיצוני ואינן דיווח לרשות"],
+  "audit-3":["תקופה","פריטים שנאספו לתקופת <b>"+Q2L+"</b> <span class='vs'>·</span> נשמרים בדפדפן הזה"],
+  "strength-0":["בסיס השוואה","יתרות ליום <b>"+D_CUR+"</b> <span class='vs'>מול</span> הספים בשטר הנאמנות"+
+    " <span class='vs'>·</span> תקופה קודמת <b>"+(PRIOR_COV?dmy(PRIOR_COV.date):D_PYE)+"</b>"],
+  "strength-1":["בסיס השוואה","יתרות ליום <b>"+D_CUR+"</b> <span class='vs'>·</span> מגמת ההון החוזר מ־<b>"+
+    WC_FIRST.l+"</b> <span class='vs'>·</span> לוח האג״ח נגזר מתנאי השטר"],
+  "strength-2":["בסיס השוואה","יתרות ליום <b>"+D_CUR+"</b>"],
+  "strength-3":["בסיס השוואה","מצב ליום <b>"+D_CUR+"</b> <span class='vs'>·</span> נורות תקנה 10(ב)(14)"],
+  "proj-0":["מקורות",LAYERS],
+  "proj-1":["מקורות",LAYERS],
+  "proj-2":["מקורות","מצגת משקיעים <b>"+LAYER.B.d+"</b>"],
+  "proj-3":["מקורות","גילוי רבעוני <b>"+LAYER.A.d+"</b> <span class='vs'>·</span> מצגת <b>"+LAYER.B.d+"</b>"],
+  "ctrl-0":["מצב","הריצה האוטומטית האחרונה <span class='vs'>·</span> ההתאמה נבדקת מול ה-XBRL ליום <b>"+D_CUR+"</b>"]
+};
+function renderCmp(tab,idx){
+  const bar=document.getElementById("cmpBar");
+  if(!bar)return;
+  const c=CMP[tab+"-"+idx];
+  if(!c){bar.style.display="none";return;}
+  bar.style.display="flex";
+  bar.innerHTML='<span class="k">'+c[0]+'</span><span>'+c[1]+'</span>';
+}
+
 /* ═══════════ עזרי מבחן ═══════════ */
 /* סף כפול · שני הספים נחצו → אדום · אחד מהם → ענבר · אף אחד → לא חריגה.
    מעבר סימן מטופל ב-testCell ונדלק אדום בלי קשר לספים. */
@@ -1475,13 +1547,14 @@ function renderHome(){
       '<div class="mini">סף 25,000 · מרווח <b class="pos num">+'+fmt(c.adjEquity-25000)+'</b></div></div>'+
     '<div class="card grad st-neg"><div class="lbl">הפסד נקי · רבעון 2/2026</div>'+
       '<div class="big num negc">(2,311)</div>'+
-      '<div class="mini">רבעון קודם (3,260) · שיפור <span class="num pos">949</span></div></div>'+
+      '<div class="mini">מול '+Q1L+' (3,260) · שיפור <span class="num pos">949</span></div></div>'+
     '<div class="card grad st-neg"><div class="lbl">ריבית אג״ח שנתית</div>'+
       '<div class="big num negc" data-count="'+(BOND.balance*BOND.coupon)+'">'+fmt(BOND.balance*BOND.coupon)+'</div>'+
-      '<div class="mini">7.5% לא צמודה · פי 4.1 מהרווח התפעולי הרבעוני</div></div>';
+      '<div class="mini">7.5% לא צמודה · פי 4.1 מהרווח התפעולי ב־'+Q2L+'</div></div>';
 
   el("homeQuarter").innerHTML='<table><thead><tr><th>סעיף</th><th class="n">Q2/2026</th>'+
-    '<th class="n">Q1/2026</th><th class="n">שינוי</th><th class="n">Q2/2025</th><th class="n">מול אשתקד</th></tr></thead><tbody>'+
+    '<th class="n">'+Q1L+'</th><th class="n">שינוי מול '+Q1L+'</th>'+
+    '<th class="n">'+Q2PL+'</th><th class="n">שינוי מול '+Q2PL+'</th></tr></thead><tbody>'+
     [["הכנסות",32899,27081,11498],["רווח גולמי",7421,5911,-613],
      ["רווח תפעולי",239,-762,-5872],["הפסד נקי",-2311,-3260,-7413]].map(r=>{
       const t2=testCell(r[1],r[2]),t3=testCell(r[1],r[3]);
@@ -1493,9 +1566,9 @@ function renderHome(){
 
   el("homeAlerts").innerHTML=[
     ["hi","ריבית האג״ח פי 4.1 מהרווח התפעולי","3,914 לשנה מול רווח תפעולי רבעוני של 239"],
-    ["hi","קפיצה באשראי שוטף · פי 2.5","30,198 ← 75,100 בחצי שנה"],
+    ["hi","קפיצה באשראי שוטף · פי 2.5",D_PYE+": 30,198 ← "+D_CUR+": 75,100"],
     ["hi","ז׳בוטינסקי 105 · בונים בלי למכור","ביצוע 52.7% מול שיווק 8%"],
-    ["md","ההון החוזר נשחק ב־58%","86,300 ← 36,357 בשנה וחצי"],
+    ["md","ההון החוזר נשחק ב־58%",WC_FIRST.l+": "+fmt(WC_FIRST.v)+" ← "+WC_LAST.l+": "+fmt(WC_LAST.v)],
     ["ok","עמידה בשלושת הקובננטים","ללא חריגה למועד הדוח"]
   ].map(a=>'<div class="al"><span class="dot '+a[0]+'"></span><span class="tx"><span class="tt">'+a[1]+
     '</span><span class="ds">'+a[2]+'</span></span><span class="add">למעקב</span></div>').join("");
@@ -1541,8 +1614,8 @@ function renderAnalytic(){
 
   if(ANALYTIC_VIEW==="bs"){
     html='<div class="scroller"><table><thead><tr><th class="frz">סעיף</th>'+
-      '<th class="n">30.6.2026</th><th class="n">31.12.2025</th><th class="n">שינוי מצטבר</th>'+
-      '<th class="n">30.6.2025</th><th class="n">מול אשתקד</th></tr></thead><tbody>';
+      '<th class="n">'+D_CUR+'</th><th class="n">'+D_PYE+'</th><th class="n">שינוי מול '+D_PYE+'</th>'+
+      '<th class="n">'+D_PYS+'</th><th class="n">שינוי מול '+D_PYS+'</th></tr></thead><tbody>';
     BS.forEach(r=>{
       const [n,cur,ly,fy,kind]=r;
       const t1=testCell(cur,fy),t2=testCell(cur,ly);
@@ -1557,9 +1630,9 @@ function renderAnalytic(){
       '<div class="src">שני מבחנים · יתרה מול יתרה, ללא עיבוד · המבחן השוטף מול 31.3.2026 חסום: אין פירוט יתרות לאותו מועד</div>';
   }else{
     html='<div class="scroller"><table><thead><tr><th class="frz">סעיף</th>'+
-      '<th class="n">Q2/2026</th><th class="n">Q1/2026</th><th class="n">מבחן 2</th>'+
-      '<th class="n">Q2/2025</th><th class="n">מבחן 3</th><th class="n">מנורמל 2026</th>'+
-      '<th class="n">2025 בפועל</th><th class="n">מבחן 1</th></tr></thead><tbody>';
+      '<th class="n">'+Q2L+'</th><th class="n">'+Q1L+'</th><th class="n">מבחן 2 · מול '+Q1L+'</th>'+
+      '<th class="n">'+Q2PL+'</th><th class="n">מבחן 3 · מול '+Q2PL+'</th><th class="n">מנורמל</th>'+
+      '<th class="n">'+FYPL+' בפועל</th><th class="n">מבחן 1 · מול '+FYPL+'</th></tr></thead><tbody>';
     PL.forEach(r=>{
       const [n,h26,h25,q2_26,q2_25,y25]=r;
       const q1_26=h26-q2_26;
@@ -1681,8 +1754,6 @@ function renderFollow(){
 }
 
 /* ═══════════ 3.2 · נזילות ═══════════ */
-const dmy=iso=>iso.split("-").reverse().join(".");
-
 function renderLiquidity(){
   const el=document.getElementById("liqBody");
   if(!el)return;
@@ -1691,7 +1762,7 @@ function renderLiquidity(){
   const due12=NEXT12.principal+NEXT12.interest+BASE.bankCredit+lease12;
   document.getElementById("liqKpi").innerHTML=
     '<div class="card grad st-warn"><div class="lbl">הון חוזר</div><div class="mid num warnc">'+fmt(WC_LAST.v)+'</div>'+
-      '<div class="mini">נשחק מ־'+fmt(WC_FIRST.v)+' · ירידה של '+
+      '<div class="mini">מ־'+fmt(WC_FIRST.v)+' ב־'+WC_FIRST.l+' · ירידה של '+
       Math.round((1-WC_LAST.v/WC_FIRST.v)*100)+'%</div></div>'+
     '<div class="card grad st-neg"><div class="lbl">מזומן זמין לשירות חוב</div><div class="mid num negc">'+fmt(avail)+'</div>'+
       '<div class="mini">'+fmt(restricted)+' נוספים מוגבלים ואינם זמינים</div></div>'+
@@ -1784,7 +1855,7 @@ function renderWarnings(){
   const el=document.getElementById("warnBody");
   if(!el)return;
   el.innerHTML=[
-    ["ok","גירעון בהון החוזר","כבויה","הון חוזר חיובי 36,357 · אך נשחק מ־86,300 בשנה וחצי"],
+    ["ok","גירעון בהון החוזר","כבויה","הון חוזר חיובי "+fmt(WC_LAST.v)+" ב־"+WC_LAST.l+" · נשחק מ־"+fmt(WC_FIRST.v)+" ב־"+WC_FIRST.l],
     ["ok","הון עצמי שלילי","כבויה","הון עצמי חיובי 37,570"],
     ["hi","תזרים שלילי מתמשך מפעילות שוטפת","דולקת","מצוין בדוחות ברמת הסולו · מחייבת גילוי מורחב ותזרים חזוי"],
     ["ok","הערת עסק חי","כבויה","סקירת רו״ח ללא הסתייגות"]
@@ -1937,8 +2008,7 @@ function renderBankCov(){
    מול ה-XBRL. אין כאן נתון על החברה — יש כאן נתון על אמינות הנתונים. */
 function relDay(iso){
   if(!iso)return "מעולם";
-  const d=Math.floor((Date.now()-new Date(iso).getTime())/86400000);
-  return d<1?"היום":d===1?"אתמול":"לפני "+d+" ימים";
+  return relTime(new Date(iso));
 }
 function renderControl(){
   const el=document.getElementById("ctrlSources");
@@ -2056,6 +2126,7 @@ function screenName(){
 }
 function show(tab,idx){
   CURRENT={tab,idx};
+  renderCmp(tab,idx);
   screens.forEach(s=>s.classList.add("hide"));
   const built=document.getElementById("scr-"+tab+"-"+idx);
   if(built){
@@ -2116,8 +2187,7 @@ document.addEventListener("click",e=>{
   }
 });
 
-renderLive();
-setInterval(renderLive,60000);
+renderPeriod();
 renderAll(false);
 goTo("strength");
 </script>
