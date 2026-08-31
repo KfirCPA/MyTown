@@ -29,6 +29,12 @@ jobs:
         run: node scripts/fetch-sources.mjs
         continue-on-error: true
 
+      # גישוש · זמני. מדפיס מה באמת חוזר מכל כתובת מועמדת, כדי לכתוב
+      # פרסר מול המציאות. יוסר ברגע שהאדפטרים מתייצבים.
+      - name: גישוש מקורות
+        run: node scripts/probe-sources.mjs
+        continue-on-error: true
+
       # פרסור ה-XBRL · שער הוולידציה. דוח שנכשל מסומן ואינו נבלע בשקט.
       - name: פרסור דוחות XBRL
         run: node scripts/parse-xbrl.mjs
