@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-31T06:20:23.230Z",
+  "updatedAt": "2026-08-31T06:24:51.042Z",
   "company": {
     "name": "קבוצת מיי טאון בע\"מ",
     "tase": 2449,
@@ -24,11 +24,20 @@
     },
     "bond-quote": {
       "title": "ציטוט אג״ח סדרה א׳",
-      "data": null,
-      "fetchedAt": null,
-      "stale": true,
-      "via": null,
-      "error": "mayaapi · שער נייר: HTTP שגוי | ביזפורטל · פרסור טקסט: הפרסור לא זיהה מבנה"
+      "data": {
+        "price": 100.77,
+        "yieldGross": 9.2,
+        "yieldNet": 7.7,
+        "duration": 1.59,
+        "adjustedGross": 103.12,
+        "adjustedNet": 102.66,
+        "yearsToMaturity": 1.73,
+        "govSpread": 5.87
+      },
+      "fetchedAt": "2026-08-31T06:24:51.042Z",
+      "stale": false,
+      "via": "ביזפורטל · טבלת ביצועים",
+      "error": null
     },
     "news": {
       "title": "כתבות שפורסמו",
@@ -130,7 +139,7 @@
           "source": "חדשות אפס שמונה"
         }
       ],
-      "fetchedAt": "2026-08-31T06:20:23.230Z",
+      "fetchedAt": "2026-08-31T06:24:51.042Z",
       "stale": false,
       "via": "Google News RSS",
       "error": null

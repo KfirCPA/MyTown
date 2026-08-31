@@ -1,11 +1,12 @@
 {
-  "ranAt": "2026-08-31T06:20:23.230Z",
+  "ranAt": "2026-08-31T06:24:51.042Z",
   "env": "GitHub Actions",
   "results": [
     {
       "id": "maya-reports",
       "title": "דיווחי מאיה",
       "why": "רשימת הדיווחים המיידיים והתקופתיים · מזהה דוח חדש שטרם נטען",
+      "blockedOnCI": "מאיה חוסמת ברמת WAF כתובות של מרכזי נתונים ומחזירה security violation. עובד מהרצה מקומית.",
       "ok": false,
       "via": null,
       "count": 0,
@@ -14,14 +15,14 @@
           "candidate": "mayaapi · company/reports",
           "url": "https://mayaapi.tase.co.il/api/company/reports?companyId=2449&lang=he",
           "status": 403,
-          "ms": 869,
+          "ms": 889,
           "result": "HTTP שגוי"
         },
         {
           "candidate": "mayaapi · v1/company/reports",
           "url": "https://mayaapi.tase.co.il/api/v1/company/reports?companyId=2449&lang=he",
           "status": 403,
-          "ms": 769,
+          "ms": 870,
           "result": "HTTP שגוי"
         }
       ]
@@ -30,6 +31,7 @@
       "id": "magna-reports",
       "title": "דיווחי מגנא",
       "why": "אתר ההפצה של רשות ניירות ערך · המקור הרשמי לקבצי ה-XBRL",
+      "blockedOnCI": "מגנא מחזירה 403 עם דף חסימה זהה לכל נתיב. עובד מהרצה מקומית.",
       "ok": false,
       "via": null,
       "count": 0,
@@ -38,7 +40,7 @@
           "candidate": "magna · חיפוש לפי ח.פ.",
           "url": "https://www.magna.isa.gov.il/api/reports/search?corporateNumber=514444660&pageSize=30",
           "status": 403,
-          "ms": 633,
+          "ms": 571,
           "result": "HTTP שגוי"
         },
         {
@@ -46,7 +48,7 @@
           "url": "https://www.magna.isa.gov.il/?q=514444660",
           "status": 200,
           "bytes": 20822,
-          "ms": 13,
+          "ms": 12,
           "result": "הפרסור לא זיהה מבנה"
         }
       ]
@@ -55,24 +57,18 @@
       "id": "bond-quote",
       "title": "ציטוט אג״ח סדרה א׳",
       "why": "התשואה השוטפת · הפריט האחרון שחסר בלשונית מידע למשקיע",
-      "ok": false,
-      "via": null,
-      "count": 0,
+      "blockedOnCI": null,
+      "ok": true,
+      "via": "ביזפורטל · טבלת ביצועים",
+      "count": 1,
       "attempts": [
         {
-          "candidate": "mayaapi · שער נייר",
-          "url": "https://mayaapi.tase.co.il/api/security/lastsaleeod?securityId=1214626&lang=he",
-          "status": 403,
-          "ms": 759,
-          "result": "HTTP שגוי"
-        },
-        {
-          "candidate": "ביזפורטל · פרסור טקסט",
+          "candidate": "ביזפורטל · טבלת ביצועים",
           "url": "https://www.bizportal.co.il/bonds/quote/generalview/1214626",
           "status": 200,
-          "bytes": 186865,
-          "ms": 525,
-          "result": "הפרסור לא זיהה מבנה"
+          "bytes": 186874,
+          "ms": 365,
+          "result": "הצליח"
         }
       ]
     },
@@ -80,6 +76,7 @@
       "id": "news",
       "title": "כתבות שפורסמו",
       "why": "הקשר חיצוני לדיווחים · מה שהעיתונות מדווחת ואינו בגילוי",
+      "blockedOnCI": null,
       "ok": true,
       "via": "Google News RSS",
       "count": 16,
