@@ -211,6 +211,60 @@ function dateKey(label) {
   return new Date(2000 + y, m - 1, d).getTime();
 }
 
+/* ═══════════ 6 · שעון הדיווח ═══════════
+   הפער האחרון באוטומציה: מגנא חוסמת את הראנר, ולכן קובץ XBRL חדש נטען
+   ידנית. מה שכן אפשר לעשות אוטומטית הוא לדעת מתי מצפים לו ולהתריע.
+   הפיגור נגזר מהיסטוריית ההגשות של החברה עצמה ולא מציטוט תקנה — כך
+   הוא נשאר נכון גם אם החברה מגישה מוקדם או מאחרת בעקביות. */
+function quarterEnd(d){
+  const y=d.getUTCFullYear(), q=Math.floor(d.getUTCMonth()/3);
+  return new Date(Date.UTC(y,q*3+3,0));
+}
+function nextReport(){
+  const withDates=fin.periods.filter((p)=>p.filedAt&&p.balanceDate);
+  if(!withDates.length)return null;
+  const lag=(p)=>Math.round((new Date(p.filedAt)-new Date(p.balanceDate))/86400000);
+  const qLags=withDates.filter((p)=>p.months===3).map(lag).sort((a,b)=>a-b);
+  const aLags=withDates.filter((p)=>p.isAnnual).map(lag).sort((a,b)=>a-b);
+  const latest=withDates.map((p)=>p.balanceDate).sort().pop();
+
+  /* התקופה הבאה אחרי האחרונה שנטענה */
+  const after=new Date(latest+"T00:00:00Z");
+  after.setUTCDate(after.getUTCDate()+1);
+  const nextEnd=quarterEnd(after);
+  const isAnnual=nextEnd.getUTCMonth()===11;
+  const lags=isAnnual?(aLags.length?aLags:qLags):qLags;
+  if(!lags.length)return null;
+  const typical=lags[Math.floor(lags.length/2)], worst=lags[lags.length-1];
+  const iso=(d)=>d.toISOString().slice(0,10);
+  const plus=(d,n)=>{const x=new Date(d);x.setUTCDate(x.getUTCDate()+n);return x;};
+  const today=new Date();
+  const dueBy=plus(nextEnd,worst);
+
+  return {
+    latestLoaded:latest,
+    period:(isAnnual?"שנת ":"רבעון "+(Math.floor(nextEnd.getUTCMonth()/3)+1)+"/")+nextEnd.getUTCFullYear(),
+    balanceDate:iso(nextEnd),
+    expectedFiling:iso(plus(nextEnd,typical)),
+    overdueAfter:iso(dueBy),
+    lagHistory:{quarterly:qLags,annual:aLags,typical,worst},
+    status:today<nextEnd?"התקופה טרם הסתיימה"
+          :today<=dueBy?"בתוך חלון ההגשה"
+          :"מאחר · הדוח היה אמור להיות מוגש",
+    daysLate:today>dueBy?Math.round((today-dueBy)/86400000):0,
+    _note:"הפיגור נגזר מהיסטוריית ההגשות של החברה: "+
+      qLags.join(", ")+" ימים ברבעוניים"+(aLags.length?" ו-"+aLags.join(", ")+" בשנתי":"")+"."
+  };
+}
+const NEXT=nextReport();
+if(NEXT){
+  console.log("\n── שעון הדיווח ──");
+  console.log("  אחרון שנטען  "+dmy(NEXT.latestLoaded));
+  console.log("  הבא בתור     "+NEXT.period+" · מאזן "+dmy(NEXT.balanceDate));
+  console.log("  צפי הגשה     "+dmy(NEXT.expectedFiling)+" · מאחר אחרי "+dmy(NEXT.overdueAfter));
+  console.log("  מצב          "+NEXT.status+(NEXT.daysLate?" · "+NEXT.daysLate+" ימים":""));
+}
+
 /* ═══════════ דוח ═══════════ */
 const counts = findings.reduce((a, f) => ((a[f.level] = (a[f.level] || 0) + 1), a), {});
 const failures = findings.filter((f) => f.level === 'fail');
@@ -237,6 +291,7 @@ const report = {
     validationPassed: p.validation.passed,
   })),
   counts: { ok: counts.ok || 0, fail: counts.fail || 0, skip: counts.skip || 0, warn: counts.warn || 0 },
+  nextReport: NEXT,
   findings,
 };
 await writeFile(REPORT, JSON.stringify(report, null, 2) + '\n', 'utf8');

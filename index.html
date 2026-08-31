@@ -2030,9 +2030,19 @@ function renderControl(){
       '<div class="mini">'+(recon?(recon.fail?recon.fail+" סטיות פתוחות":"אין סטיות")+" · "+recon.skip+" לא ישימות":"טרם רצה התאמה")+'</div></div>'+
     '<div class="card grad"><div class="lbl">תקופות XBRL</div><div class="mid num">'+periods.length+'</div>'+
       '<div class="mini">'+(periods.filter(p=>p.validationPassed).length)+' עברו ולידציה</div></div>'+
-    '<div class="card grad'+(missing.length?" st-warn":"")+'"><div class="lbl">דיווחים בלי XBRL</div>'+
-      '<div class="mid num'+(missing.length?" warnc":"")+'">'+(SOURCES?missing.length:'<span class="na">—</span>')+'</div>'+
-      '<div class="mini">'+(missing.length?"קיימים במגנא, לא נטענו":"אין פער ידוע")+'</div></div>';
+    (function(){
+      /* שעון הדיווח · הצעד היחיד שנשאר ידני, ולכן זה שצריך התרעה */
+      const n=RECON&&RECON.nextReport;
+      if(!n)return '<div class="card grad"><div class="lbl">הדוח הבא</div>'+
+        '<div class="mid na">—</div><div class="mini">אין היסטוריית הגשות</div></div>';
+      const late=n.daysLate>0, due=n.status==="בתוך חלון ההגשה";
+      return '<div class="card grad'+(late?" st-neg":due?" st-warn":"")+'">'+
+        '<div class="lbl">הדוח הבא</div>'+
+        '<div class="mid'+(late?" negc":due?" warnc":"")+'">'+n.period+'</div>'+
+        '<div class="mini">מאזן '+dmy(n.balanceDate)+' · '+
+        (late?'מאחר ב־'+n.daysLate+' ימים':due?'צפי הגשה '+dmy(n.expectedFiling):'התקופה טרם הסתיימה')+
+        '</div></div>';
+    })();
 
   el.innerHTML=res.length?
     '<table><thead><tr><th>מקור</th><th class="n">מצב</th><th>דרך</th><th class="n">נשלף</th></tr></thead><tbody>'+
@@ -2060,7 +2070,18 @@ function renderControl(){
       '<td class="n"><span class="pill '+(p.validationPassed?"ok":"bad")+'">'+
       (p.validationPassed?"עברה":"נכשלה")+'</span></td></tr>').join("")+'</tbody></table>'+
     (missing.length?'<div style="margin-top:12px;font-size:12px" class="warnc">חסרים אצלנו: '+
-      missing.join(" · ")+'</div>':"")
+      missing.join(" · ")+'</div>':"")+
+    (function(){
+      const n=RECON&&RECON.nextReport;
+      if(!n)return "";
+      const late=n.daysLate>0;
+      return '<div class="al" style="margin-top:14px"><span class="dot '+(late?"hi":"md")+'"></span>'+
+        '<span class="tx"><span class="tt">הדוח הבא · '+n.period+' ליום '+dmy(n.balanceDate)+'</span>'+
+        '<span class="ds">צפי הגשה '+dmy(n.expectedFiling)+' · נחשב מאחר אחרי '+dmy(n.overdueAfter)+
+        ' <span class="sep">·</span> '+n._note+
+        ' <span class="sep">·</span> טעינת ה-XBRL ידנית — מגנא חוסמת את הראנר</span></span>'+
+        (late?'<span class="add">למעקב</span>':"")+'</div>';
+    })()
     :'<p class="na" style="padding:16px 2px">אין דוח התאמה. הרץ <code>node scripts/build-app-data.mjs</code>.</p>';
 
   const fails=RECON?RECON.findings.filter(f=>f.level==="fail"):[];
@@ -2089,13 +2110,27 @@ function renderControl(){
     '<tr><td>קובננט · הון עצמי מתואם</td><td class="n num">'+fmt(THRESH.equity)+'</td>'+
       '<td style="font-size:11.5px;color:var(--t2)">סף מינימלי · שטר הנאמנות ס׳ 6.4.2</td></tr>'+
     '<tr><td>קובננט · יחס הון למאזן</td><td class="n num">'+pctS(THRESH.ratio,0)+'</td>'+
-      '<td style="font-size:11.5px" class="warnc">'+(THRESH._conflict?"סתירה בין המקורות · ראה להלן":"ס׳ 6.4.1")+'</td></tr>'+
+      '<td style="font-size:11.5px;color:var(--t2)">'+(THRESH._ratioDecision
+        ?"הוכרע לפי ביאור 17, המחמיר · ראה להלן":"ס׳ 6.4.1")+'</td></tr>'+
     '<tr><td>קובננט · חוב לבטוחה</td><td class="n num">'+pctS(THRESH.debtCol,0)+'</td>'+
       '<td style="font-size:11.5px;color:var(--t2)">תקרה · נספח 7 ס׳ 2.9.1</td></tr>'+
     '</tbody></table>'+
-    (THRESH._conflict?'<div class="al" style="margin-top:12px"><span class="dot hi"></span>'+
-      '<span class="tx"><span class="tt">סתירה בין המקורות · סף יחס ההון</span>'+
-      '<span class="ds">'+THRESH._conflict+'</span></span><span class="add">למעקב</span></div>':"")+
+    (function(){
+      /* המקורות עדיין סותרים — זו עובדה שלא נעלמת. מה שהשתנה הוא
+         שההכרעה התקבלה ותועדה, ולכן הפריט אינו פתוח עוד. */
+      const dec=THRESH._ratioDecision;
+      if(!dec)return "";
+      const rows=Object.entries(dec.sources).map(([k,v])=>
+        '<tr><td style="font-size:11.5px">'+k+'</td><td class="n num">'+pctS(v.floor,0)+
+        '</td><td class="n num">'+pctS(v.computed,1)+'</td></tr>').join("");
+      return '<div class="al" style="margin-top:14px"><span class="dot ok"></span>'+
+        '<span class="tx"><span class="tt">סף יחס ההון · הוכרע '+pctS(dec.value,0)+
+        ' <span class="pill ok">נסגר</span></span>'+
+        '<span class="ds">'+dec.note+' <span class="sep">·</span> '+dec.decidedBy+'</span></span></div>'+
+        '<div class="scroller" style="margin-top:10px"><table><thead><tr><th>מקור</th>'+
+        '<th class="n">הסף שהוא נוקב</th><th class="n">היחס שהוא מחשב ל-31.12.2025</th>'+
+        '</tr></thead><tbody>'+rows+'</tbody></table></div>';
+    })()+
     '<div class="src">הספים נערכים ב-data/app/meta.json · הקוד לא משתנה</div>';
 }
 

@@ -40,6 +40,24 @@ jobs:
         run: node scripts/build-app-data.mjs --write
         continue-on-error: true
 
+      # שעון הדיווח · דוח שמאחר מייצר אזהרה גלויה בממשק Actions ובמייל
+      # שגיטהאב שולח. בלי זה השעון היה כותב ל-JSON שאיש לא קורא.
+      - name: התרעה על דוח שמאחר
+        if: always()
+        run: |
+          node -e '
+            const fs=require("fs");
+            if(!fs.existsSync("data/reconcile.json")) process.exit(0);
+            const n=JSON.parse(fs.readFileSync("data/reconcile.json","utf8")).nextReport;
+            if(!n) process.exit(0);
+            const line=n.period+" ליום "+n.balanceDate+" · צפי הגשה "+n.expectedFiling;
+            if(n.daysLate>0)
+              console.log("::warning title=דוח מאחר::"+line+" · מאחר ב-"+n.daysLate+
+                " ימים ולא נטען. הורד את ה-XBRL ממגנא ל-data/xbrl/ והרץ scripts/parse-xbrl.mjs");
+            else
+              console.log("::notice title=הדוח הבא::"+line+" · "+n.status);
+          '
+
       - name: שמירה ברפו
         if: always()
         run: |

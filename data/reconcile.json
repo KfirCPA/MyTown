@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-31T11:29:42.722Z",
+  "generatedAt": "2026-08-31T18:38:55.845Z",
   "asOf": "2026-06-30",
   "xbrlPeriods": [
     {
@@ -44,6 +44,28 @@
     "fail": 0,
     "skip": 9,
     "warn": 0
+  },
+  "nextReport": {
+    "latestLoaded": "2026-06-30",
+    "period": "רבעון 3/2026",
+    "balanceDate": "2026-09-30",
+    "expectedFiling": "2026-11-26",
+    "overdueAfter": "2026-11-27",
+    "lagHistory": {
+      "quarterly": [
+        51,
+        57,
+        58
+      ],
+      "annual": [
+        90
+      ],
+      "typical": 57,
+      "worst": 58
+    },
+    "status": "התקופה טרם הסתיימה",
+    "daysLate": 0,
+    "_note": "הפיגור נגזר מהיסטוריית ההגשות של החברה: 51, 57, 58 ימים ברבעוניים ו-90 בשנתי."
   },
   "findings": [
     {
