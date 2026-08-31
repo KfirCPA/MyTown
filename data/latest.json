@@ -4,7 +4,7 @@
     "tase": 2449,
     "corpId": "514444660"
   },
-  "updatedAt": "2026-08-30T06:14:14.443Z",
+  "updatedAt": "2026-08-31T06:14:21.081Z",
   "reports": {
     "data": null,
     "fetchedAt": null,
@@ -14,13 +14,13 @@
   "bond": {
     "data": {
       "lastPrice": null,
-      "changePct": "-1.93",
+      "changePct": "0",
       "seriesMarketCap": "8362",
-      "yield": "9.07"
+      "yield": "9.2"
     },
-    "fetchedAt": "2026-08-28T07:58:51.389Z",
-    "stale": true,
-    "error": "HTTP 403 — https://www.bizportal.co.il/bonds/quote/generalview/1214626"
+    "fetchedAt": "2026-08-31T06:14:21.081Z",
+    "stale": false,
+    "error": null
   },
   "deals": {
     "data": null,
