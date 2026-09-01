@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-31T18:39:50.283Z",
+  "updatedAt": "2026-09-01T06:27:07.081Z",
   "company": {
     "name": "קבוצת מיי טאון בע\"מ",
     "tase": 2449,
@@ -25,16 +25,16 @@
     "bond-quote": {
       "title": "ציטוט אג״ח סדרה א׳",
       "data": {
-        "price": 100.77,
-        "yieldGross": 9.31,
-        "yieldNet": 7.8,
+        "price": 100.62,
+        "yieldGross": 9.32,
+        "yieldNet": 7.82,
         "duration": 1.59,
-        "adjustedGross": 103.12,
-        "adjustedNet": 102.66,
+        "adjustedGross": 103.14,
+        "adjustedNet": 102.67,
         "yearsToMaturity": 1.73,
-        "govSpread": 5.97
+        "govSpread": 5.98
       },
-      "fetchedAt": "2026-08-31T18:39:50.283Z",
+      "fetchedAt": "2026-09-01T06:27:07.081Z",
       "stale": false,
       "via": "ביזפורטל · טבלת ביצועים",
       "error": null
@@ -49,10 +49,10 @@
           "source": "פאנדר"
         },
         {
-          "title": "קבוצת רוכשים קנתה 15 דירות בפרויקט \"מיי-טאון\" בקריית מלאכי. זה הסכום ששולם - nadlancenter.co.il",
+          "title": "קבוצת רוכשים קנתה 15 דירות בפרויקט \"מיי-טאון\" בקריית מלאכי. זה הסכום ששולם - מרכז הנדל\"ן",
           "date": "Thu, 26 Mar 2026 07:00:00 GMT",
           "url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTFBmaGYzUXlDd21zYnNIemkwUnp5RmJVeGx0VEI0Z2NYeDM2THc1Nmk1alBlY1haV2taRVpfRjl4RXhTS0RybnRvZlBSdGdISnVfMjIybTdCOA?oc=5",
-          "source": "nadlancenter.co.il"
+          "source": "מרכז הנדל\"ן"
         },
         {
           "title": "בקומה ה-21 בעיר המפתיעה: נמכר הפנטהאוז היקר ביותר אי פעם ב-3.4 מיליון שקל - מעריב",
@@ -73,10 +73,10 @@
           "source": "ice (אייס)"
         },
         {
-          "title": "מיי טאון סוגרת ליווי של 732 מיליון ש\"ח לפרויקט ההתחדשות הראשון בקריית מלאכי - nadlancenter.co.il",
+          "title": "מיי טאון סוגרת ליווי של 732 מיליון ש\"ח לפרויקט ההתחדשות הראשון בקריית מלאכי - מרכז הנדל\"ן",
           "date": "Thu, 27 Nov 2025 08:00:00 GMT",
           "url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTFBNcHE1c1hwQ2N3TmIxNWxfdnU1MmtmbWlVcFpobFV1ZHhlNGFrbmdUUURHajViR0JNQmlKaXRGMExNdDJtSjNtVmpRTWxoTExLTGVndW52dw?oc=5",
-          "source": "nadlancenter.co.il"
+          "source": "מרכז הנדל\"ן"
         },
         {
           "title": "במינוף נמוך ורק עם חצי מיליון שקל בקופה: חברת הבנייה שרוצה לגייס אג\"ח - גלובס",
@@ -91,10 +91,10 @@
           "source": "ice (אייס)"
         },
         {
-          "title": "ניצלה סכסוך שותפים: קבוצת גבאי השתלטה על חברת הבת של קבוצת מאי טאון - TheMarker",
+          "title": "ניצלה סכסוך שותפים: קבוצת גבאי השתלטה על חברת הבת של קבוצת מאי טאון - themarker.com",
           "date": "Wed, 20 Nov 2024 08:00:00 GMT",
           "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxQWW9sSkJYbGdXNlMyN0xNRkdLV2JicGl5blRWbWRBUEx2OUhJRG9wS3hGTjJlZGJ1X3NCVjlZUHRVb3FTc2tGWVB3NDRDbU83eHZzeWo1YWx4Qm9HN3ppZm05RXlBVF9HcnNhMEJNZ1RvcHd3Ul9pczBtdklmcnUxdXBSNmY0c1lhTUZhNUJuQWNLV0NQdklsanotLXF5eEFLV3ZnanZYQQ?oc=5",
-          "source": "TheMarker"
+          "source": "themarker.com"
         },
         {
           "title": "ההתחדשות העירונית ממשיכה להתקדם: הריסת מבנים ישנים בתל אביב ויבנה - ynet",
@@ -103,10 +103,10 @@
           "source": "ynet"
         },
         {
-          "title": "רמת אביב הישנה מתחדשת: שיכון ובינוי ומיי טאון ייבנו 150 דירות - nadlancenter.co.il",
+          "title": "רמת אביב הישנה מתחדשת: שיכון ובינוי ומיי טאון ייבנו 150 דירות - מרכז הנדל\"ן",
           "date": "Tue, 11 Nov 2025 08:00:00 GMT",
           "url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTE5hcHAwbHFfQ3NicjduU3BEbEVvOFNQNzJnalJpdXdEWjIxUDFEV0c5aF9McTc0MEJ4TDJwXzNmMnFSMG5mMlJBNndLQlEtN0ZVQzROMXc0MA?oc=5",
-          "source": "nadlancenter.co.il"
+          "source": "מרכז הנדל\"ן"
         },
         {
           "title": "732 מיליון ש\"ח בדרך לקריית מלאכי: המיזם שישנה את פני העיר - ice (אייס)",
@@ -127,16 +127,16 @@
           "source": "ice (אייס)"
         },
         {
-          "title": "גיוס אג\"ח ראשון ל-MY TOWN: גייסה 62 מיליון שקל עם ביקושים של מעל 150 מלש\"ח - nadlancenter.co.il",
+          "title": "גיוס אג\"ח ראשון ל-MY TOWN: גייסה 62 מיליון שקל עם ביקושים של מעל 150 מלש\"ח - מרכז הנדל\"ן",
           "date": "Wed, 04 Dec 2024 08:00:00 GMT",
           "url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTE0xaWxNQnAxbFduM2ZVcW1IRkdiN2swa3haZGE5Q3VIZTJFTWh4c1FIb1JwZ1ZMRmlOSU1hQ1VubTFKRXl5Y2dsMU5BVE51MTJVNWktUUtYTQ?oc=5",
-          "source": "nadlancenter.co.il"
+          "source": "מרכז הנדל\"ן"
         },
         {
-          "title": "42 מיליון שקל על הכף: ביהמ\"ש קיבל את בקשת מיי טאון לעיכוב הליכים בתביעת גבאי נגדה - nadlancenter.co.il",
+          "title": "42 מיליון שקל על הכף: ביהמ\"ש קיבל את בקשת מיי טאון לעיכוב הליכים בתביעת גבאי נגדה - מרכז הנדל\"ן",
           "date": "Thu, 27 Jul 2023 07:00:00 GMT",
           "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE85eEdjVE9VY3RmTl9fdzRFR2ZYZl9VenlhcEhPUGFiN1JFTU4tV2dfUG5FMmNFbXpGd0ViSGoyeWdDXzBRYXhTdWVCNjltekdJN1VHeDFB?oc=5",
-          "source": "nadlancenter.co.il"
+          "source": "מרכז הנדל\"ן"
         },
         {
           "title": "קריית מלאכי פורצת דרך: אחרי 30 שנה – 'מיי טאון סנטר' יוצא לדרך - חדשות אפס שמונה",
@@ -145,7 +145,7 @@
           "source": "חדשות אפס שמונה"
         }
       ],
-      "fetchedAt": "2026-08-31T18:39:50.283Z",
+      "fetchedAt": "2026-09-01T06:27:07.081Z",
       "stale": false,
       "via": "Google News RSS",
       "error": null
