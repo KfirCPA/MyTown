@@ -663,7 +663,8 @@ svg{display:block;overflow:visible}
         <div class="src">המקור הרשמי · כל קובץ עובר ולידציה לפני שהוא נכנס</div></div>
     </div>
     <div class="card"><h2>התאמה · ידני מול XBRL</h2><div id="ctrlRecon"></div></div>
-    <div class="card"><h2>ספי חריגה</h2><div id="ctrlThresh"></div></div>
+    <div class="card"><h2>מדיניות מקורות</h2><div id="ctrlPolicy"></div></div>
+    <div class="card" style="margin-top:14px"><h2>ספי חריגה</h2><div id="ctrlThresh"></div></div>
   </div>
 
   <!-- ═══ PROJECTS ═══ -->
@@ -723,7 +724,7 @@ svg{display:block;overflow:visible}
    אין מספרים קשיחים בקוד. כל הנתונים יושבים ב-data/app/*.json ונטענים כאן.
    עדכון רבעון הוא עריכת JSON — הקוד לא משתנה.
    כשתתחבר הזנה אמיתית, שנה mode ל-"live" ועדכן lastSync ב-meta.json. */
-const FILES=["meta","bond","statements","projects","related","events","followups.seed"];
+const FILES=["meta","bond","statements","projects","related","events","followups.seed","source-policy"];
 /* בנייה עצמאית (scripts/build-standalone.mjs) מזריקה את הנתונים לדף עצמו,
    וכך הוא נפתח מכל מקום בלי שרת. באתר הרגיל המשתנה אינו קיים והטעינה רגילה. */
 const EMBEDDED=(typeof window!=="undefined"&&window.__MYTOWN_DATA__)||null;
@@ -739,9 +740,9 @@ async function loadOptional(path){
   try{const r=await fetch(path,{cache:"no-store"});return r.ok?await r.json():null;}
   catch(e){return null;}
 }
-let META,BONDSRC,STMT,PROJ,RELSRC,EVSRC,SEED;
+let META,BONDSRC,STMT,PROJ,RELSRC,EVSRC,SEED,POLICY;
 try{
-  [META,BONDSRC,STMT,PROJ,RELSRC,EVSRC,SEED]=await Promise.all(FILES.map(loadJson));
+  [META,BONDSRC,STMT,PROJ,RELSRC,EVSRC,SEED,POLICY]=await Promise.all(FILES.map(loadJson));
 }catch(err){
   document.body.innerHTML=
     '<div style="max-width:720px;margin:14vh auto;padding:26px 30px;background:#0E1820;'+
@@ -856,12 +857,42 @@ const HAIRCUT=0.15, IMPAIR_AT=BASE.grossMargin;
 /* ── המודל מבוסס כעת על כלכלת הפרויקט האמיתית מהמצגת ולא על פרוקסי ──
    שיעורי הרווח הגולמי נעים בין 20.1% ל־37.8%. לכל פרויקט סף ירידת ערך
    משלו, השווה בדיוק לשיעור הרווח שלו: מתחתיו NRV עדיין מעל העלות. */
+/* ═══════════ מדיניות המקורות ═══════════
+   מידע רגולטורי גובר על כל מקור אחר בכל סתירה. המצגת נכנסת רק כשהגילוי
+   הרבעוני אינו נוקב בנתון — ואז הפריט מסומן כמקור משני.
+   עד היום היה כאן ההפך: המצגת גברה על הגילוי בשלושה שדות. */
+function pickReg(p,regField,otherField){
+  if(Number.isFinite(p[regField]))return {v:p[regField],tier:"regulatory",fallback:false};
+  if(Number.isFinite(p[otherField]))return {v:p[otherField],tier:"company",fallback:true};
+  return {v:null,tier:null,fallback:false};
+}
+/* סתירות בין המקורות · נאספות ומוצגות, לא נמחקות */
+const SRC_CONFLICTS=(()=>{
+  const pairs=(POLICY&&POLICY.fieldPairs)||[];
+  const out=[];
+  for(const p of PROJECTS)for(const f of pairs){
+    const a=p[f.regulatory],b=p[f.other];
+    if(Number.isFinite(a)&&Number.isFinite(b)&&Math.abs(a-b)>1e-9)
+      out.push({project:p.name,label:f.label,reg:a,other:b});
+  }
+  return out;
+})();
+const SRC_FALLBACKS=(()=>{
+  const pairs=(POLICY&&POLICY.fieldPairs)||[];
+  const out=[];
+  for(const p of PROJECTS)for(const f of pairs){
+    if(!Number.isFinite(p[f.regulatory])&&Number.isFinite(p[f.other]))
+      out.push({project:p.name,label:f.label,value:p[f.other]});
+  }
+  return out;
+})();
+
 function stressOn(p){
   if(!Number.isFinite(p.rev)||!Number.isFinite(p.cost))return null;
-  const ex=Number.isFinite(p.execB)?p.execB:p.exec;
-  const mk=Number.isFinite(p.mktB)?p.mktB:p.mkt;
+  const ex=pickReg(p,"exec","execB").v;
+  const mk=pickReg(p,"mkt","mktB").v;
   if(!Number.isFinite(ex)||!Number.isFinite(mk))return null;
-  const sh=Number.isFinite(p.shareB)?p.shareB:p.share;
+  const sh=pickReg(p,"share","shareB").v;
   const margin=p.gp/p.rev;
   const impairAt=1-p.cost/p.rev;              // הקיצוץ שממנו NRV<עלות
   const exposed=p.rev*(1-mk);                 // רק יחידות שטרם נמכרו
@@ -1013,6 +1044,36 @@ function bulletCard(o){
       '<span class="lbl">'+(breach?"חריגה מהאמה":o.note)+'</span>'+
       (changed?'<span class="delta">המדווח ל־'+D_CUR+': '+o.fmt(o.base)+'</span>':"")+'</div>'+
     '<div class="src">'+o.src+'</div></div>';
+}
+
+/* הערות המקורות · מוצגות בכל מסך שנשען על שתי השכבות.
+   הכלל אומר איזה ערך מחושב; ההערה אומרת מה הפער ומאיפה. */
+function srcNotes(opts){
+  const o=opts||{};
+  let h="";
+  if(SRC_CONFLICTS.length){
+    h+='<div class="al"><span class="dot hi"></span><span class="tx">'+
+      '<span class="tt">'+SRC_CONFLICTS.length+' אי-התאמות בין הגילוי למצגת</span>'+
+      '<span class="ds">המוצג והמחושב הוא הערך הרגולטורי. הפער נשמר כהערה ואינו נמחק.</span></span>'+
+      (o.follow?'<span class="add">למעקב</span>':"")+'</div>'+
+      '<div class="scroller"><table><thead><tr><th>פרויקט</th><th>שדה</th>'+
+      '<th class="n">גילוי רבעוני</th><th class="n">מצגת</th><th class="n">פער</th>'+
+      '</tr></thead><tbody>'+
+      SRC_CONFLICTS.map(c=>'<tr><td>'+c.project+'</td>'+
+        '<td style="font-size:11.5px;color:var(--t2)">'+c.label+'</td>'+
+        '<td class="n num pos">'+pctS(c.reg)+'</td>'+
+        '<td class="n num na">'+pctS(c.other)+'</td>'+
+        '<td class="n num warnc">'+ptS((c.reg-c.other)*100)+' נק׳</td></tr>').join("")+
+      '</tbody></table></div>';
+  }
+  if(SRC_FALLBACKS.length){
+    h+='<div class="al" style="margin-top:12px"><span class="dot md"></span><span class="tx">'+
+      '<span class="tt">'+SRC_FALLBACKS.length+' שדות שנלקחו מהמצגת</span>'+
+      '<span class="ds">הגילוי הרבעוני אינו נוקב בהם, ולכן נעשה שימוש במקור המשני: '+
+      SRC_FALLBACKS.map(f=>f.project+" · "+f.label).join(" <span class=\'sep\'>·</span> ")+
+      '</span></span></div>';
+  }
+  return h?'<div style="margin-top:16px">'+h+'</div>':"";
 }
 
 /* ═══════════ רינדור ═══════════ */
@@ -1182,9 +1243,9 @@ function renderProjects(animate){
   document.getElementById("gapNote").innerHTML=worst+" פרויקטים בפער שלילי מסבירים היטב את הקפיצה באשראי השוטף מ־"+
     fmt(BASE.bankCreditPrior)+" ב־"+D_PYE+" ל־"+fmt(BASE.bankCredit)+" ב־"+D_CUR+"."+
     (STRESS?" תחת קיצון, ערך המכירות שנחתמו נשחק ב־15% והפערים מתרחבים בהתאם.":"");
-  document.getElementById("projAlerts").innerHTML=[
-    ["hi","\u05e1\u05ea\u05d9\u05e8\u05d4 \u05d1\u05d7\u05dc\u05e7 \u05d4\u05d7\u05d1\u05e8\u05d4 \u00b7 \u05e7\u05e8\u05d9\u05d9\u05ea \u05de\u05dc\u05d0\u05db\u05d9",
-      "\u05d4\u05d2\u05d9\u05dc\u05d5\u05d9 \u05d4\u05e8\u05d1\u05e2\u05d5\u05e0\u05d9 \u05de\u05e6\u05d9\u05d2 33% \u05d1\u05d0\u05d9\u05d7\u05d5\u05d3 \u05d9\u05d7\u05e1\u05d9 \u00b7 \u05d4\u05de\u05e6\u05d2\u05ea \u05de\u05e6\u05d9\u05d2\u05d4 67% \u00b7 \u05d4\u05e4\u05e2\u05e8 \u05de\u05db\u05e4\u05d9\u05dc \u05d0\u05ea \u05d4\u05d7\u05e9\u05d9\u05e4\u05d4"],
+  document.getElementById("projAlerts").innerHTML=srcNotes({follow:true})+[
+    ["hi","חלק החברה בקריית מלאכי · מחושב לפי הגילוי",
+      "הגילוי הרבעוני מציג 33% באיחוד יחסי; המצגת מציגה 67%. החישוב לפי 33%, הערך הרגולטורי. שימוש ב-67% היה מכפיל את החשיפה."],
     ["hi","\u05e7\u05e8\u05d9\u05d9\u05ea \u05de\u05dc\u05d0\u05db\u05d9 \u00b7 "+fmt(323866)+" \u05dc\u05d4\u05e9\u05dc\u05de\u05d4",
       "73% \u05de\u05db\u05dc\u05dc \u05d4\u05e2\u05dc\u05d5\u05ea \u05e9\u05e0\u05d5\u05ea\u05e8\u05d4 \u00b7 \u05d4\u05db\u05e0\u05e1\u05d5\u05ea \u05e6\u05e4\u05d5\u05d9\u05d5\u05ea "+fmt(460491)+" \u00b7 \u05e9\u05d5\u05d5\u05e7\u05d5 11% \u05d1\u05dc\u05d1\u05d3"],
     ["hi","\u05d6\u05f3\u05d1\u05d5\u05d8\u05d9\u05e0\u05e1\u05e7\u05d9 105 \u00b7 \u05d4\u05d7\u05e9\u05d5\u05e3 \u05d1\u05d9\u05d5\u05ea\u05e8",
@@ -1744,8 +1805,8 @@ function renderPeriod(){
 }
 
 /* לכל מסך הבסיס שלו. אין בסיס אחד גלובלי, ולכן אין גם משפט אחד גלובלי. */
-const LAYERS="שכבה A · גילוי רבעוני <b>"+LAYER.A.d+"</b> <span class='vs'>·</span> "+
-             "שכבה B · מצגת משקיעים <b>"+LAYER.B.d+"</b> · אין לערבב";
+const LAYERS="גילוי רבעוני <b>"+LAYER.A.d+"</b> <span class='vs'>גובר על</span> "+
+             "מצגת משקיעים <b>"+LAYER.B.d+"</b> · המצגת נכנסת רק כשהגילוי אינו נוקב";
 const CMP={
   "home-0":["בסיס השוואה","<b>"+Q2L+"</b> <span class='vs'>מול</span> <b>"+Q1L+
     "</b> <span class='vs'>ומול</span> <b>"+Q2PL+"</b> <span class='vs'>·</span> יתרות ליום <b>"+D_CUR+"</b>"],
@@ -2253,7 +2314,7 @@ function renderProjSubs(){
        לפי שמו והשאירה אחר ברשימה רק משום ש-rem שלו היה null. */
     const live=PROJECTS.filter(p=>p.stage==="בביצוע");
     const rows=live.filter(p=>Number.isFinite(p.rev))
-      .map(p=>[p.name,p.stageNote?"בביצוע ·":"בביצוע",Number.isFinite(p.mktB)?p.mktB:0,p.ends,p.rev,p.cost,p.gp,p.gp/p.rev,p.surplus,p.share]);
+      .map(p=>[p.name,p.stageNote?"בביצוע ·":"בביצוע",pickReg(p,"mkt","mktB").v??0,p.ends,p.rev,p.cost,p.gp,p.gp/p.rev,p.surplus,p.share]);
     const notes=live.filter(p=>p.stageNote);
     const revLive=live.reduce((a,p)=>a+(p.rev||0),0);
     ex.innerHTML=projTable(rows,"שיווק")+
@@ -2472,6 +2533,25 @@ function renderControl(){
       skips.map(f=>f.label).join(" · ")+'</div></div>':"")+
     '<div class="src">נבדק ל-'+dmy(RECON.asOf)+' · הופק '+relDay(RECON.generatedAt)+'</div>';
 
+  const pol=document.getElementById("ctrlPolicy");
+  if(pol&&POLICY){
+    pol.innerHTML=
+      '<div class="al"><span class="dot ok"></span><span class="tx">'+
+        '<span class="tt">'+POLICY.rule+'</span>'+
+        '<span class="ds">'+POLICY.why+'</span></span></div>'+
+      '<div class="scroller" style="margin-top:12px"><table><thead><tr><th class="n">דירוג</th>'+
+        '<th>שכבה</th><th>מקורות</th></tr></thead><tbody>'+
+        POLICY.tiers.map(t=>'<tr'+(t.rank===1?' class="sum"':"")+'><td class="n num">'+t.rank+'</td>'+
+          '<td>'+t.label+'</td><td style="font-size:11.5px;color:var(--t2)">'+
+          t.sources.join(" · ")+'</td></tr>').join("")+
+      '</tbody></table></div>'+
+      '<div class="al" style="margin-top:12px"><span class="dot md"></span><span class="tx">'+
+        '<span class="tt">כשהמקור הרגולטורי שותק</span><span class="ds">'+POLICY.fallback+'</span></span></div>'+
+      '<div class="al"><span class="dot md"></span><span class="tx">'+
+        '<span class="tt">כשיש סתירה</span><span class="ds">'+POLICY.conflicts+'</span></span></div>'+
+      srcNotes({})+
+      '<div class="src">המדיניות ב-data/app/source-policy.json · נאכפת בקוד ונבדקת בצינור</div>';
+  }
   document.getElementById("ctrlThresh").innerHTML=
     '<table><thead><tr><th>סף</th><th class="n">ערך</th><th>נימוק</th></tr></thead><tbody>'+
     '<tr><td>חריגה · אחוז</td><td class="n num">'+pctS(EXC.pct,0)+'</td>'+

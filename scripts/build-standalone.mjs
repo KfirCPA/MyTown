@@ -10,7 +10,7 @@
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 
-const APP = ['meta', 'bond', 'statements', 'projects', 'related', 'events', 'followups.seed'];
+const APP = ['meta', 'bond', 'statements', 'projects', 'related', 'events', 'followups.seed', 'source-policy'];
 const OPTIONAL = ['data/sources.json', 'data/sources-status.json', 'data/reconcile.json'];
 const ARTIFACT = process.argv.includes('--artifact');
 const OUT = ARTIFACT ? 'dist/mytown-artifact.html' : 'dist/mytown-standalone.html';

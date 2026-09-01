@@ -238,6 +238,38 @@ const STAGES = proj._stages?.values || ['בביצוע', 'הושלם'];
   else add('ok', 'פרויקטים', 'סיווג מול העלות שנותרה', 'עקבי');
 }
 
+/* ═══════════ 5ג · מדיניות המקורות ═══════════
+   מידע רגולטורי גובר על כל מקור אחר. הבדיקות כאן לא יכולות לקרוא את קוד
+   התצוגה, אבל הן כן מוודאות שכל סתירה בין שתי השכבות מזוהה וסופרת אותה,
+   כך שאי-התאמה חדשה לא תיכנס בשקט. */
+{
+  const policy = existsSync(`${APP}/source-policy.json`)
+    ? JSON.parse(await readFile(`${APP}/source-policy.json`, 'utf8')) : null;
+  if (!policy) add('warn', 'מקורות', 'אין קובץ מדיניות', 'data/app/source-policy.json חסר');
+  else {
+    const pairs = policy.fieldPairs || [];
+    const conflicts = [], fallbacks = [];
+    for (const p of proj.inExecution) for (const f of pairs) {
+      const a = p[f.regulatory], b = p[f.other];
+      if (Number.isFinite(a) && Number.isFinite(b) && Math.abs(a - b) > 1e-9)
+        conflicts.push(`${p.name} · ${f.label}: ${(a * 100).toFixed(1)}% מול ${(b * 100).toFixed(1)}%`);
+      else if (!Number.isFinite(a) && Number.isFinite(b))
+        fallbacks.push(`${p.name} · ${f.label}`);
+    }
+    add(conflicts.length ? 'warn' : 'ok', 'מקורות', 'אי-התאמות בין הגילוי למצגת',
+      conflicts.length ? `${conflicts.length} · המחושב הוא הרגולטורי · ${conflicts.join(' | ')}` : 'אין');
+    add('ok', 'מקורות', 'שדות שנלקחו מהמקור המשני',
+      fallbacks.length ? `${fallbacks.length} · ${fallbacks.join(', ')}` : 'אין');
+
+    const ranks = (policy.tiers || []).map((t) => t.rank);
+    const top = (policy.tiers || []).find((t) => t.rank === 1);
+    add(top && top.id === 'regulatory' ? 'ok' : 'fail', 'מקורות', 'הרגולטורי בראש הדירוג',
+      top ? top.label : 'לא הוגדר');
+    add(new Set(ranks).size === ranks.length ? 'ok' : 'fail', 'מקורות', 'דירוג חד-ערכי',
+      ranks.join(', '));
+  }
+}
+
 /* ═══════════ 6 · שעון הדיווח ═══════════
    הפער האחרון באוטומציה: מגנא חוסמת את הראנר, ולכן קובץ XBRL חדש נטען
    ידנית. מה שכן אפשר לעשות אוטומטית הוא לדעת מתי מצפים לו ולהתריע.
