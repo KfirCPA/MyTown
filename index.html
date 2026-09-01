@@ -252,16 +252,18 @@ tr.neg td.n{color:var(--t2)}
 /* ═══ בורר תקופות ההשוואה ═══
    הטבלה החזיקה תשע עמודות ודרשה גלילה אופקית. במקום זה בוחרים מול מה
    משווים, והטבלה מציגה ארבע עמודות שנכנסות למסך אחד. */
-.periodsel{display:flex;gap:7px;flex-wrap:wrap;align-items:center;
-  padding-bottom:13px;margin-bottom:13px;border-bottom:1px solid var(--hair)}
-.periodsel .lbl2{font-size:9.5px;letter-spacing:.1em;color:var(--t3);margin-left:4px}
+.periodsel{display:block;padding-bottom:13px;margin-bottom:13px;border-bottom:1px solid var(--hair)}
+.periodsel .lbl2{display:block;font-size:9.5px;letter-spacing:.1em;color:var(--t3);margin-bottom:7px}
+.periodsel .opts{display:flex;gap:7px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+.periodsel .opts::-webkit-scrollbar{display:none}
+.periodsel .opts>*{flex:none}
 .periodsel .p{font-size:11.5px;color:var(--t2);background:rgba(5,10,13,.55);
   box-shadow:0 0 0 1px var(--hair);border-radius:6px;padding:7px 12px;cursor:pointer;
   white-space:nowrap;transition:box-shadow .15s,color .15s,background .15s}
 .periodsel .p:hover{box-shadow:0 0 0 1px var(--accent);color:var(--t1)}
 .periodsel .p.on{background:linear-gradient(135deg,rgba(15,169,160,.22),rgba(20,128,138,.22));
   color:var(--glow);box-shadow:0 0 0 1px var(--glow)}
-.periodsel .norm{margin-right:auto;display:flex;align-items:center;gap:7px;
+.periodsel .norm{margin-top:10px;display:inline-flex;align-items:center;gap:7px;
   font-size:11px;color:var(--t2);cursor:pointer;user-select:none}
 .periodsel .norm .sw2{width:30px;height:17px;border-radius:9px;background:var(--sunken);
   box-shadow:0 0 0 1px var(--hair);position:relative;transition:background .2s}
@@ -275,7 +277,9 @@ tr.neg td.n{color:var(--t2)}
   padding:4px 9px;cursor:pointer;white-space:nowrap;display:inline-block;
   transition:box-shadow .15s,color .15s}
 .add:hover{box-shadow:0 0 0 1px var(--accent);color:var(--glow)}
-.act{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:13px}
+.act{display:flex;gap:8px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin-bottom:13px}
+.act::-webkit-scrollbar{display:none}
+.act>*{flex:none}
 .act button{font-family:inherit;font-size:11.5px;color:var(--t2);background:rgba(5,10,13,.6);
   border:1px solid var(--hair);border-radius:6px;padding:7px 13px;cursor:pointer;
   transition:border-color .15s,color .15s}
@@ -328,6 +332,31 @@ svg{display:block;overflow:visible}
 /* ═══ פס בסיס ההשוואה ═══
    כל שינוי שמוצג במסך נמדד מול משהו. השורה הזו אומרת מול מה, לכל מסך
    בנפרד, כי כל מסך משווה לבסיס אחר. בלעדיה "ירד 58%" הוא מספר בלי מובן. */
+/* ═══ תא השינוי ═══
+   שתי שורות קבועות: חץ וסכום, ומתחתם האחוז. קודם שניהם היו בזרימה אחת
+   ומיקום החץ השתנה לפי אורך המספר. */
+/* ═══ אירועים · שני חלקים ═══ */
+.evsec{margin-bottom:20px}
+.evsec:last-of-type{margin-bottom:0}
+.evhead{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;
+  font-size:12px;color:var(--t1);font-weight:500;
+  padding-bottom:8px;margin-bottom:6px;border-bottom:1px solid var(--hair)}
+.evhead span{font-size:10.5px;color:var(--t3);font-weight:400}
+/* אייקון כתבה · מסמן שהפריט מקורו בעיתונות ולא בדיווח לרשות */
+.npicon{width:12px;height:12px;vertical-align:-1px;margin-left:6px;flex:none;
+  fill:none;stroke:var(--t3);stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.nplink{color:inherit;text-decoration:none;border-bottom:1px dotted var(--t3)}
+.nplink:hover{border-bottom-color:var(--glow);color:var(--glow)}
+.chg{display:block;line-height:1.35}
+.chg .v{display:block;white-space:nowrap}
+.chg .p{display:block;font-size:10px;color:var(--t3);white-space:nowrap;margin-top:1px}
+.chg .flag{display:inline-block;margin-top:3px}
+
+/* שורות כפתורים · שורה אחת נגללת במקום שבירה לא צפויה */
+.btnrow{display:flex;gap:9px;margin-bottom:11px;flex-wrap:nowrap;
+  overflow-x:auto;scrollbar-width:none}
+.btnrow::-webkit-scrollbar{display:none}
+.btnrow>*{flex:none}
 .cmpbar{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;
   padding:9px 13px;margin:10px 0 4px;border-radius:8px;
   background:rgba(5,10,13,.45);box-shadow:0 0 0 1px var(--hair);
@@ -364,6 +393,12 @@ svg{display:block;overflow:visible}
 @media(max-width:520px){
   .banner .tagline{line-height:1.5}
   .disclaimer span:not(:first-of-type){display:none}
+  /* ריווח התאים מצטמצם כדי שטבלת המאזן, שכותרותיה ארוכות יותר
+     מאלה של הרווח וההפסד, תישאר בתוך רוחב המסך */
+  table{font-size:12.5px}
+  td{padding:10px 7px}
+  th{padding:11px 7px}
+  .chg .p{font-size:9.5px}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
@@ -513,7 +548,7 @@ svg{display:block;overflow:visible}
       <h2>מבחני שינוי
         <span class="ttip" data-tip="סעיפים מאזניים: יתרה מול יתרה, ללא עיבוד. סעיפי רווח והפסד: שלושה מבחנים במקביל. הרבעון הבודד נגזר בחיסור מהמצטבר.">?</span>
       </h2>
-      <div style="display:flex;gap:9px;margin-bottom:11px;flex-wrap:wrap">
+      <div class="btnrow">
         <button class="btn" id="btnPL">רווח והפסד</button>
         <button class="btn" id="btnBS">מאזן</button>
       </div>
@@ -597,6 +632,12 @@ svg{display:block;overflow:visible}
       <div id="eventsList"></div>
       <div class="src">מקור · דיווחים מיידיים למאיה · דוח דירקטוריון · מצגת משקיעים 24.5.2026</div>
     </div>
+    <div class="card" style="margin-top:14px">
+      <h2>בעיתונות
+        <span class="ttip" data-tip="נשלף פעם ביום ב-GitHub Actions מ-Google News. כתבות מאותו יום שחולקות מספרים ושמות מזוהות ככפילות ומאוחדות. כתבה שפורסמה אחרי תאריך המאזן נכנסת גם לרשימת האירועים שלאחר התקופה, מסומנת באייקון.">?</span>
+      </h2>
+      <div id="newsList"></div>
+    </div>
     <div class="grid2" style="margin-top:14px">
       <div class="card">
         <h2>אג״ח סדרה א׳ · תנאים</h2>
@@ -632,7 +673,7 @@ svg{display:block;overflow:visible}
       <h2>סטטוס פרויקטים · 30.6.2026
         <span class="ttip" data-tip="לחיצה על כותרת עמודה ממיינת. לחיצה שנייה הופכת את הכיוון. ברירת המחדל היא מיון לפי הפער בין ביצוע לשיווק, כך שהפרויקטים המסוכנים ביותר צפים למעלה.">?</span>
       </h2>
-      <div style="display:flex;gap:9px;margin-bottom:14px;flex-wrap:wrap">
+      <div class="btnrow">
         <button class="btn" id="btnCsv">ייצוא ל־CSV</button>
         <button class="btn" id="btnGap">מיין לפי פער</button>
       </div>
@@ -743,7 +784,7 @@ const LAYER={A:{d:dmy(META.layers.A.date),src:META.layers.A.source},
              B:{d:dmy(META.layers.B.date),src:META.layers.B.source}};
 const PROJECTS=PROJ.inExecution;
 const TOTALS=PROJ.totals;
-const EVENTS=EVSRC.events.map(e=>({d:e.date,t:e.title,s:e.detail,k:e.kind}));
+const EVENTS=EVSRC.events.map(e=>({d:e.date,t:e.title,s:e.detail,k:e.kind,iso:e.dateISO||null}));
 
 /* ── אג״ח סדרה א׳ · לוח הסילוקין נגזר מתנאי השטר, לא מוקלד ──
    קרן: ארבעה תשלומים לא שווים · ריבית: חצי-שנתית על היתרה הבלתי מסולקת.
@@ -1220,23 +1261,111 @@ function setStress(on){
   t.classList.toggle("on",on);t.setAttribute("aria-checked",String(on));
   renderAll(true);
 }
+/* ═══════════ ניפוי כפילויות בכתבות ═══════════
+   אותו אירוע מדווח בשתי כותרות שונות לגמרי, ולכן דמיון טקסטואלי לבדו
+   אינו תופס. מה שכן משותף לשתי הגרסאות: אותו יום, ואותם מספרים ושמות.
+   התאריך הוא תנאי מחייב — כותרת דומה בהפרש חודשים היא אירוע אחר, לא
+   כפילות. נבדק על 17 הכתבות בפועל: אוחדו שלושה זוגות, ולא אוחדו שתי
+   כתבות דומות שמרוחקות חצי שנה. */
+const NEWS_STOP=new Set(["של","עם","על","את","זה","הוא","היא","מיי","טאון","קבוצת","החברה",
+  "אחרי","היום","הסכום","שעות","פחות","ביותר","פעם","אחד","יותר","בדרך","סוף"]);
+const newsStem=w=>(/^[בלהמוכש]/.test(w)&&w.length>=4)?w.slice(1):w;
+const newsTitle=t=>String(t||"")
+  .replace(/\s+[-–]\s+[^-–]{2,40}$/,"")
+  .replace(/["'״׳“”,.:;!?()\[\]]/g," ").replace(/\s+/g," ").trim();
+const newsToks=t=>new Set(newsTitle(t).split(" ")
+  .filter(w=>/\d/.test(w)||w.length>=3).map(newsStem).filter(w=>!NEWS_STOP.has(w)));
+function dedupeNews(items){
+  const out=[];
+  const shared=(a,b)=>{let n=0;for(const x of a)if(b.has(x))n++;return n;};
+  const days=(a,b)=>Math.abs(new Date(a)-new Date(b))/864e5;
+  for(const it of [...items].sort((a,b)=>new Date(b.date||0)-new Date(a.date||0))){
+    const tk=newsToks(it.title);
+    const hit=out.find(o=>o.date&&it.date&&days(o.date,it.date)<=1&&shared(o.tk,tk)>=2);
+    if(hit){if(it.source&&!hit.also.includes(it.source))hit.also.push(it.source);continue;}
+    out.push(Object.assign({},it,{tk,also:[],iso:it.date?new Date(it.date).toISOString().slice(0,10):null}));
+  }
+  return out;
+}
+
+/* ═══════════ 2.3 · אירועים ═══════════
+   הפרדה בין מה שקרה עד תאריך המאזן לבין מה שקרה אחריו. בתוך כל חלק,
+   סדר יורד לפי חומרה — אדום למעלה, ירוק למטה. אירוע שמקורו בכתבה
+   מסומן באייקון, כי הוא אינו דיווח לרשות. */
+const NEWS_ICON='<svg class="npicon" viewBox="0 0 24 24" aria-hidden="true">'+
+  '<path d="M4 5h13v14H4z"/><path d="M17 9h3v8a2 2 0 0 1-3 1.7"/>'+
+  '<path d="M7 8h7M7 11h7M7 14h4"/></svg>';
+const SEV_ORDER={hi:0,md:1,ok:2,na:3};
+const plEv=n=>n===0?"אין אירועים":n===1?"אירוע אחד":n+" אירועים";
+
 function renderEvents(){
   const el=document.getElementById("eventsList");
   if(!el)return;
-  const news=SOURCES&&SOURCES.sources&&SOURCES.sources.news&&SOURCES.sources.news.data;
-  el.innerHTML=EVENTS.map(e=>'<div class="al"><span class="dot '+e.k+'"></span><span class="tx">'+
-    '<span class="tt">'+e.t+'</span><span class="ds">'+e.d+' \u00b7 '+e.s+'</span></span>'+
-    (e.k==="hi"?'<span class="add">\u05dc\u05de\u05e2\u05e7\u05d1</span>':"")+'</div>').join("")+
-    /* כתבות · מקור חיצוני, ולכן מופרד מהדיווחים ומסומן ככזה */
-    (Array.isArray(news)&&news.length?
-      '<div style="margin-top:20px"><div class="lbl" style="margin-bottom:8px">בעיתונות</div>'+
-      news.slice(0,8).map(n=>'<div class="al"><span class="dot na"></span><span class="tx">'+
-        '<span class="tt">'+(n.url?'<a href="'+n.url+'" target="_blank" rel="noopener" '+
-          'style="color:inherit;text-decoration:none;border-bottom:1px dotted var(--t3)">'+n.title+'</a>':n.title)+'</span>'+
-        '<span class="ds">'+[n.source,n.date?new Date(n.date).toLocaleDateString("he-IL"):null]
-          .filter(Boolean).join(" \u00b7 ")+'</span></span></div>').join("")+
-      '<div class="src">מקור חיצוני · אינו דיווח לרשות ואינו מאומת מול הגילוי</div></div>'
-      :"");
+  const asOf=META.source.asOf;
+  const src=SOURCES&&SOURCES.sources&&SOURCES.sources.news;
+  const news=src&&Array.isArray(src.data)?dedupeNews(src.data):[];
+
+  const bySev=(a,b)=>(SEV_ORDER[a.k]??9)-(SEV_ORDER[b.k]??9)||
+    String(b.iso||"").localeCompare(String(a.iso||""));
+
+  const declared=EVENTS.map(e=>Object.assign({},e,{from:"דיווח"}));
+  const inPeriod=declared.filter(e=>!e.iso||e.iso<=asOf).sort(bySev);
+  const afterDecl=declared.filter(e=>e.iso&&e.iso>asOf);
+  /* כתבה שפורסמה אחרי תאריך המאזן היא אירוע לאחר התקופה לכל דבר —
+     היא פשוט אינה דיווח לרשות, ולכן מסומנת ומסווגת לבדיקה. */
+  const afterNews=news.filter(n=>n.iso&&n.iso>asOf).map(n=>({
+    d:new Date(n.iso).toLocaleDateString("he-IL"),iso:n.iso,
+    t:n.title,s:[n.source,...(n.also||[])].filter(Boolean).join(" · "),
+    k:"md",from:"כתבה",url:n.url}));
+  const after=[...afterDecl,...afterNews].sort(bySev);
+
+  const row=e=>'<div class="al"><span class="dot '+e.k+'"></span><span class="tx">'+
+    '<span class="tt">'+(e.from==="כתבה"?NEWS_ICON:"")+
+      (e.url?'<a href="'+e.url+'" target="_blank" rel="noopener" class="nplink">'+e.t+'</a>':e.t)+'</span>'+
+    '<span class="ds">'+e.d+(e.s?' <span class="sep">·</span> '+e.s:"")+
+      (e.from==="כתבה"?' <span class="sep">·</span> מקור עיתונאי, לא דיווח לרשות':"")+'</span></span>'+
+    (e.k==="hi"||e.from==="כתבה"?'<span class="add">למעקב</span>':"")+'</div>';
+
+  el.innerHTML=
+    '<div class="evsec"><div class="evhead">בתקופת הדיווח <span>עד '+dmy(asOf)+
+      ' <span class="sep">·</span> '+plEv(inPeriod.length)+'</span></div>'+
+      inPeriod.map(row).join("")+'</div>'+
+    '<div class="evsec"><div class="evhead">לאחר תאריך המאזן <span>מ־'+dmy(asOf)+
+      ' <span class="sep">·</span> '+plEv(after.length)+'</span></div>'+
+      (after.length?after.map(row).join("")
+        :'<p class="na" style="padding:12px 2px;font-size:12px;line-height:1.7">'+
+         'לא נמצאו אירועים לאחר תאריך המאזן. הדיווחים המיידיים אינם נשלפים אוטומטית '+
+         '(מגנא ומאיה חוסמות את הראנר), והכתבות שנשלפו כולן מוקדמות מ־'+dmy(asOf)+'. '+
+         'כתבה חדשה שתפורסם אחרי המועד הזה תיכנס לכאן מעצמה בשליפה היומית.</p>')+
+      '</div>'+
+    '<div class="src">מיון בתוך כל חלק לפי חומרה יורדת · '+
+      (news.length?'הכתבות נשלפות אוטומטית פעם ביום · '+news.length+' לאחר ניפוי כפילויות':
+       'הכתבות טרם נשלפו')+'</div>';
+
+  renderNewsList(news);
+  renderBondAndWc();
+}
+
+function renderNewsList(news){
+  const el=document.getElementById("newsList");
+  if(!el)return;
+  const src=SOURCES&&SOURCES.sources&&SOURCES.sources.news;
+  el.innerHTML=news.length?
+    news.map(n=>'<div class="al"><span class="dot na"></span><span class="tx">'+
+      '<span class="tt">'+NEWS_ICON+(n.url?'<a href="'+n.url+'" target="_blank" rel="noopener" class="nplink">'+
+        n.title+'</a>':n.title)+'</span>'+
+      '<span class="ds">'+(n.iso?dmy(n.iso):"—")+
+        (n.source?' <span class="sep">·</span> '+n.source:"")+
+        (n.also&&n.also.length?' <span class="sep">·</span> דווח גם ב־'+n.also.join(", "):"")+
+      '</span></span></div>').join("")
+    :'<p class="na" style="padding:14px 2px">טרם נשלפו כתבות.</p>';
+  el.innerHTML+='<div class="src">ממוין לפי תאריך, מהחדש לישן · נשלף אוטומטית פעם ביום '+
+    (src&&src.fetchedAt?'· אחרון: '+relDay(src.fetchedAt):"")+
+    ' <span class="sep">·</span> מקור חיצוני, אינו דיווח לרשות ואינו מאומת מול הגילוי</div>';
+}
+
+/* טבלת האג״ח וגרף ההון החוזר · הכרטיסים שלצד רשימת האירועים */
+function renderBondAndWc(){
   const row=(l,v)=>'<tr><td>'+l+'</td><td class="n num">'+v+'</td></tr>';
   document.getElementById("bondTable").innerHTML=
     row("מועד הנפקה",dmy(BOND.issued))+
@@ -1670,11 +1799,17 @@ function testCell(cur,base){
   let pctTxt;
   if(base===0) pctTxt='<span class="na">חדש</span>';
   else if(base<0) pctTxt='<span class="na">בסיס שלילי</span>';
-  else pctTxt=(d>=0?"▲ ":"▼ ")+Math.abs(d/base*100).toFixed(1)+"%";
+  else pctTxt=Math.abs(d/base*100).toFixed(1)+"%";
   const ex=isException(cur,base);
   const cls=sign?"negc":ex==="both"?"negc":ex==="one"?"warnc":d>=0?"pos":"negc";
-  return {h:'<span class="'+cls+'">'+fmt(d)+'</span> <span style="font-size:10px;color:var(--t3)">'+pctTxt+'</span>'+
-    (sign?'<span class="flag">מעבר סימן</span>':""),ex:sign?"sign":ex,d:Math.abs(d)};
+  /* מבנה קבוע: החץ תמיד צמוד לסכום, האחוז תמיד בשורה שמתחת. קודם שניהם
+     היו בזרימה אחת, ולכן מיקום החץ השתנה לפי אורך המספר. */
+  const arrow=d===0?"":d>0?"▲ ":"▼ ";
+  return {h:'<span class="chg">'+
+      '<span class="v '+cls+'">'+arrow+fmt(d)+'</span>'+
+      '<span class="p">'+pctTxt+'</span>'+
+      (sign?'<span class="flag">מעבר סימן</span>':"")+
+    '</span>',ex:sign?"sign":ex,d:Math.abs(d)};
 }
 
 /* ═══════════ 1 · בית ═══════════ */
@@ -1773,8 +1908,8 @@ function renderPeriodSel(){
   const opts=cmpOptions();
   if(!opts.some(o=>o[0]===ANALYTIC_CMP))ANALYTIC_CMP=opts[0][0];
   el.innerHTML='<span class="lbl2">בסיס ההשוואה</span>'+
-    opts.map(o=>'<span class="p'+(o[0]===ANALYTIC_CMP?" on":"")+'" data-c="'+o[0]+'" title="'+o[2]+'">'+
-      o[1]+'</span>').join("")+
+    '<span class="opts">'+opts.map(o=>'<span class="p'+(o[0]===ANALYTIC_CMP?" on":"")+
+      '" data-c="'+o[0]+'" title="'+o[2]+'">'+o[1]+'</span>').join("")+'</span>'+
     (ANALYTIC_VIEW==="pl"&&ANALYTIC_CMP==="fy"
       ?'<span class="norm'+(ANALYTIC_NORM?" on":"")+'" id="normTog" role="switch" tabindex="0" '+
        'aria-checked="'+ANALYTIC_NORM+'" title="מצטבר חצי שנה מוכפל בשניים · פיזור אחיד">'+
@@ -1873,8 +2008,8 @@ function renderRelPeriodSel(){
   if(!el)return;
   const opts=[["pye","מול "+D_PYE,"סוף השנה הקודמת"],["pys","מול "+D_PYS,"מקביל אשתקד"]];
   el.innerHTML='<span class="lbl2">בסיס ההשוואה</span>'+
-    opts.map(o=>'<span class="p'+(o[0]===REL_CMP?" on":"")+'" data-c="'+o[0]+'" title="'+o[2]+'">'+
-      o[1]+'</span>').join("");
+    '<span class="opts">'+opts.map(o=>'<span class="p'+(o[0]===REL_CMP?" on":"")+
+      '" data-c="'+o[0]+'" title="'+o[2]+'">'+o[1]+'</span>').join("")+'</span>';
   el.querySelectorAll(".p").forEach(b=>b.addEventListener("click",()=>{
     REL_CMP=b.dataset.c;renderRelPeriodSel();renderRelated();}));
 }
