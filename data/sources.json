@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-01T06:27:07.081Z",
+  "updatedAt": "2026-09-02T06:31:04.743Z",
   "company": {
     "name": "קבוצת מיי טאון בע\"מ",
     "tase": 2449,
@@ -25,16 +25,16 @@
     "bond-quote": {
       "title": "ציטוט אג״ח סדרה א׳",
       "data": {
-        "price": 100.62,
-        "yieldGross": 9.32,
-        "yieldNet": 7.82,
-        "duration": 1.59,
-        "adjustedGross": 103.14,
-        "adjustedNet": 102.67,
+        "price": 100.59,
+        "yieldGross": 9.36,
+        "yieldNet": 7.85,
+        "duration": 1.58,
+        "adjustedGross": 103.16,
+        "adjustedNet": 102.69,
         "yearsToMaturity": 1.73,
-        "govSpread": 5.98
+        "govSpread": 6.11
       },
-      "fetchedAt": "2026-09-01T06:27:07.081Z",
+      "fetchedAt": "2026-09-02T06:31:04.743Z",
       "stale": false,
       "via": "ביזפורטל · טבלת ביצועים",
       "error": null
@@ -61,12 +61,6 @@
           "source": "מעריב"
         },
         {
-          "title": "אחרי 30 שנה: הפרויקט שנתקע בקריית מלאכי סוף סוף יוצא לדרך - היום",
-          "date": "Wed, 27 May 2026 07:00:00 GMT",
-          "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTE9CWDVGN0YwWldHOXJXa1VXTWFldmRzczBPekxnMXZqVnZfZXFTNlZSN2MySzVXWVZhV29IN2hKWTFnLWc5dHlLc0ZhaGl2S1BWVEJnMHVVQ242c3NXY0J2N200R1U4cmhSeUNwN3I2TG5ta0VtYUHSAX5BVV95cUxNMF8wZE5LdzhtZ0Y1cGJDeFcwN0ttaW5WdzZzdkgyUG9xLW1nVGJzU0NIQVdSamdfUzVVNS1oUWRxLWtkUWhYZTFMNDBBYWN3dHdEOE5temc1TGhqdmd4WGRPYlF3N2djSGFza3U4M3hGMlVndVdZc181UF9aTVE?oc=5",
-          "source": "היום"
-        },
-        {
           "title": "בפחות מ-24 שעות: החברה שמכרה 15 דירות בפרויקט אחד - ice (אייס)",
           "date": "Thu, 26 Mar 2026 07:00:00 GMT",
           "url": "https://news.google.com/rss/articles/CBMiY0FVX3lxTE1CTzFfbmJlMnB3ejZJLUN1dHNwTXZ2dXV6TndnaDhWcFQyU25tWUJYQm94TUg2N2VYNTZpb3JuQ3VBczVlbHZLWVRCZXRwSXR2YlN5dWF3MnU0S1F0akZLNEdPbw?oc=5",
@@ -91,10 +85,10 @@
           "source": "ice (אייס)"
         },
         {
-          "title": "ניצלה סכסוך שותפים: קבוצת גבאי השתלטה על חברת הבת של קבוצת מאי טאון - themarker.com",
+          "title": "ניצלה סכסוך שותפים: קבוצת גבאי השתלטה על חברת הבת של קבוצת מאי טאון - TheMarker",
           "date": "Wed, 20 Nov 2024 08:00:00 GMT",
           "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxQWW9sSkJYbGdXNlMyN0xNRkdLV2JicGl5blRWbWRBUEx2OUhJRG9wS3hGTjJlZGJ1X3NCVjlZUHRVb3FTc2tGWVB3NDRDbU83eHZzeWo1YWx4Qm9HN3ppZm05RXlBVF9HcnNhMEJNZ1RvcHd3Ul9pczBtdklmcnUxdXBSNmY0c1lhTUZhNUJuQWNLV0NQdklsanotLXF5eEFLV3ZnanZYQQ?oc=5",
-          "source": "themarker.com"
+          "source": "TheMarker"
         },
         {
           "title": "ההתחדשות העירונית ממשיכה להתקדם: הריסת מבנים ישנים בתל אביב ויבנה - ynet",
@@ -139,13 +133,13 @@
           "source": "מרכז הנדל\"ן"
         },
         {
-          "title": "קריית מלאכי פורצת דרך: אחרי 30 שנה – 'מיי טאון סנטר' יוצא לדרך - חדשות אפס שמונה",
+          "title": "קריית מלאכי פורצת דרך: אחרי 30 שנה – 'מיי טאון סנטר' יוצא לדרך - news08.net",
           "date": "Thu, 20 Nov 2025 08:00:00 GMT",
           "url": "https://news.google.com/rss/articles/CBMiugJBVV95cUxNRkx5bzk0WElmVWZwc1lOeUU0dmoxZE5qZFoybm9pV3pnMWFoX2J2TE8xa0dGQ0hrMUZPNmJULXBMQzBFMjFqUVh0NTJ4RXdYWUVCcDhSWmRQQmQ1RjRJQ1NZSHhFQzg0RG5oZzBCbjA2UDQwQy10N0V6RldIZE9Zbm5oTll6eXo0NF9mS3JBcDlaQjRIbUJwRFVSYWZMLTBVVlJJV3prc3ZQQ0tad0R2YnZyODU5UHNLemZPQUNXV2FWTFB1ZHBCTVNlS0pFZDA0VW94ZTMzSXRyYUhpMF9uNE9uTjc2LTJzQ21LN1cySU9SUWpzV1NtOGxXNk9URUE3Z0xYRFlBYm5IWHg0b0gwcFVncXozWjBpY2hZUkFfMlAyNjBjcnlEUHZfRUVKUXc4MHJudWpRV2FnZw?oc=5",
-          "source": "חדשות אפס שמונה"
+          "source": "news08.net"
         }
       ],
-      "fetchedAt": "2026-09-01T06:27:07.081Z",
+      "fetchedAt": "2026-09-02T06:31:04.743Z",
       "stale": false,
       "via": "Google News RSS",
       "error": null

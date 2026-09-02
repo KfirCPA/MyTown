@@ -1,5 +1,5 @@
 {
-  "ranAt": "2026-09-01T06:27:07.081Z",
+  "ranAt": "2026-09-02T06:31:04.743Z",
   "env": "GitHub Actions",
   "results": [
     {
@@ -15,14 +15,14 @@
           "candidate": "mayaapi · company/reports",
           "url": "https://mayaapi.tase.co.il/api/company/reports?companyId=2449&lang=he",
           "status": 403,
-          "ms": 863,
+          "ms": 512,
           "result": "HTTP שגוי"
         },
         {
           "candidate": "mayaapi · v1/company/reports",
           "url": "https://mayaapi.tase.co.il/api/v1/company/reports?companyId=2449&lang=he",
           "status": 403,
-          "ms": 945,
+          "ms": 847,
           "result": "HTTP שגוי"
         }
       ]
@@ -40,7 +40,7 @@
           "candidate": "magna · חיפוש לפי ח.פ.",
           "url": "https://www.magna.isa.gov.il/api/reports/search?corporateNumber=514444660&pageSize=30",
           "status": 403,
-          "ms": 385,
+          "ms": 533,
           "result": "HTTP שגוי"
         },
         {
@@ -48,7 +48,7 @@
           "url": "https://www.magna.isa.gov.il/?q=514444660",
           "status": 200,
           "bytes": 20822,
-          "ms": 18,
+          "ms": 9,
           "result": "הפרסור לא זיהה מבנה"
         }
       ]
@@ -66,8 +66,8 @@
           "candidate": "ביזפורטל · טבלת ביצועים",
           "url": "https://www.bizportal.co.il/bonds/quote/generalview/1214626",
           "status": 200,
-          "bytes": 186899,
-          "ms": 382,
+          "bytes": 187151,
+          "ms": 339,
           "result": "הצליח"
         }
       ]
@@ -79,14 +79,14 @@
       "blockedOnCI": null,
       "ok": true,
       "via": "Google News RSS",
-      "count": 17,
+      "count": 16,
       "attempts": [
         {
           "candidate": "Google News RSS",
           "url": "https://news.google.com/rss/search?q=%22%D7%A7%D7%91%D7%95%D7%A6%D7%AA%20%D7%9E%D7%99%D7%99%20%D7%98%D7%90%D7%95%D7%9F%22&hl=he&gl=IL&ceid=IL:he",
           "status": 200,
-          "bytes": 18992,
-          "ms": 275,
+          "bytes": 17441,
+          "ms": 271,
           "result": "הצליח"
         }
       ]
