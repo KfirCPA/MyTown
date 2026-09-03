@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-02T06:31:04.743Z",
+  "updatedAt": "2026-09-03T06:27:56.847Z",
   "company": {
     "name": "קבוצת מיי טאון בע\"מ",
     "tase": 2449,
@@ -26,15 +26,15 @@
       "title": "ציטוט אג״ח סדרה א׳",
       "data": {
         "price": 100.59,
-        "yieldGross": 9.36,
-        "yieldNet": 7.85,
+        "yieldGross": 9.38,
+        "yieldNet": 7.86,
         "duration": 1.58,
-        "adjustedGross": 103.16,
-        "adjustedNet": 102.69,
-        "yearsToMaturity": 1.73,
+        "adjustedGross": 103.19,
+        "adjustedNet": 102.71,
+        "yearsToMaturity": 1.72,
         "govSpread": 6.11
       },
-      "fetchedAt": "2026-09-02T06:31:04.743Z",
+      "fetchedAt": "2026-09-03T06:27:56.847Z",
       "stale": false,
       "via": "ביזפורטל · טבלת ביצועים",
       "error": null
@@ -42,12 +42,6 @@
     "news": {
       "title": "כתבות שפורסמו",
       "data": [
-        {
-          "title": "מה שלא נעשה ב-30 שנה, עשתה קבוצת מיי טאון בשנתיים - פאנדר",
-          "date": "Thu, 28 May 2026 07:00:00 GMT",
-          "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTFBTLTNJVXFTc3R3TVZTZTExOWNGOVdPTy12LUNuRGZqSndfUm9GMjZqdVJIR1pMRzctajhKd2I1bmp2Y2FrSVZvUjYtM0xVeGN6?oc=5",
-          "source": "פאנדר"
-        },
         {
           "title": "קבוצת רוכשים קנתה 15 דירות בפרויקט \"מיי-טאון\" בקריית מלאכי. זה הסכום ששולם - מרכז הנדל\"ן",
           "date": "Thu, 26 Mar 2026 07:00:00 GMT",
@@ -61,9 +55,9 @@
           "source": "מעריב"
         },
         {
-          "title": "בפחות מ-24 שעות: החברה שמכרה 15 דירות בפרויקט אחד - ice (אייס)",
-          "date": "Thu, 26 Mar 2026 07:00:00 GMT",
-          "url": "https://news.google.com/rss/articles/CBMiY0FVX3lxTE1CTzFfbmJlMnB3ejZJLUN1dHNwTXZ2dXV6TndnaDhWcFQyU25tWUJYQm94TUg2N2VYNTZpb3JuQ3VBczVlbHZLWVRCZXRwSXR2YlN5dWF3MnU0S1F0akZLNEdPbw?oc=5",
+          "title": "יובל שרף קוטפת קמפיין במיליונים: זה הג'וב היוקרתי בחברת הנדל\"ן - ice (אייס)",
+          "date": "Sun, 15 Feb 2026 08:00:00 GMT",
+          "url": "https://news.google.com/rss/articles/CBMickFVX3lxTFBpZ1VSVlIyYm4zZTltdDRjdDF5U1J0czhEVVBLb1p6Sm1hUFVLWHhQeXFIR29mbElkdWdrbi1adWZjLVRyVGlMczNDVG9RT2F5WVJDNG1kcjBjQ1VncHV1MHJZSEN0LWpxZ0dXSWpiQWJKQQ?oc=5",
           "source": "ice (אייס)"
         },
         {
@@ -79,16 +73,16 @@
           "source": "גלובס"
         },
         {
-          "title": "יובל שרף קוטפת קמפיין במיליונים: זה הג'וב היוקרתי בחברת הנדל\"ן - ice (אייס)",
-          "date": "Sun, 15 Feb 2026 08:00:00 GMT",
-          "url": "https://news.google.com/rss/articles/CBMickFVX3lxTFBpZ1VSVlIyYm4zZTltdDRjdDF5U1J0czhEVVBLb1p6Sm1hUFVLWHhQeXFIR29mbElkdWdrbi1adWZjLVRyVGlMczNDVG9RT2F5WVJDNG1kcjBjQ1VncHV1MHJZSEN0LWpxZ0dXSWpiQWJKQQ?oc=5",
-          "source": "ice (אייס)"
+          "title": "כדי לא לסכל פינוי-בינוי: הושהתה \"בריחת\" משקיעה - ynet",
+          "date": "Mon, 03 Mar 2025 08:00:00 GMT",
+          "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE1fUmY0OUctanNhNXNlQ2EzTllxaG1abndEVHFOTXl5ejNnSnk5RlJjVS1MQXFnWUtEZ2NiZHdFSFVrNk5RQjRlUWRnamVVZmFLYnpPaWVBbk40VzM3OUE?oc=5",
+          "source": "ynet"
         },
         {
-          "title": "ניצלה סכסוך שותפים: קבוצת גבאי השתלטה על חברת הבת של קבוצת מאי טאון - TheMarker",
-          "date": "Wed, 20 Nov 2024 08:00:00 GMT",
-          "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxQWW9sSkJYbGdXNlMyN0xNRkdLV2JicGl5blRWbWRBUEx2OUhJRG9wS3hGTjJlZGJ1X3NCVjlZUHRVb3FTc2tGWVB3NDRDbU83eHZzeWo1YWx4Qm9HN3ppZm05RXlBVF9HcnNhMEJNZ1RvcHd3Ul9pczBtdklmcnUxdXBSNmY0c1lhTUZhNUJuQWNLV0NQdklsanotLXF5eEFLV3ZnanZYQQ?oc=5",
-          "source": "TheMarker"
+          "title": "חתמו על פינוי בינוי - ויקבלו הטבה \"מנופחת\" של 500 אלף שקל - ice (אייס)",
+          "date": "Sun, 21 Sep 2025 07:00:00 GMT",
+          "url": "https://news.google.com/rss/articles/CBMiY0FVX3lxTE5NQnlvS3NKM2N1T1h3OTA0TVFfOVVMWHpueXl2aHBBb1FuTExEaEw5emtNSGIxdmRmcTk4bTFuRTdHS0FsWEJEZjNXN0QxQUFNSVQ5YUdBb1BoMENSbFEycWVqQQ?oc=5",
+          "source": "ice (אייס)"
         },
         {
           "title": "ההתחדשות העירונית ממשיכה להתקדם: הריסת מבנים ישנים בתל אביב ויבנה - ynet",
@@ -97,49 +91,13 @@
           "source": "ynet"
         },
         {
-          "title": "רמת אביב הישנה מתחדשת: שיכון ובינוי ומיי טאון ייבנו 150 דירות - מרכז הנדל\"ן",
-          "date": "Tue, 11 Nov 2025 08:00:00 GMT",
-          "url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTE5hcHAwbHFfQ3NicjduU3BEbEVvOFNQNzJnalJpdXdEWjIxUDFEV0c5aF9McTc0MEJ4TDJwXzNmMnFSMG5mMlJBNndLQlEtN0ZVQzROMXc0MA?oc=5",
-          "source": "מרכז הנדל\"ן"
-        },
-        {
-          "title": "732 מיליון ש\"ח בדרך לקריית מלאכי: המיזם שישנה את פני העיר - ice (אייס)",
-          "date": "Thu, 27 Nov 2025 08:00:00 GMT",
-          "url": "https://news.google.com/rss/articles/CBMiY0FVX3lxTFBIbVJkM1NMYkkwT1otc0JQYjVfR2pCcTZMa29ZMkRMZmp1d3JOdzJJWlpwcUV4UzBNelNfUmJOZVFFZGVZbERTVGhWZkE4aHlmMGNTNUxhVUpLeGplZ3dvZ18zOA?oc=5",
-          "source": "ice (אייס)"
-        },
-        {
           "title": "הצלחה חלקית: מכרז קרקע ל-50 דירות בחריש נותר ללא הצעות - גלובס",
           "date": "Wed, 20 Nov 2024 08:00:00 GMT",
           "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE4ycGktR3pGSU0zb1pxcUItNTlLMnRoOWUzWXdpTGlabHBCdmNwM240blRoQ2IxS0ZSaXFjM2Vid2ozcFhhd0FpV20wQ3VDZkxMZlNzM3gtOEMta0Q2bmQ0WWxXWWx3a1R3?oc=5",
           "source": "גלובס"
-        },
-        {
-          "title": "שובר שוק: נמכר הפנטהאוז היקר בהיסטוריה של קריית מלאכי - זה המחיר - ice (אייס)",
-          "date": "Thu, 23 Apr 2026 07:00:00 GMT",
-          "url": "https://news.google.com/rss/articles/CBMiY0FVX3lxTE91RktXYWpkcTZxUzR1Tm1LOTc5RGxOWkQ1a05ydUcyMFc2T3ktMFFjSk5mTV9VSEw2c3FZZEZ6Sm1vZ1hhVDVIbDdmZHBHcEVxVHRrWHpyY3VCUVFiaXk5MjBaWQ?oc=5",
-          "source": "ice (אייס)"
-        },
-        {
-          "title": "גיוס אג\"ח ראשון ל-MY TOWN: גייסה 62 מיליון שקל עם ביקושים של מעל 150 מלש\"ח - מרכז הנדל\"ן",
-          "date": "Wed, 04 Dec 2024 08:00:00 GMT",
-          "url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTE0xaWxNQnAxbFduM2ZVcW1IRkdiN2swa3haZGE5Q3VIZTJFTWh4c1FIb1JwZ1ZMRmlOSU1hQ1VubTFKRXl5Y2dsMU5BVE51MTJVNWktUUtYTQ?oc=5",
-          "source": "מרכז הנדל\"ן"
-        },
-        {
-          "title": "42 מיליון שקל על הכף: ביהמ\"ש קיבל את בקשת מיי טאון לעיכוב הליכים בתביעת גבאי נגדה - מרכז הנדל\"ן",
-          "date": "Thu, 27 Jul 2023 07:00:00 GMT",
-          "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE85eEdjVE9VY3RmTl9fdzRFR2ZYZl9VenlhcEhPUGFiN1JFTU4tV2dfUG5FMmNFbXpGd0ViSGoyeWdDXzBRYXhTdWVCNjltekdJN1VHeDFB?oc=5",
-          "source": "מרכז הנדל\"ן"
-        },
-        {
-          "title": "קריית מלאכי פורצת דרך: אחרי 30 שנה – 'מיי טאון סנטר' יוצא לדרך - news08.net",
-          "date": "Thu, 20 Nov 2025 08:00:00 GMT",
-          "url": "https://news.google.com/rss/articles/CBMiugJBVV95cUxNRkx5bzk0WElmVWZwc1lOeUU0dmoxZE5qZFoybm9pV3pnMWFoX2J2TE8xa0dGQ0hrMUZPNmJULXBMQzBFMjFqUVh0NTJ4RXdYWUVCcDhSWmRQQmQ1RjRJQ1NZSHhFQzg0RG5oZzBCbjA2UDQwQy10N0V6RldIZE9Zbm5oTll6eXo0NF9mS3JBcDlaQjRIbUJwRFVSYWZMLTBVVlJJV3prc3ZQQ0tad0R2YnZyODU5UHNLemZPQUNXV2FWTFB1ZHBCTVNlS0pFZDA0VW94ZTMzSXRyYUhpMF9uNE9uTjc2LTJzQ21LN1cySU9SUWpzV1NtOGxXNk9URUE3Z0xYRFlBYm5IWHg0b0gwcFVncXozWjBpY2hZUkFfMlAyNjBjcnlEUHZfRUVKUXc4MHJudWpRV2FnZw?oc=5",
-          "source": "news08.net"
         }
       ],
-      "fetchedAt": "2026-09-02T06:31:04.743Z",
+      "fetchedAt": "2026-09-03T06:27:56.847Z",
       "stale": false,
       "via": "Google News RSS",
       "error": null
